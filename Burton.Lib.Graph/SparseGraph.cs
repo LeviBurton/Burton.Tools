@@ -34,7 +34,7 @@ namespace Burton.Lib.Graph
         /// Returns the node at the given index
         /// </summary>
         /// <param name="NodeIndex"></param>
-        /// <returns></returns>
+        /// <returns>Node at nodeIndex</returns>
         public NodeType GetNode(int NodeIndex)
         {
             if (NodeIndex > Nodes.Count)
@@ -59,7 +59,7 @@ namespace Burton.Lib.Graph
         /// <summary>
         /// Returns the next free node index
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Next valid node index</returns>
         public int GetNextFreeNodeIndex()
         {
             return NextNodeIndex;
@@ -69,7 +69,7 @@ namespace Burton.Lib.Graph
         /// Adds a node to the graph and returns it
         /// </summary>
         /// <param name="Node"></param>
-        /// <returns></returns>
+        /// <returns>New Node Index</returns>
         public int AddNode(NodeType Node)
         {
             if (Node.NodeIndex < Nodes.Count)
@@ -126,13 +126,13 @@ namespace Burton.Lib.Graph
         /// Returns the number of active + inactive enodes present in the graph.
         /// </summary>
         /// <returns></returns>
-        public int NumNodes()
+        public int NodeCount()
         {
             return Nodes.Count;
         }
 
         // returns the number of active nodes present in the graph
-        public int NumActiveNodes()
+        public int ActiveNodeCount()
         {
             int ActiveNodeCount = 0;
 
@@ -149,10 +149,10 @@ namespace Burton.Lib.Graph
         /// Returns the number of edges in the graph
         /// </summary>
         /// <returns>Count of edges in the graph</returns>
-        public int NumEdges()
+        public int EdgeCount()
         {
             int EdgeCount = 0;
-            for (int i = 0; i < NumNodes(); i++)
+            for (int i = 0; i < NodeCount(); i++)
             {
                 if (Nodes[i].NodeIndex != (int)ENodeType.InvalidNodeIndex)
                 {

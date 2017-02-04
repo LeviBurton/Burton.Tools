@@ -118,7 +118,7 @@ namespace GraphVisualizerTest
                 Path.Add(Node);
             }
 
-            Console.Write("NomActiveNodes: {0}\nNumEdges: {1}\n", Graph.NumActiveNodes(), Graph.NumEdges());
+            Console.Write("NomActiveNodes: {0}\nNumEdges: {1}\n", Graph.ActiveNodeCount(), Graph.EdgeCount());
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -127,7 +127,7 @@ namespace GraphVisualizerTest
 
         private void GridPanel_Paint(object sender, PaintEventArgs e)
         {
-            for (int CurNodeIndex = 0; CurNodeIndex < Graph.NumNodes(); ++CurNodeIndex)
+            for (int CurNodeIndex = 0; CurNodeIndex < Graph.NodeCount(); ++CurNodeIndex)
             {
                 var Node = (NavGraphNode)Graph.GetNode(CurNodeIndex);
                 if (Node.NodeIndex == (int)ENodeType.InvalidNodeIndex)

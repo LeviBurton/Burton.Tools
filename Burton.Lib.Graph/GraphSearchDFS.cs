@@ -26,13 +26,13 @@ namespace Burton.Lib.Graph
             this.TargetNodeIndex = Target;
 
             VisitedNodes = new List<int>();
-            for (int i = 0; i < Graph.NumNodes(); i++)
+            for (int i = 0; i < Graph.NodeCount(); i++)
             {
                 VisitedNodes.Insert(i, (int)NodeStatus.Unvisited);
             }
 
-            Route = new List<int>(Graph.NumNodes());
-            for (int i = 0; i < Graph.NumNodes(); i++)
+            Route = new List<int>(Graph.NodeCount());
+            for (int i = 0; i < Graph.NodeCount(); i++)
             {
                 Route.Insert(i, (int)NodeStatus.NoParentAssigned);
             }
