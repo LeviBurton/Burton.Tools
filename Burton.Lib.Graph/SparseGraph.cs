@@ -49,7 +49,7 @@ namespace Burton.Lib.Graph
         /// </summary>
         /// <param name="From"></param>
         /// <param name="To"></param>
-        /// <returns></returns>
+        /// <returns>The edge connecting From to To</returns>
         public EdgeType GetEdge(int From, int To)
         {
             var Edge = (EdgeType) Edges.GetEdge(From, To);
@@ -190,6 +190,8 @@ namespace Burton.Lib.Graph
         {
             this.bIsDigraph = bIsDigraph;
             NextNodeIndex = 0;
+
+            // FIXME: The initial size of this is currently arbitrary.
             Edges = new AdjacencyList<GraphEdge>(1024 * 1024);
         }
     }

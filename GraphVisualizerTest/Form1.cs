@@ -19,6 +19,7 @@ namespace GraphVisualizerTest
         public int CellWidth;
         public int CellHeight;
         List<NavGraphNode> Path = new List<NavGraphNode>();
+        List<GraphEdge> TraversedEges = new List<GraphEdge>();
 
         public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
         {
@@ -103,15 +104,22 @@ namespace GraphVisualizerTest
         private void Form1_Load(object sender, EventArgs e)
         {
             Graph = new SparseGraph<GraphNode, GraphEdge>(true);
-
+         
             CreateGrid(Graph, 10, 10);
-
-
             Path.Clear();
 
-            var DFS = new GraphSearchDFS(Graph, 0, 99);
+            Graph.RemoveNode(50);
+            Graph.RemoveNode(20);
+            Graph.RemoveNode(65);
+            Graph.RemoveNode(53);
+            Graph.RemoveNode(85);
+
+            var DFS = new GraphSearchDFS(Graph, 30, 57);
+            TraversedEges.Clear();
+
             var PathToTarget = DFS.GetPathToTarget();
-       
+            TraversedEges = DFS.TraversedEdges;
+
             foreach (var NodeIndex in PathToTarget)
             {
                 var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
@@ -149,6 +157,15 @@ namespace GraphVisualizerTest
 
                     e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
                 }
+            }
+
+            foreach (var Edge in TraversedEges)
+            {
+                var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
+                var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
+                var EdgePen = new Pen(Color.Black, 2);
+
+                e.Graphics.DrawLine(EdgePen, new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY));
             }
 
             foreach (var Node in Path)

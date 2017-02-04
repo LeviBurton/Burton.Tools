@@ -14,6 +14,9 @@ namespace Burton.Lib.Graph
         SparseGraph<GraphNode, GraphEdge> Graph;
         List<int> VisitedNodes;
         List<int> Route;
+
+        public List<GraphEdge> TraversedEdges;
+
         int SourceNodeIndex;
         int TargetNodeIndex;
         public bool bFound;
@@ -24,6 +27,8 @@ namespace Burton.Lib.Graph
             this.bFound = false;
             this.SourceNodeIndex = Source;
             this.TargetNodeIndex = Target;
+
+            TraversedEdges = new List<GraphEdge>();
 
             VisitedNodes = new List<int>();
             for (int i = 0; i < Graph.NodeCount(); i++)
@@ -44,6 +49,8 @@ namespace Burton.Lib.Graph
         {
             Stack<GraphEdge> Stack = new Stack<GraphEdge>();
 
+            TraversedEdges.Clear();
+
             GraphEdge Dummy = new GraphEdge(SourceNodeIndex, SourceNodeIndex, 0);
 
             Stack.Push(Dummy);
@@ -52,6 +59,7 @@ namespace Burton.Lib.Graph
             {
                 GraphEdge Next = Stack.Pop();
                 Route[Next.ToNodeIndex] = Next.FromNodeIndex;
+                TraversedEdges.Add(Next);
 
                 if (Next != Dummy)
                 {
