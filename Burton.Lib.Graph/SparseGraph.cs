@@ -96,6 +96,10 @@ namespace Burton.Lib.Graph
             }
         }
 
+        /// <summary>
+        /// Sets the node at NodeIndex to invalid and removes any edges connected to this node.
+        /// </summary>
+        /// <param name="NodeIndex"></param>
         public void RemoveNode(int NodeIndex)
         {
             if (NodeIndex > Nodes.Count)
@@ -118,7 +122,10 @@ namespace Burton.Lib.Graph
             Edges.RemoveEdge(From, To);
         }
 
-        // returns the number of active + inactive nodes present in the graph
+        /// <summary>
+        /// Returns the number of active + inactive enodes present in the graph.
+        /// </summary>
+        /// <returns></returns>
         public int NumNodes()
         {
             return Nodes.Count;
@@ -127,7 +134,15 @@ namespace Burton.Lib.Graph
         // returns the number of active nodes present in the graph
         public int NumActiveNodes()
         {
-            return Nodes.Count;
+            int ActiveNodeCount = 0;
+
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                if (Nodes[i].NodeIndex != (int)ENodeType.InvalidNodeIndex)
+                    ActiveNodeCount++;
+            }
+
+            return ActiveNodeCount;
         }
 
         // returns the number of edges present in the graph
