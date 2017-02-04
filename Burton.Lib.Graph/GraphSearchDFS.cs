@@ -48,7 +48,6 @@ namespace Burton.Lib.Graph
         public bool Search()
         {
             Stack<GraphEdge> Stack = new Stack<GraphEdge>();
-
             TraversedEdges.Clear();
 
             GraphEdge Dummy = new GraphEdge(SourceNodeIndex, SourceNodeIndex, 0);

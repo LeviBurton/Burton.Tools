@@ -12,7 +12,6 @@ using System.Windows.Forms;
 
 namespace GraphVisualizerTest
 {
-
     public partial class Form1 : Form
     {
         public SparseGraph<GraphNode, GraphEdge> Graph;
@@ -20,6 +19,7 @@ namespace GraphVisualizerTest
         public int CellHeight;
         List<NavGraphNode> Path = new List<NavGraphNode>();
         List<GraphEdge> TraversedEges = new List<GraphEdge>();
+        public EBrushType CurrentBrushType;
 
         public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
         {
@@ -104,7 +104,8 @@ namespace GraphVisualizerTest
         private void Form1_Load(object sender, EventArgs e)
         {
             Graph = new SparseGraph<GraphNode, GraphEdge>(true);
-         
+            CurrentBrushType = EBrushType.Source;
+
             CreateGrid(Graph, 10, 10);
             Path.Clear();
 
@@ -173,8 +174,62 @@ namespace GraphVisualizerTest
                 e.Graphics.FillEllipse(new SolidBrush(Color.Green), new RectangleF((float)Node.LocationX - 7.5f, (float)Node.LocationY - 7.5f, 15, 15));
             }
         }
+
+        #region Brush Type Selection
+        private void SourceButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                CurrentBrushType = EBrushType.Source;
+            }
+        }
+
+        private void TargetButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                CurrentBrushType = EBrushType.Target;
+            }
+        }
+
+        private void ObstacleButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                CurrentBrushType = EBrushType.Obstacle;
+            }
+        }
+
+        private void WaterButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                CurrentBrushType = EBrushType.Water;
+            }
+        }
+
+        private void MudButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                CurrentBrushType = EBrushType.Mud;
+            }
+        }
+
+        #endregion
     }
 
+    public enum EBrushType
+    {
+        Normal = 0,
+        Obstacle = 1,
+        Water = 2,
+        Mud = 3,
+        Source = 4,
+        Target = 5
+    }
+
+    #region Misc
     public class NavGraphNode : GraphNode
     {
         public double LocationX;
@@ -208,5 +263,6 @@ namespace GraphVisualizerTest
             return Math.Sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
         }
     }
+    #endregion
 
 }
