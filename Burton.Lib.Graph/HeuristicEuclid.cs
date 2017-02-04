@@ -10,7 +10,8 @@ namespace Burton.Lib.Graph
     {
         public double Calculate(T Graph, int Node1, int Node2)
         {
-            return Graph.GetNode(Node1).NodeIndex + Graph.GetNode(Node2).NodeIndex;           
+            // return Graph.GetNode(Node1).NodeIndex + Graph.GetNode(Node2).NodeIndex;           
+            return 0.0;
         }
     }
 }
