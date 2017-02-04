@@ -145,10 +145,22 @@ namespace Burton.Lib.Graph
             return ActiveNodeCount;
         }
 
-        // returns the number of edges present in the graph
+        /// <summary>
+        /// Returns the number of edges in the graph
+        /// </summary>
+        /// <returns>Count of edges in the graph</returns>
         public int NumEdges()
         {
-            return 0;
+            int EdgeCount = 0;
+            for (int i = 0; i < NumNodes(); i++)
+            {
+                if (Nodes[i].NodeIndex != (int)ENodeType.InvalidNodeIndex)
+                {
+                    EdgeCount += Edges[Nodes[i].NodeIndex].Count;
+                }
+            }
+
+            return EdgeCount;
         }
 
         // returns true if this is a directed graph

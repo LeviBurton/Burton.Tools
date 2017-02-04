@@ -105,9 +105,7 @@ namespace GraphVisualizerTest
             Graph = new SparseGraph<GraphNode, GraphEdge>(true);
 
             CreateGrid(Graph, 10, 10);
-            Graph.RemoveNode(45);
-            Graph.RemoveNode(55);
-            Graph.RemoveNode(65);
+
 
             Path.Clear();
 
@@ -119,6 +117,8 @@ namespace GraphVisualizerTest
                 var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
                 Path.Add(Node);
             }
+
+            Console.Write("NomActiveNodes: {0}\nNumEdges: {1}\n", Graph.NumActiveNodes(), Graph.NumEdges());
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
