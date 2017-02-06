@@ -20,6 +20,9 @@ namespace GraphVisualizerTest
         List<NavGraphNode> Path = new List<NavGraphNode>();
         List<GraphEdge> TraversedEges = new List<GraphEdge>();
         public EBrushType CurrentBrushType;
+        public bool bPaintTerrain;
+        public int NumCellsX;
+        public int NumCellsY;
 
         public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
         {
@@ -56,13 +59,14 @@ namespace GraphVisualizerTest
             }
         }
 
-        public static void CreateGrid(SparseGraph<GraphNode, GraphEdge> Graph, int CellsX, int CellsY)
+        public void CreateGrid(SparseGraph<GraphNode, GraphEdge> Graph, int CellsX, int CellsY)
         {
             int GridWidthPx = 700;
             int GridHeightPx = 700;
 
-            int CellWidth = GridWidthPx / CellsX;
-            int CellHeight = GridHeightPx / CellsY;
+            CellWidth = GridWidthPx / CellsX;
+            CellHeight = GridHeightPx / CellsY;
+          
 
             double MidX = CellWidth / 2;
             double MidY = CellHeight / 2;
@@ -104,16 +108,13 @@ namespace GraphVisualizerTest
         private void Form1_Load(object sender, EventArgs e)
         {
             Graph = new SparseGraph<GraphNode, GraphEdge>(true);
+
             CurrentBrushType = EBrushType.Source;
+            bPaintTerrain = false;
+            NumCellsX = 10;
+            NumCellsY = 10;
 
-            CreateGrid(Graph, 10, 10);
-            Path.Clear();
-
-            Graph.RemoveNode(50);
-            Graph.RemoveNode(20);
-            Graph.RemoveNode(65);
-            Graph.RemoveNode(53);
-            Graph.RemoveNode(85);
+            CreateGrid(Graph, NumCellsX, NumCellsY);
 
             var DFS = new GraphSearchDFS(Graph, 30, 57);
             TraversedEges.Clear();
@@ -128,10 +129,38 @@ namespace GraphVisualizerTest
             }
 
             Console.Write("NomActiveNodes: {0}\nNumEdges: {1}\n", Graph.ActiveNodeCount(), Graph.EdgeCount());
+
+            this.GridPanel.MouseMove += GridPanel_OnMouseMove;
+            this.GridPanel.MouseDown += GridPanel_OnMouseDown;
+            this.GridPanel.MouseUp += GridPanel_OnMouseUp;
+
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void PaintTerrain(Point Location, EBrushType Brush)
         {
+            if (!bPaintTerrain)
+                return;
+
+            int LocationToNodeIndex = Location.Y / CellHeight * NumCellsY + Location.X / CellWidth;
+            var Node = Graph.GetNode(LocationToNodeIndex);
+            
+            Console.WriteLine(Node.NodeIndex);
+        }
+
+        private void GridPanel_OnMouseDown(object sender, MouseEventArgs e)
+        {
+            bPaintTerrain = true;
+            PaintTerrain(e.Location, CurrentBrushType);
+        }
+
+        private void GridPanel_OnMouseMove(object sender, MouseEventArgs e)
+        {
+            PaintTerrain(e.Location, CurrentBrushType);
+        }
+
+        private void GridPanel_OnMouseUp(object sender, MouseEventArgs e)
+        {
+            bPaintTerrain = false;
         }
 
         private void GridPanel_Paint(object sender, PaintEventArgs e)
@@ -146,18 +175,18 @@ namespace GraphVisualizerTest
                 sf.LineAlignment = StringAlignment.Near;
                 sf.Alignment = StringAlignment.Near;
 
-                //e.Graphics.DrawRectangle(new Pen(Color.Black), new Rectangle(new Point((int)Node.LocationX - 35, (int)Node.LocationY - 35), new Size(70, 70)));
-
+                e.Graphics.DrawRectangle(new Pen(Color.NavajoWhite, 2), new Rectangle(new Point((int)Node.LocationX - CellWidth / 2, (int)Node.LocationY - CellHeight / 2), new Size(CellWidth, CellHeight)));
                 e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.LocationX - 15.0f, (float)Node.LocationY - 15.0f));
-                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.LocationX - 5, (float)Node.LocationY - 5, 10, 10));
 
                 foreach (var Edge in Graph.Edges[Node.NodeIndex])
                 {
                     var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
                     var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
 
-                    e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
+                    e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY));
                 }
+
+                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.LocationX - 5, (float)Node.LocationY - 5, 10, 10));
             }
 
             foreach (var Edge in TraversedEges)
@@ -261,6 +290,11 @@ namespace GraphVisualizerTest
             double xSeparation = v2.x - x;
 
             return Math.Sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
+        }
+
+        public override string ToString()
+        {
+            return string.Format(@"[{0}, {1}]", x, y);
         }
     }
     #endregion

@@ -40,7 +40,7 @@
             // 
             this.GridPanel.Location = new System.Drawing.Point(12, 41);
             this.GridPanel.Name = "GridPanel";
-            this.GridPanel.Size = new System.Drawing.Size(725, 696);
+            this.GridPanel.Size = new System.Drawing.Size(725, 708);
             this.GridPanel.TabIndex = 0;
             this.GridPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.GridPanel_Paint);
             // 
@@ -115,7 +115,6 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();
 
