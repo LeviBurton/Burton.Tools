@@ -43,6 +43,7 @@
     <Compile Include="AdjacencyList.cs" />
     <Compile Include="GraphEdge.cs" />
     <Compile Include="GraphNode.cs" />
+    <Compile Include="GraphSearchBFS.cs" />
     <Compile Include="GraphSearchDFS.cs" />
     <Compile Include="HeuristicEuclid.cs" />
     <Compile Include="IHeuristic.cs" />

@@ -27,11 +27,11 @@ namespace GraphVisualizerTest
         public int TargetNode;
         public int GridWidthPx = 600;
         public int GridHeightPx = 600;
-        public int NumCellsX = 10;
-        public int NumCellsY = 10;
-        public int BigCircle = 20;
-        public int MediumCircle = 10;
-        public int SmallCircle = 5;
+        public int NumCellsX = 20;
+        public int NumCellsY = 20;
+        public int BigCircle = 10;
+        public int MediumCircle = 5;
+        public int SmallCircle = 2;
         public int CellWidth;
         public int CellHeight;
 
@@ -105,7 +105,6 @@ namespace GraphVisualizerTest
                     AddAllNeighborsToGridNode(Graph, Row, Col, CellsX, CellsY);
                 }
             }
-
         }
 
         public Form1()
@@ -135,7 +134,8 @@ namespace GraphVisualizerTest
             SourceNode = 8;
             TargetNode = 40;
 
-            CreatePathDFS();
+            //CreatePathDFS();
+            CreatePathBFS();
 
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
             this.GridPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseDown);
@@ -197,8 +197,34 @@ namespace GraphVisualizerTest
 
             foreach (var Node in Path)
             {
-                e.Graphics.FillEllipse(new SolidBrush(Color.Blue), new RectangleF((float)Node.LocationX - 7.5f, (float)Node.LocationY - 7.5f, 15, 15));
+                e.Graphics.FillEllipse(new SolidBrush(Color.Blue), new RectangleF((float)Node.LocationX - MediumCircle, (float)Node.LocationY - MediumCircle, MediumCircle * 2, MediumCircle * 2));
             }
+        }
+
+        private void CreatePathBFS()
+        {
+            TraversedEges.Clear();
+            Path.Clear();
+
+            Stopwatch Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+            var BFS = new GraphSearchBFS(Graph, SourceNode, TargetNode);
+            BFS.Search();
+            Stopwatch.Stop();
+
+            if (BFS.bFound)
+            {
+                var PathToTarget = BFS.GetPathToTarget();
+                TraversedEges = BFS.TraversedEdges;
+
+                foreach (var NodeIndex in PathToTarget)
+                {
+                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
+                    Path.Add(Node);
+                }
+            }
+
+            GridPanel.Refresh();
         }
 
         private void CreatePathDFS()
@@ -265,7 +291,8 @@ namespace GraphVisualizerTest
 
             if (bShouldSearch)
             {
-                CreatePathDFS();
+                //CreatePathDFS();
+                CreatePathBFS();
             }
 
           //  Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
