@@ -16,9 +16,15 @@ namespace GraphVisualizerTest
     public partial class Form1 : Form
     {
         public SparseGraph<GraphNode, GraphEdge> Graph;
+
+        List<EBrushType> Terrain = new List<EBrushType>();
+        List<NavGraphNode> Path = new List<NavGraphNode>();
+        List<GraphEdge> TraversedEges = new List<GraphEdge>();
+
+        public EBrushType CurrentBrushType;
+
         public int SourceNode;
         public int TargetNode;
-
         public int GridWidthPx = 600;
         public int GridHeightPx = 600;
         public int NumCellsX;
@@ -26,18 +32,11 @@ namespace GraphVisualizerTest
         public int BigCircle = 20;
         public int MediumCircle = 10;
         public int SmallCircle = 5;
-
         public int CellWidth;
         public int CellHeight;
 
-        List<EBrushType> Terrain = new List<EBrushType>();
-        List<NavGraphNode> Path = new List<NavGraphNode>();
-        List<GraphEdge> TraversedEges = new List<GraphEdge>();
-        public EBrushType CurrentBrushType;
         public bool bIsPaintingTerrain;
 
-        public GraphSearchDFS SearchDFS;
-        
         public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
         {
             return !((x < 0) || (x >= NumCellsX) || (y < 0) || (y >= NumCellsY));
