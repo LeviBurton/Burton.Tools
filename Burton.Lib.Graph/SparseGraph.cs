@@ -65,6 +65,16 @@ namespace Burton.Lib.Graph
             return NextNodeIndex;
         }
 
+        public bool IsNodePresent(int NodeIndex)
+        {
+            if (Nodes[NodeIndex].NodeIndex == (int)ENodeType.InvalidNodeIndex || (NodeIndex >= Nodes.Count))
+            {
+                return false;
+            }
+
+            return true;
+        }
+       
         /// <summary>
         /// Adds a node to the graph and returns it
         /// </summary>
@@ -81,7 +91,7 @@ namespace Burton.Lib.Graph
 
                 Nodes[Node.NodeIndex] = Node;
 
-                return NextNodeIndex;
+                return Node.NodeIndex;
             }
             else
             {

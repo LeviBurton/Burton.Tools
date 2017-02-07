@@ -27,8 +27,8 @@ namespace GraphVisualizerTest
         public int TargetNode;
         public int GridWidthPx = 600;
         public int GridHeightPx = 600;
-        public int NumCellsX;
-        public int NumCellsY;
+        public int NumCellsX = 10;
+        public int NumCellsY = 10;
         public int BigCircle = 20;
         public int MediumCircle = 10;
         public int SmallCircle = 5;
@@ -42,7 +42,7 @@ namespace GraphVisualizerTest
             return !((x < 0) || (x >= NumCellsX) || (y < 0) || (y >= NumCellsY));
         }
 
-        public static void AddAllNeighborsToGridNode(SparseGraph<GraphNode, GraphEdge> Graph, int Row, int Col, int CellsX, int CellsY)
+        public void AddAllNeighborsToGridNode(SparseGraph<GraphNode, GraphEdge> Graph, int Row, int Col, int CellsX, int CellsY)
         {
             for (int i = -1; i < 2; ++i)
             {
@@ -67,6 +67,12 @@ namespace GraphVisualizerTest
                         GraphEdge NewEdge = new GraphEdge((Row) * CellsX + Col, NodeY * CellsY + NodeX, Distance);
 
                         Graph.AddEdge(NewEdge);
+
+                        if (!Graph.IsDigraph())
+                        {
+                            GraphEdge Edge = new GraphEdge(NodeY * NumCellsX + NodeX, Row * NumCellsX + Col, Distance);
+                            Graph.AddEdge(Edge);
+                        }
                     }
                 }
             }
@@ -118,10 +124,9 @@ namespace GraphVisualizerTest
 
         private void Form1_Load(object sender, EventArgs e)
         {     
-            Graph = new SparseGraph<GraphNode, GraphEdge>(true);
+            Graph = new SparseGraph<GraphNode, GraphEdge>(false);
             CurrentBrushType = EBrushType.Source;
-            NumCellsX = 7;
-            NumCellsY = 7;
+
             bIsPaintingTerrain = false;
 
             CreateGrid(Graph, NumCellsX, NumCellsY);
@@ -238,8 +243,6 @@ namespace GraphVisualizerTest
             }
 
             bool bShouldSearch = false;
-            var Node = Graph.GetNode(TileIndex);
-
 
             if ( (CurrentBrushType == EBrushType.Source) || (CurrentBrushType == EBrushType.Target))
             {
@@ -259,7 +262,6 @@ namespace GraphVisualizerTest
                 UpdateGraphFromBrush(CurrentBrushType, TileIndex);
                 bShouldSearch = true;
             }
-       
 
             if (bShouldSearch)
             {
@@ -272,6 +274,38 @@ namespace GraphVisualizerTest
         public void UpdateGraphFromBrush(EBrushType Brush, int TileIndex)
         {
             Terrain[TileIndex] = Brush;
+
+            if (Brush == EBrushType.Obstacle)
+            {
+                Graph.RemoveNode(TileIndex);
+            }
+            else
+            {
+                //make the node active again if it is currently inactive
+                if (!Graph.IsNodePresent(TileIndex))
+                {
+                    int y = TileIndex / NumCellsY;
+                    int x = TileIndex - (y * NumCellsY);
+                    double MidX = CellWidth / 2;
+                    double MidY = CellHeight / 2;
+                    Console.WriteLine(string.Format("{0} {1} {2}", TileIndex, x, y));
+
+                    Vector2 Position = new Vector2(MidX + (x * CellWidth), MidY + (y * CellHeight));
+                    var NodeIndex = Graph.AddNode(new NavGraphNode(TileIndex, Position.x, Position.y));
+
+
+                    AddAllNeighborsToGridNode(Graph, y, x, NumCellsX, NumCellsY);
+
+
+                }
+            }
+
+            Terrain[TileIndex] = Brush;
+        }
+
+        public void WeightNavGraphNodeEdges(int NodeIndex, float Weight)
+        {
+
         }
 
         #region GridPanel Mouse Events
