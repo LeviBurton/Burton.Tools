@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Burton.Lib.Graph
 {
-    public class GraphSearchDFS
+    public class GraphSearchBFS
     {
        public enum NodeStatus { Visited, Unvisited, NoParentAssigned };
 
@@ -21,7 +21,7 @@ namespace Burton.Lib.Graph
         public int TargetNodeIndex;
         public bool bFound;
 
-        public GraphSearchDFS(SparseGraph<GraphNode,GraphEdge> Graph, int Source, int Target)
+        public GraphSearchBFS(SparseGraph<GraphNode,GraphEdge> Graph, int Source, int Target)
         {
             this.Graph = Graph;
             this.bFound = false;
@@ -45,41 +45,36 @@ namespace Burton.Lib.Graph
 
         public bool Search()
         {
-            Stack<GraphEdge> Stack = new Stack<GraphEdge>();
+            Queue<GraphEdge> Queue = new Queue<GraphEdge>();
             TraversedEdges.Clear();
             bFound = false;
             GraphEdge Dummy = new GraphEdge(SourceNodeIndex, SourceNodeIndex, 0);
 
-            Stack.Push(Dummy);
+            Queue.Enqueue(Dummy);
 
-            while (Stack.Count > 0)
+            while (Queue.Count > 0)
             {
-                // pop the next edge from the stack of edges to examine
-                GraphEdge Next = Stack.Pop();
-                
-                // make a note of the parent of the node this edge points to
+                GraphEdge Next = Queue.Dequeue();
+
                 Route[Next.ToNodeIndex] = Next.FromNodeIndex;
 
-                // ...and mark it visited
-                VisitedNodes[Next.ToNodeIndex] = (int)NodeStatus.Visited;
-
-                // keep track of which edges we have traversed to find a path
                 TraversedEdges.Add(Next);
 
-                // did we find the target?
                 if (Next.ToNodeIndex == TargetNodeIndex)
                 {
                     bFound = true;
                     return true;
                 }
 
-                // push edges leading from the node this edges points to onto the stack.
                 foreach (var Edge in Graph.Edges[Next.ToNodeIndex])
                 {
-                    // if we havent visited this node, add it to the stack to be examined
                     if (VisitedNodes[Edge.ToNodeIndex] ==(int) NodeStatus.Unvisited)
                     {
-                        Stack.Push(Edge);
+                        Queue.Enqueue(Edge);
+
+                        // mark node as visited before it is examined
+                        // ensures a maximum of N edges are ever placed in the queue, rather than E edges
+                        VisitedNodes[Edge.ToNodeIndex] = (int)NodeStatus.Visited;
                     }
                 }
             }
