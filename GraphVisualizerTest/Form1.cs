@@ -29,6 +29,8 @@ namespace GraphVisualizerTest
 
         public int CellWidth;
         public int CellHeight;
+
+        List<EBrushType> Terrain = new List<EBrushType>();
         List<NavGraphNode> Path = new List<NavGraphNode>();
         List<GraphEdge> TraversedEges = new List<GraphEdge>();
         public EBrushType CurrentBrushType;
@@ -78,14 +80,16 @@ namespace GraphVisualizerTest
 
             double MidX = CellWidth / 2;
             double MidY = CellHeight / 2;
+            Terrain.Capacity = CellsX * CellsY;
 
             for (int Row = 0; Row < CellsY; ++Row)
             {
                 for (int Col = 0; Col < CellsX; ++Col)
                 {
-                    Graph.AddNode(new NavGraphNode(Graph.GetNextFreeNodeIndex(),
-                                    MidX + (Col * CellWidth), MidY + (Row * CellHeight)));
+                    var NodeIndex = Graph.AddNode(new NavGraphNode(Graph.GetNextFreeNodeIndex(),
+                                                    MidX + (Col * CellWidth), MidY + (Row * CellHeight)));
 
+                    Terrain.Insert(NodeIndex, EBrushType.Normal);
                 }
             }
 
@@ -134,10 +138,6 @@ namespace GraphVisualizerTest
             this.GridPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseUp);
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
         private void GridPanel_Paint(object sender, PaintEventArgs e)
         {
             for (int CurNodeIndex = 0; CurNodeIndex < Graph.NodeCount(); ++CurNodeIndex)
@@ -149,6 +149,15 @@ namespace GraphVisualizerTest
                 StringFormat sf = new StringFormat();
                 sf.LineAlignment = StringAlignment.Near;
                 sf.Alignment = StringAlignment.Near;
+
+                if (Terrain[Node.NodeIndex] == EBrushType.Normal)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(Color.White), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
+                }
+                if (Terrain[Node.NodeIndex] == EBrushType.Obstacle)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
+                }
 
                 e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.LocationX - (CellWidth/2), (int)Node.LocationY - (CellHeight/2)), new Size(CellWidth, CellHeight)));
                 e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.LocationX - 15.0f, (float)Node.LocationY - 15.0f));
@@ -232,16 +241,26 @@ namespace GraphVisualizerTest
             bool bShouldSearch = false;
             var Node = Graph.GetNode(TileIndex);
 
-            if (CurrentBrushType == EBrushType.Source)
+
+            if ( (CurrentBrushType == EBrushType.Source) || (CurrentBrushType == EBrushType.Target))
             {
-                SourceNode = TileIndex;
-                bShouldSearch = true;  
+                if (CurrentBrushType == EBrushType.Source)
+                {
+                    SourceNode = TileIndex;
+                    bShouldSearch = true;
+                }
+                else if (CurrentBrushType == EBrushType.Target)
+                {
+                    TargetNode = TileIndex;
+                    bShouldSearch = true;
+                }
             }
-            else if (CurrentBrushType == EBrushType.Target)
+            else
             {
-                TargetNode = TileIndex;
+                UpdateGraphFromBrush(CurrentBrushType, TileIndex);
                 bShouldSearch = true;
             }
+       
 
             if (bShouldSearch)
             {
@@ -249,6 +268,11 @@ namespace GraphVisualizerTest
             }
 
           //  Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
+        }
+
+        public void UpdateGraphFromBrush(EBrushType Brush, int TileIndex)
+        {
+            Terrain[TileIndex] = Brush;
         }
 
         #region GridPanel Mouse Events
@@ -315,6 +339,13 @@ namespace GraphVisualizerTest
 
         #endregion
 
+        private void NormalButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                ChangeBrush(EBrushType.Normal);
+            }
+        }
     }
 
     public enum EBrushType
