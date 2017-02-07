@@ -15,11 +15,16 @@ namespace GraphVisualizerTest
     public partial class Form1 : Form
     {
         public SparseGraph<GraphNode, GraphEdge> Graph;
+
+        public int NumCellsX;
+        public int NumCellsY;
+
         public int CellWidth;
         public int CellHeight;
         List<NavGraphNode> Path = new List<NavGraphNode>();
         List<GraphEdge> TraversedEges = new List<GraphEdge>();
         public EBrushType CurrentBrushType;
+        public bool bIsPaintingTerrain;
 
         public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
         {
@@ -56,13 +61,13 @@ namespace GraphVisualizerTest
             }
         }
 
-        public static void CreateGrid(SparseGraph<GraphNode, GraphEdge> Graph, int CellsX, int CellsY)
+        public void CreateGrid(SparseGraph<GraphNode, GraphEdge> Graph, int CellsX, int CellsY)
         {
             int GridWidthPx = 700;
             int GridHeightPx = 700;
 
-            int CellWidth = GridWidthPx / CellsX;
-            int CellHeight = GridHeightPx / CellsY;
+            CellWidth = GridWidthPx / CellsX;
+            CellHeight = GridHeightPx / CellsY;
 
             double MidX = CellWidth / 2;
             double MidY = CellHeight / 2;
@@ -102,20 +107,17 @@ namespace GraphVisualizerTest
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {
+        {     
             Graph = new SparseGraph<GraphNode, GraphEdge>(true);
             CurrentBrushType = EBrushType.Source;
+            NumCellsX = 10;
+            NumCellsY = 10;
+            bIsPaintingTerrain = false;
 
-            CreateGrid(Graph, 10, 10);
+            CreateGrid(Graph, NumCellsX, NumCellsY);
             Path.Clear();
 
-            Graph.RemoveNode(50);
-            Graph.RemoveNode(20);
-            Graph.RemoveNode(65);
-            Graph.RemoveNode(53);
-            Graph.RemoveNode(85);
-
-            var DFS = new GraphSearchDFS(Graph, 30, 57);
+            var DFS = new GraphSearchDFS(Graph, 92, 9);
             TraversedEges.Clear();
 
             var PathToTarget = DFS.GetPathToTarget();
@@ -126,6 +128,10 @@ namespace GraphVisualizerTest
                 var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
                 Path.Add(Node);
             }
+
+            this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
+            this.GridPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseDown);
+            this.GridPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseUp);
 
             Console.Write("NomActiveNodes: {0}\nNumEdges: {1}\n", Graph.ActiveNodeCount(), Graph.EdgeCount());
         }
@@ -175,12 +181,44 @@ namespace GraphVisualizerTest
             }
         }
 
+        private void ChangeBrush(EBrushType NewBrush)
+        {
+            CurrentBrushType = NewBrush;
+        }
+
+        private void PaintTerrain(PointF Point)
+        { 
+            int TileIndex = (int)Point.Y / CellHeight  * NumCellsX + (int)Point.X / CellWidth;      
+            Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
+        }
+
+        #region GridPanel Mouse Events
+        private void GridPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (bIsPaintingTerrain)
+                PaintTerrain(e.Location);
+        }
+
+        private void GridPanel_MouseDown(object sender, MouseEventArgs e)
+        {
+            bIsPaintingTerrain = true;
+
+            PaintTerrain(e.Location);
+        }
+
+        private void GridPanel_MouseUp(object sender, MouseEventArgs e)
+        {
+            bIsPaintingTerrain = false;
+        }
+
+        #endregion
+
         #region Brush Type Selection
         private void SourceButton_CheckedChanged(object sender, EventArgs e)
         {
             if (((RadioButton)sender).Checked)
             {
-                CurrentBrushType = EBrushType.Source;
+                ChangeBrush(EBrushType.Source);
             }
         }
 
@@ -188,7 +226,7 @@ namespace GraphVisualizerTest
         {
             if (((RadioButton)sender).Checked)
             {
-                CurrentBrushType = EBrushType.Target;
+                ChangeBrush(EBrushType.Target);
             }
         }
 
@@ -196,7 +234,7 @@ namespace GraphVisualizerTest
         {
             if (((RadioButton)sender).Checked)
             {
-                CurrentBrushType = EBrushType.Obstacle;
+                ChangeBrush(EBrushType.Obstacle);
             }
         }
 
@@ -204,7 +242,7 @@ namespace GraphVisualizerTest
         {
             if (((RadioButton)sender).Checked)
             {
-                CurrentBrushType = EBrushType.Water;
+                ChangeBrush(EBrushType.Water);
             }
         }
 
@@ -212,11 +250,12 @@ namespace GraphVisualizerTest
         {
             if (((RadioButton)sender).Checked)
             {
-                CurrentBrushType = EBrushType.Mud;
+                ChangeBrush(EBrushType.Mud);
             }
         }
 
         #endregion
+
     }
 
     public enum EBrushType
