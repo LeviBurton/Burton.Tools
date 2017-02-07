@@ -117,22 +117,21 @@ namespace GraphVisualizerTest
         {     
             Graph = new SparseGraph<GraphNode, GraphEdge>(true);
             CurrentBrushType = EBrushType.Source;
-            NumCellsX = 10;
-            NumCellsY = 10;
+            NumCellsX = 7;
+            NumCellsY = 7;
             bIsPaintingTerrain = false;
 
             CreateGrid(Graph, NumCellsX, NumCellsY);
             Path.Clear();
-            SourceNode = 25;
-            TargetNode = 75;
+
+            SourceNode = 8;
+            TargetNode = 40;
 
             CreatePathDFS();
 
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
             this.GridPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseDown);
             this.GridPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseUp);
-
-            Console.Write("NomActiveNodes: {0}\nNumEdges: {1}\n", Graph.ActiveNodeCount(), Graph.EdgeCount());
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -161,7 +160,6 @@ namespace GraphVisualizerTest
                     var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
                     e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
                 }
-
 
                 if (Node.NodeIndex == SourceNode)
                 {
