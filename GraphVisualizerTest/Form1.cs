@@ -27,8 +27,8 @@ namespace GraphVisualizerTest
         public int TargetNode;
         public int GridWidthPx = 600;
         public int GridHeightPx = 600;
-        public int NumCellsX = 20;
-        public int NumCellsY = 20;
+        public int NumCellsX = 50;
+        public int NumCellsY = 50;
         public int BigCircle = 10;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
@@ -163,8 +163,7 @@ namespace GraphVisualizerTest
                     e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
                 }
 
-                e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.LocationX - (CellWidth/2), (int)Node.LocationY - (CellHeight/2)), new Size(CellWidth, CellHeight)));
-                e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.LocationX - 15.0f, (float)Node.LocationY - 15.0f));
+              //  e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.LocationX - 15.0f, (float)Node.LocationY - 15.0f));
                 e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.LocationX - SmallCircle, (float)Node.LocationY - SmallCircle, SmallCircle*2, SmallCircle*2));
 
                 foreach (var Edge in Graph.Edges[Node.NodeIndex])
@@ -184,6 +183,7 @@ namespace GraphVisualizerTest
                     e.Graphics.FillEllipse(new SolidBrush(Color.Red), new RectangleF((float)Node.LocationX - BigCircle, (float)Node.LocationY - BigCircle, BigCircle*2, BigCircle*2));
                 }
 
+                e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
             }
 
             foreach (var Edge in TraversedEges)
@@ -199,6 +199,8 @@ namespace GraphVisualizerTest
             {
                 e.Graphics.FillEllipse(new SolidBrush(Color.Blue), new RectangleF((float)Node.LocationX - MediumCircle, (float)Node.LocationY - MediumCircle, MediumCircle * 2, MediumCircle * 2));
             }
+
+
         }
 
         private void CreatePathBFS()
