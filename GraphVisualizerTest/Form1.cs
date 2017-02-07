@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -15,9 +16,16 @@ namespace GraphVisualizerTest
     public partial class Form1 : Form
     {
         public SparseGraph<GraphNode, GraphEdge> Graph;
+        public int SourceNode;
+        public int TargetNode;
 
+        public int GridWidthPx = 600;
+        public int GridHeightPx = 600;
         public int NumCellsX;
         public int NumCellsY;
+        public int BigCircle = 20;
+        public int MediumCircle = 10;
+        public int SmallCircle = 5;
 
         public int CellWidth;
         public int CellHeight;
@@ -26,6 +34,8 @@ namespace GraphVisualizerTest
         public EBrushType CurrentBrushType;
         public bool bIsPaintingTerrain;
 
+        public GraphSearchDFS SearchDFS;
+        
         public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
         {
             return !((x < 0) || (x >= NumCellsX) || (y < 0) || (y >= NumCellsY));
@@ -63,9 +73,6 @@ namespace GraphVisualizerTest
 
         public void CreateGrid(SparseGraph<GraphNode, GraphEdge> Graph, int CellsX, int CellsY)
         {
-            int GridWidthPx = 700;
-            int GridHeightPx = 700;
-
             CellWidth = GridWidthPx / CellsX;
             CellHeight = GridHeightPx / CellsY;
 
@@ -116,18 +123,10 @@ namespace GraphVisualizerTest
 
             CreateGrid(Graph, NumCellsX, NumCellsY);
             Path.Clear();
+            SourceNode = 25;
+            TargetNode = 75;
 
-            var DFS = new GraphSearchDFS(Graph, 92, 9);
-            TraversedEges.Clear();
-
-            var PathToTarget = DFS.GetPathToTarget();
-            TraversedEges = DFS.TraversedEdges;
-
-            foreach (var NodeIndex in PathToTarget)
-            {
-                var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
-                Path.Add(Node);
-            }
+            CreatePathDFS();
 
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
             this.GridPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseDown);
@@ -152,18 +151,28 @@ namespace GraphVisualizerTest
                 sf.LineAlignment = StringAlignment.Near;
                 sf.Alignment = StringAlignment.Near;
 
-                //e.Graphics.DrawRectangle(new Pen(Color.Black), new Rectangle(new Point((int)Node.LocationX - 35, (int)Node.LocationY - 35), new Size(70, 70)));
-
+                e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.LocationX - (CellWidth/2), (int)Node.LocationY - (CellHeight/2)), new Size(CellWidth, CellHeight)));
                 e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.LocationX - 15.0f, (float)Node.LocationY - 15.0f));
-                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.LocationX - 5, (float)Node.LocationY - 5, 10, 10));
+                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.LocationX - SmallCircle, (float)Node.LocationY - SmallCircle, SmallCircle*2, SmallCircle*2));
 
                 foreach (var Edge in Graph.Edges[Node.NodeIndex])
                 {
                     var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
                     var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
-
                     e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
                 }
+
+
+                if (Node.NodeIndex == SourceNode)
+                {
+                    e.Graphics.FillEllipse(new SolidBrush(Color.Green), new RectangleF((float)Node.LocationX - BigCircle, (float)Node.LocationY - BigCircle, BigCircle*2, BigCircle*2));
+                }
+
+                else if (Node.NodeIndex == TargetNode)
+                {
+                    e.Graphics.FillEllipse(new SolidBrush(Color.Red), new RectangleF((float)Node.LocationX - BigCircle, (float)Node.LocationY - BigCircle, BigCircle*2, BigCircle*2));
+                }
+
             }
 
             foreach (var Edge in TraversedEges)
@@ -177,8 +186,35 @@ namespace GraphVisualizerTest
 
             foreach (var Node in Path)
             {
-                e.Graphics.FillEllipse(new SolidBrush(Color.Green), new RectangleF((float)Node.LocationX - 7.5f, (float)Node.LocationY - 7.5f, 15, 15));
+                e.Graphics.FillEllipse(new SolidBrush(Color.Blue), new RectangleF((float)Node.LocationX - 7.5f, (float)Node.LocationY - 7.5f, 15, 15));
             }
+        }
+
+        private void CreatePathDFS()
+        {
+            TraversedEges.Clear();
+            Path.Clear();
+
+            Stopwatch Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+            var DFS = new GraphSearchDFS(Graph, SourceNode, TargetNode);    
+            DFS.Search();
+            Stopwatch.Stop();
+           
+            if (DFS.bFound)
+            {
+                var PathToTarget = DFS.GetPathToTarget();
+                TraversedEges = DFS.TraversedEdges;
+
+                foreach (var NodeIndex in PathToTarget)
+                {
+                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
+                    Path.Add(Node);
+                }
+            }
+
+            GridPanel.Refresh();
+            //Console.WriteLine(string.Format("Elapsed Search Time: {0}", Stopwatch.Elapsed.ToString()));
         }
 
         private void ChangeBrush(EBrushType NewBrush)
@@ -188,8 +224,33 @@ namespace GraphVisualizerTest
 
         private void PaintTerrain(PointF Point)
         { 
-            int TileIndex = (int)Point.Y / CellHeight  * NumCellsX + (int)Point.X / CellWidth;      
-            Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
+            int TileIndex = (int)Point.Y / CellHeight  * NumCellsX + (int)Point.X / CellWidth;
+
+            if (TileIndex < 0 || TileIndex > NumCellsX * NumCellsY)
+            {
+                return;
+            }
+
+            bool bShouldSearch = false;
+            var Node = Graph.GetNode(TileIndex);
+
+            if (CurrentBrushType == EBrushType.Source)
+            {
+                SourceNode = TileIndex;
+                bShouldSearch = true;  
+            }
+            else if (CurrentBrushType == EBrushType.Target)
+            {
+                TargetNode = TileIndex;
+                bShouldSearch = true;
+            }
+
+            if (bShouldSearch)
+            {
+                CreatePathDFS();
+            }
+
+          //  Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
         }
 
         #region GridPanel Mouse Events

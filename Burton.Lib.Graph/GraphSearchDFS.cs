@@ -17,8 +17,8 @@ namespace Burton.Lib.Graph
 
         public List<GraphEdge> TraversedEdges;
 
-        int SourceNodeIndex;
-        int TargetNodeIndex;
+        public int SourceNodeIndex;
+        public int TargetNodeIndex;
         public bool bFound;
 
         public GraphSearchDFS(SparseGraph<GraphNode,GraphEdge> Graph, int Source, int Target)
@@ -41,15 +41,13 @@ namespace Burton.Lib.Graph
             {
                 Route.Insert(i, (int)NodeStatus.NoParentAssigned);
             }
-
-            bFound = Search();
         }
 
         public bool Search()
         {
             Stack<GraphEdge> Stack = new Stack<GraphEdge>();
             TraversedEdges.Clear();
-
+            bFound = false;
             GraphEdge Dummy = new GraphEdge(SourceNodeIndex, SourceNodeIndex, 0);
 
             Stack.Push(Dummy);
@@ -68,6 +66,7 @@ namespace Burton.Lib.Graph
                 VisitedNodes[Next.ToNodeIndex] = (int)NodeStatus.Visited;
                 if (Next.ToNodeIndex == TargetNodeIndex)
                 {
+                    bFound = true;
                     return true;
                 }
 
@@ -79,6 +78,7 @@ namespace Burton.Lib.Graph
                     }
                 }
             }
+
             return false;
         }
 
