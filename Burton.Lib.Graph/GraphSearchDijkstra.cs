@@ -13,9 +13,6 @@ namespace Burton.Lib.Graph
         public List<GraphEdge> ShortestPathTree;
         public List<GraphEdge> SpanningTree;
         public List<GraphEdge> SearchFrontier;
-
-        public List<int> VisitedNodes;
-        public List<int> Route;
         public List<float> CostToThisNode;
 
         public int SourceNodeIndex;
@@ -37,13 +34,9 @@ namespace Burton.Lib.Graph
             ShortestPathTree = new List<GraphEdge>(NodeCount);
             SpanningTree = new List<GraphEdge>(NodeCount);
             SearchFrontier = new List<GraphEdge>(NodeCount);
-
-            VisitedNodes = new List<int>(NodeCount);
-            Route = new List<int>(ActiveNodeCount);
             CostToThisNode = new List<float>(ActiveNodeCount);
-            Route = new List<int>(Graph.NodeCount());
-
-            for (int i = 0; i < Graph.NodeCount(); i++)
+        
+            for (int i = 0; i < NodeCount; i++)
             {
                 ShortestPathTree.Insert(i, null);
                 SearchFrontier.Insert(i, null);
