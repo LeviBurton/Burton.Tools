@@ -216,7 +216,7 @@ namespace GraphVisualizerTest
             if (Dijkstra.bFound)
             {
                 var PathToTarget = Dijkstra.GetPathToTarget();
-                TraversedEges = Dijkstra.TraversedEdges;
+                TraversedEges = Dijkstra.SpanningTree;
 
                 foreach (var NodeIndex in PathToTarget)
                 {
@@ -268,7 +268,7 @@ namespace GraphVisualizerTest
             if (DFS.bFound)
             {
                 var PathToTarget = DFS.GetPathToTarget();
-                TraversedEges = DFS.TraversedEdges;
+                TraversedEges = DFS.SpanningTree;
 
                 foreach (var NodeIndex in PathToTarget)
                 {
@@ -319,8 +319,8 @@ namespace GraphVisualizerTest
             if (bShouldSearch)
             {
                 //CreatePathDFS();
-                //CreatePathBFS();
-                CreatePathDijkstra();
+                CreatePathBFS();
+                //CreatePathDijkstra();
             }
 
           //  Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));

@@ -11,7 +11,7 @@ namespace Burton.Lib.Graph
 
         SparseGraph<GraphNode, GraphEdge> Graph;
         public List<GraphEdge> ShortestPathTree;
-        public List<GraphEdge> TraversedEdges;
+        public List<GraphEdge> SpanningTree;
         public List<GraphEdge> SearchFrontier;
 
         public List<int> VisitedNodes;
@@ -35,7 +35,7 @@ namespace Burton.Lib.Graph
             int NodeCount = Graph.NodeCount();
 
             ShortestPathTree = new List<GraphEdge>();
-            TraversedEdges = new List<GraphEdge>();
+            SpanningTree = new List<GraphEdge>();
             SearchFrontier = new List<GraphEdge>();
 
             VisitedNodes = new List<int>(NodeCount);
@@ -57,6 +57,9 @@ namespace Burton.Lib.Graph
         public bool Search()
         {
             var PriQueue = new PriorityQueue<float>();
+            
+            
+
             return false;
         }
 
@@ -78,6 +81,16 @@ namespace Burton.Lib.Graph
             }
 
             return Path;
+        }
+
+        public float GetCostToTarget()
+        {
+            return CostToThisNode[TargetNodeIndex];
+        }
+
+        public float GetCostToNode(int NodeIndex)
+        {
+            return CostToThisNode[NodeIndex];
         }
     }
 }
