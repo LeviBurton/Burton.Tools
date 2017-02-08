@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Graph", "Burton.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3D618E62-0684-4617-83EE-D176EA31F4D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Graph.Tests", "Burton.Lib.Graph.Tests\Burton.Lib.Graph.Tests.csproj", "{8DA9CCA4-2460-4120-9793-16DC5AF5F804}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Types.Tuple", "Burton.Lib.Types.Tuple\Burton.Lib.Types.Tuple.csproj", "{D0788EFD-E9EC-4159-A0D5-FAF34E15A34A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphVisualizerTest", "GraphVisualizerTest\GraphVisualizerTest.csproj", "{990DA749-B203-4C3F-89A4-F22CC26E6657}"
@@ -41,10 +39,6 @@ Global
 		{2AFB63FE-05C1-4FE3-ABB7-8EB3704BA789}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AFB63FE-05C1-4FE3-ABB7-8EB3704BA789}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AFB63FE-05C1-4FE3-ABB7-8EB3704BA789}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DA9CCA4-2460-4120-9793-16DC5AF5F804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DA9CCA4-2460-4120-9793-16DC5AF5F804}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DA9CCA4-2460-4120-9793-16DC5AF5F804}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DA9CCA4-2460-4120-9793-16DC5AF5F804}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0788EFD-E9EC-4159-A0D5-FAF34E15A34A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0788EFD-E9EC-4159-A0D5-FAF34E15A34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0788EFD-E9EC-4159-A0D5-FAF34E15A34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,7 +52,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8DA9CCA4-2460-4120-9793-16DC5AF5F804} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 		{990DA749-B203-4C3F-89A4-F22CC26E6657} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 	EndGlobalSection
 EndGlobal

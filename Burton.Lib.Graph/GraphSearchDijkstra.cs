@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Burton.Lib.Alg;
 
-// Testing
-
 namespace Burton.Lib.Graph
 {
     public class GraphSearchDijkstra
