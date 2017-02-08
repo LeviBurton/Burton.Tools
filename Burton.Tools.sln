@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexedPriorityQueueTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "Scratch\WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{FA28794B-F0F2-443A-A7BE-C311B2464E73}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexedPriorityQueue Console Test", "Scratch\IndexedPriorityQueue Console Test\IndexedPriorityQueue Console Test.csproj", "{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{FA28794B-F0F2-443A-A7BE-C311B2464E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA28794B-F0F2-443A-A7BE-C311B2464E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA28794B-F0F2-443A-A7BE-C311B2464E73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,5 +67,6 @@ Global
 		{990DA749-B203-4C3F-89A4-F22CC26E6657} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 		{1837B6D7-4A54-4961-995F-B70B70D00C9B} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 		{FA28794B-F0F2-443A-A7BE-C311B2464E73} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
+		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 	EndGlobalSection
 EndGlobal

@@ -84,5 +84,10 @@ namespace Burton.Lib.Alg
             ReorderDownwards(1, Size - 1);
             return Heap[Size--]; 
         }
+
+        public void ChangePriority(int Index)
+        {
+            ReorderUpdwards(Heap[Index]);
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace GraphVisualizerTest
 
         List<EBrushType> Terrain = new List<EBrushType>();
         List<NavGraphNode> Path = new List<NavGraphNode>();
-        List<GraphEdge> TraversedEges = new List<GraphEdge>();
+        List<GraphEdge> SubTree = new List<GraphEdge>();
 
         public EBrushType CurrentBrushType;
 
@@ -27,8 +27,8 @@ namespace GraphVisualizerTest
         public int TargetNode;
         public int GridWidthPx = 600;
         public int GridHeightPx = 600;
-        public int NumCellsX = 50;
-        public int NumCellsY = 50;
+        public int NumCellsX = 11;
+        public int NumCellsY = 11;
         public int BigCircle = 10;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
@@ -62,7 +62,7 @@ namespace GraphVisualizerTest
                         var PosNode = new Vector2(Node.LocationX, Node.LocationY);
                         var PosNeighborNode = new Vector2(NeighborNode.LocationX, NeighborNode.LocationY);
 
-                        double Distance = PosNode.Distance(PosNeighborNode);
+                        float Distance = PosNode.Distance(PosNeighborNode);
 
                         GraphEdge NewEdge = new GraphEdge((Row) * CellsX + Col, NodeY * CellsY + NodeX, Distance);
 
@@ -83,8 +83,8 @@ namespace GraphVisualizerTest
             CellWidth = GridWidthPx / CellsX;
             CellHeight = GridHeightPx / CellsY;
 
-            double MidX = CellWidth / 2;
-            double MidY = CellHeight / 2;
+            float MidX = CellWidth / 2;
+            float MidY = CellHeight / 2;
             Terrain.Capacity = CellsX * CellsY;
 
             for (int Row = 0; Row < CellsY; ++Row)
@@ -130,11 +130,12 @@ namespace GraphVisualizerTest
 
             CreateGrid(Graph, NumCellsX, NumCellsY);
             Path.Clear();
+            SubTree.Clear();
 
-            SourceNode = 8;
-            TargetNode = 40;
+            SourceNode = 60;
+            TargetNode = 16;
 
-            //CreatePathDFS();
+            ////CreatePathDFS();
             //CreatePathBFS();
             CreatePathDijkstra();
 
@@ -164,14 +165,14 @@ namespace GraphVisualizerTest
                     e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
                 }
 
-              //  e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.LocationX - 15.0f, (float)Node.LocationY - 15.0f));
+                e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.LocationX - 15.0f, (float)Node.LocationY - 15.0f));
                 e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.LocationX - SmallCircle, (float)Node.LocationY - SmallCircle, SmallCircle*2, SmallCircle*2));
 
                 foreach (var Edge in Graph.Edges[Node.NodeIndex])
                 {
                     var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
                     var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
-                    e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
+                  //  e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
                 }
 
                 if (Node.NodeIndex == SourceNode)
@@ -187,24 +188,35 @@ namespace GraphVisualizerTest
                 e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
             }
 
-            foreach (var Edge in TraversedEges)
+            if (SubTree != null && SubTree.Count > 0)
             {
-                var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
-                var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
-                var EdgePen = new Pen(Color.Black, 2);
+                for (int i = 0; i < SubTree.Count; ++i)
+                {
+                    if (SubTree[i] != null)
+                    {
+                        var FromNode = Graph.GetNode(SubTree[i].FromNodeIndex) as NavGraphNode;
+                        var ToNode = Graph.GetNode(SubTree[i].ToNodeIndex) as NavGraphNode;
 
-                e.Graphics.DrawLine(EdgePen, new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY));
+                        var EdgePen = new Pen(Color.Black, 1);
+
+                        e.Graphics.DrawLine(EdgePen, new PointF(FromNode.LocationX, FromNode.LocationY), new PointF(ToNode.LocationX, ToNode.LocationY));
+                    }
+                }
+
             }
 
-            foreach (var Node in Path)
+            if (Path.Count > 0)
             {
-                e.Graphics.FillEllipse(new SolidBrush(Color.Blue), new RectangleF((float)Node.LocationX - MediumCircle, (float)Node.LocationY - MediumCircle, MediumCircle * 2, MediumCircle * 2));
+                foreach (var Node in Path)
+                {
+                    e.Graphics.FillEllipse(new SolidBrush(Color.Blue), new RectangleF(Node.LocationX - MediumCircle, Node.LocationY - MediumCircle, MediumCircle * 2, MediumCircle * 2));
+                }
             }
         }
 
         private void CreatePathDijkstra()
         {
-            TraversedEges.Clear();
+            SubTree.Clear();
             Path.Clear();
 
             Stopwatch Stopwatch = new Stopwatch();
@@ -216,7 +228,7 @@ namespace GraphVisualizerTest
             if (Dijkstra.bFound)
             {
                 var PathToTarget = Dijkstra.GetPathToTarget();
-                TraversedEges = Dijkstra.SpanningTree;
+                SubTree = Dijkstra.ShortestPathTree;
 
                 foreach (var NodeIndex in PathToTarget)
                 {
@@ -230,7 +242,7 @@ namespace GraphVisualizerTest
 
         private void CreatePathBFS()
         {
-            TraversedEges.Clear();
+            SubTree.Clear();
             Path.Clear();
 
             Stopwatch Stopwatch = new Stopwatch();
@@ -242,7 +254,7 @@ namespace GraphVisualizerTest
             if (BFS.bFound)
             {
                 var PathToTarget = BFS.GetPathToTarget();
-                TraversedEges = BFS.TraversedEdges;
+                SubTree = BFS.TraversedEdges;
 
                 foreach (var NodeIndex in PathToTarget)
                 {
@@ -256,7 +268,7 @@ namespace GraphVisualizerTest
 
         private void CreatePathDFS()
         {
-            TraversedEges.Clear();
+            SubTree.Clear();
             Path.Clear();
 
             Stopwatch Stopwatch = new Stopwatch();
@@ -268,7 +280,7 @@ namespace GraphVisualizerTest
             if (DFS.bFound)
             {
                 var PathToTarget = DFS.GetPathToTarget();
-                TraversedEges = DFS.SpanningTree;
+                SubTree = DFS.SpanningTree;
 
                 foreach (var NodeIndex in PathToTarget)
                 {
@@ -318,9 +330,9 @@ namespace GraphVisualizerTest
 
             if (bShouldSearch)
             {
-                //CreatePathDFS();
-                CreatePathBFS();
-                //CreatePathDijkstra();
+               // CreatePathDFS();
+               //CreatePathBFS();
+               CreatePathDijkstra();
             }
 
           //  Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
@@ -341,8 +353,8 @@ namespace GraphVisualizerTest
                 {
                     int y = TileIndex / NumCellsY;
                     int x = TileIndex - (y * NumCellsY);
-                    double MidX = CellWidth / 2;
-                    double MidY = CellHeight / 2;
+                    float MidX = CellWidth / 2;
+                    float MidY = CellHeight / 2;
                     Console.WriteLine(string.Format("{0} {1} {2}", TileIndex, x, y));
 
                     Vector2 Position = new Vector2(MidX + (x * CellWidth), MidY + (y * CellHeight));
@@ -447,10 +459,10 @@ namespace GraphVisualizerTest
     #region Misc
     public class NavGraphNode : GraphNode
     {
-        public double LocationX;
-        public double LocationY;
+        public float LocationX;
+        public float LocationY;
 
-        public NavGraphNode(int Index, double LocationX, double LocationY)
+        public NavGraphNode(int Index, float LocationX, float LocationY)
         {
             this.NodeIndex = Index;
             this.LocationX = LocationX;
@@ -460,22 +472,22 @@ namespace GraphVisualizerTest
 
     public class Vector2
     {
-        public double x;
-        public double y;
+        public float x;
+        public float y;
 
-        public Vector2(double x, double y)
+        public Vector2(float x, float y)
         {
             this.x = x;
             this.y = y;
         }
 
         //------------------------------------------------------------------------
-        public double Distance(Vector2 v2)
+        public float Distance(Vector2 v2)
         {
-            double ySeparation = v2.y - y;
-            double xSeparation = v2.x - x;
+            float ySeparation = v2.y - y;
+            float xSeparation = v2.x - x;
 
-            return Math.Sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
+            return (float)Math.Sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
         }
     }
     #endregion
