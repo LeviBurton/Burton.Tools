@@ -135,7 +135,8 @@ namespace GraphVisualizerTest
             TargetNode = 40;
 
             //CreatePathDFS();
-            CreatePathBFS();
+            //CreatePathBFS();
+            CreatePathDijkstra();
 
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
             this.GridPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseDown);
@@ -201,6 +202,32 @@ namespace GraphVisualizerTest
             }
 
 
+        }
+
+        private void CreatePathDijkstra()
+        {
+            TraversedEges.Clear();
+            Path.Clear();
+
+            Stopwatch Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+            var Dijkstra = new GraphSearchDijkstra(Graph, SourceNode, TargetNode);
+            Dijkstra.Search();
+            Stopwatch.Stop();
+
+            if (Dijkstra.bFound)
+            {
+                var PathToTarget = Dijkstra.GetPathToTarget();
+                TraversedEges = Dijkstra.TraversedEdges;
+
+                foreach (var NodeIndex in PathToTarget)
+                {
+                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
+                    Path.Add(Node);
+                }
+            }
+
+            GridPanel.Refresh();
         }
 
         private void CreatePathBFS()
@@ -294,7 +321,8 @@ namespace GraphVisualizerTest
             if (bShouldSearch)
             {
                 //CreatePathDFS();
-                CreatePathBFS();
+                //CreatePathBFS();
+                CreatePathDijkstra();
             }
 
           //  Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
