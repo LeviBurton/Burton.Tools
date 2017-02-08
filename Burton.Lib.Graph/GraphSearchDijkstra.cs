@@ -1,9 +1,7 @@
-﻿using Burton.Lib.Graph;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Burton.Lib.Alg;
 
 namespace Burton.Lib.Graph
 {
@@ -58,40 +56,7 @@ namespace Burton.Lib.Graph
 
         public bool Search()
         {
-            Queue<GraphEdge> Queue = new Queue<GraphEdge>();
-            TraversedEdges.Clear();
-            bFound = false;
-            GraphEdge Dummy = new GraphEdge(SourceNodeIndex, SourceNodeIndex, 0);
-
-            Queue.Enqueue(Dummy);
-
-            while (Queue.Count > 0)
-            {
-                GraphEdge Next = Queue.Dequeue();
-
-                Route[Next.ToNodeIndex] = Next.FromNodeIndex;
-
-                TraversedEdges.Add(Next);
-
-                if (Next.ToNodeIndex == TargetNodeIndex)
-                {
-                    bFound = true;
-                    return true;
-                }
-
-                foreach (var Edge in Graph.Edges[Next.ToNodeIndex])
-                {
-                    if (VisitedNodes[Edge.ToNodeIndex] ==(int) NodeStatus.Unvisited)
-                    {
-                        Queue.Enqueue(Edge);
-
-                        // mark node as visited before it is examined
-                        // ensures a maximum of N edges are ever placed in the queue, rather than E edges
-                        VisitedNodes[Edge.ToNodeIndex] = (int)NodeStatus.Visited;
-                    }
-                }
-            }
-
+            var PriQueue = new PriorityQueue<float>();
             return false;
         }
 
