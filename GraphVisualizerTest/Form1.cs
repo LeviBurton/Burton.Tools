@@ -200,8 +200,6 @@ namespace GraphVisualizerTest
             {
                 e.Graphics.FillEllipse(new SolidBrush(Color.Blue), new RectangleF((float)Node.LocationX - MediumCircle, (float)Node.LocationY - MediumCircle, MediumCircle * 2, MediumCircle * 2));
             }
-
-
         }
 
         private void CreatePathDijkstra()
@@ -350,10 +348,7 @@ namespace GraphVisualizerTest
                     Vector2 Position = new Vector2(MidX + (x * CellWidth), MidY + (y * CellHeight));
                     var NodeIndex = Graph.AddNode(new NavGraphNode(TileIndex, Position.x, Position.y));
 
-
                     AddAllNeighborsToGridNode(Graph, y, x, NumCellsX, NumCellsY);
-
-
                 }
             }
 
@@ -427,8 +422,6 @@ namespace GraphVisualizerTest
             }
         }
 
-        #endregion
-
         private void NormalButton_CheckedChanged(object sender, EventArgs e)
         {
             if (((RadioButton)sender).Checked)
@@ -436,6 +429,9 @@ namespace GraphVisualizerTest
                 ChangeBrush(EBrushType.Normal);
             }
         }
+
+        #endregion
+
     }
 
     public enum EBrushType

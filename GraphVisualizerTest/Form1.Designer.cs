@@ -34,6 +34,7 @@
             this.ObstacleButton = new System.Windows.Forms.RadioButton();
             this.WaterButton = new System.Windows.Forms.RadioButton();
             this.MudButton = new System.Windows.Forms.RadioButton();
+            this.NormalButton = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // GridPanel
@@ -71,7 +72,7 @@
             // ObstacleButton
             // 
             this.ObstacleButton.AutoSize = true;
-            this.ObstacleButton.Location = new System.Drawing.Point(139, 13);
+            this.ObstacleButton.Location = new System.Drawing.Point(203, 12);
             this.ObstacleButton.Name = "ObstacleButton";
             this.ObstacleButton.Size = new System.Drawing.Size(67, 17);
             this.ObstacleButton.TabIndex = 3;
@@ -82,7 +83,7 @@
             // WaterButton
             // 
             this.WaterButton.AutoSize = true;
-            this.WaterButton.Location = new System.Drawing.Point(212, 12);
+            this.WaterButton.Location = new System.Drawing.Point(276, 11);
             this.WaterButton.Name = "WaterButton";
             this.WaterButton.Size = new System.Drawing.Size(54, 17);
             this.WaterButton.TabIndex = 4;
@@ -93,7 +94,7 @@
             // MudButton
             // 
             this.MudButton.AutoSize = true;
-            this.MudButton.Location = new System.Drawing.Point(272, 12);
+            this.MudButton.Location = new System.Drawing.Point(336, 11);
             this.MudButton.Name = "MudButton";
             this.MudButton.Size = new System.Drawing.Size(46, 17);
             this.MudButton.TabIndex = 5;
@@ -101,11 +102,23 @@
             this.MudButton.UseVisualStyleBackColor = true;
             this.MudButton.CheckedChanged += new System.EventHandler(this.MudButton_CheckedChanged);
             // 
+            // NormalButton
+            // 
+            this.NormalButton.AutoSize = true;
+            this.NormalButton.Location = new System.Drawing.Point(139, 12);
+            this.NormalButton.Name = "NormalButton";
+            this.NormalButton.Size = new System.Drawing.Size(58, 17);
+            this.NormalButton.TabIndex = 6;
+            this.NormalButton.Text = "Normal";
+            this.NormalButton.UseVisualStyleBackColor = true;
+            this.NormalButton.CheckedChanged += new System.EventHandler(this.NormalButton_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 761);
+            this.Controls.Add(this.NormalButton);
             this.Controls.Add(this.MudButton);
             this.Controls.Add(this.WaterButton);
             this.Controls.Add(this.ObstacleButton);
@@ -128,6 +141,7 @@
         private System.Windows.Forms.RadioButton ObstacleButton;
         private System.Windows.Forms.RadioButton WaterButton;
         private System.Windows.Forms.RadioButton MudButton;
+        private System.Windows.Forms.RadioButton NormalButton;
     }
 }
 
