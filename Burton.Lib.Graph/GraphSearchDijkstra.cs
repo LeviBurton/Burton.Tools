@@ -55,7 +55,7 @@ namespace Burton.Lib.Graph
             {
                 int NextClosestNode = Q.Pop();
 
-                ShortestPathTree.Insert(NextClosestNode, SearchFrontier[NextClosestNode]);
+                ShortestPathTree[NextClosestNode] = SearchFrontier[NextClosestNode];
 
                 if (NextClosestNode == TargetNodeIndex)
                 {
@@ -97,7 +97,7 @@ namespace Burton.Lib.Graph
 
             Path.Insert(0, Node);
 
-            while ( (Node != SourceNodeIndex) && (ShortestPathTree[Node] != null) )
+            while ( (Node != SourceNodeIndex) && (ShortestPathTree[Node] != null) && (Path.Count < Graph.NodeCount() ) )
             {
                 Node = ShortestPathTree[Node].FromNodeIndex;
                 Path.Insert(0, Node);

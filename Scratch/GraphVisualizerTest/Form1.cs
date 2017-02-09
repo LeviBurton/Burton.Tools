@@ -29,7 +29,7 @@ namespace GraphVisualizerTest
         public int GridHeightPx = 600;
         public int NumCellsX = 11;
         public int NumCellsY = 11;
-        public int BigCircle = 10;
+        public int BigCircle = 15;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
         public int CellWidth;
@@ -116,7 +116,6 @@ namespace GraphVisualizerTest
             typeof(Panel).InvokeMember("DoubleBuffered",
                 BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
                 null,
-
                 GridPanel,
                 new object[] { true });
         }
@@ -136,7 +135,7 @@ namespace GraphVisualizerTest
             TargetNode = 16;
 
             ////CreatePathDFS();
-            //CreatePathBFS();
+           // CreatePathBFS();
             CreatePathDijkstra();
 
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
@@ -146,11 +145,15 @@ namespace GraphVisualizerTest
 
         private void GridPanel_Paint(object sender, PaintEventArgs e)
         {
+            // Draw Grid, Terrain, Nodes, Edges and Labels
             for (int CurNodeIndex = 0; CurNodeIndex < Graph.NodeCount(); ++CurNodeIndex)
             {
                 var Node = (NavGraphNode)Graph.GetNode(CurNodeIndex);
                 if (Node.NodeIndex == (int)ENodeType.InvalidNodeIndex)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
                     continue;
+                }
 
                 StringFormat sf = new StringFormat();
                 sf.LineAlignment = StringAlignment.Near;
@@ -172,7 +175,7 @@ namespace GraphVisualizerTest
                 {
                     var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
                     var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
-                  //  e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
+                    e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
                 }
 
                 if (Node.NodeIndex == SourceNode)
@@ -188,6 +191,7 @@ namespace GraphVisualizerTest
                 e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
             }
 
+            // Draw subtree of searched nodes 
             if (SubTree != null && SubTree.Count > 0)
             {
                 for (int i = 0; i < SubTree.Count; ++i)
@@ -205,11 +209,16 @@ namespace GraphVisualizerTest
 
             }
 
+            // Draw Path
             if (Path.Count > 0)
             {
-                foreach (var Node in Path)
+                for (int i = 0; i < Path.Count - 1; i++)
                 {
-                    e.Graphics.FillEllipse(new SolidBrush(Color.Blue), new RectangleF(Node.LocationX - MediumCircle, Node.LocationY - MediumCircle, MediumCircle * 2, MediumCircle * 2));
+                    var Edge = Graph.GetEdge(Graph.GetNode(Path[i].NodeIndex).NodeIndex, Graph.GetNode(Path[i + 1].NodeIndex).NodeIndex);
+                    var StartNode = (NavGraphNode) Graph.GetNode(Edge.FromNodeIndex);
+                    var EndNode = (NavGraphNode) Graph.GetNode(Edge.ToNodeIndex);
+
+                    e.Graphics.DrawLine(new Pen(Color.Blue, 10), new PointF(StartNode.LocationX, StartNode.LocationY), new PointF(EndNode.LocationX, EndNode.LocationY));
                 }
             }
         }
@@ -330,9 +339,10 @@ namespace GraphVisualizerTest
 
             if (bShouldSearch)
             {
-               // CreatePathDFS();
-               //CreatePathBFS();
-               CreatePathDijkstra();
+               // CreatePathBFS();
+                // CreatePathDFS();
+                //CreatePathBFS();
+                CreatePathDijkstra();
             }
 
           //  Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
