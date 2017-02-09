@@ -216,11 +216,7 @@ namespace GraphVisualizerTest
             {
                 for (int i = 0; i < Path.Count - 1; i++)
                 {
-                    var Edge = Graph.GetEdge(Graph.GetNode(Path[i].NodeIndex).NodeIndex, Graph.GetNode(Path[i + 1].NodeIndex).NodeIndex);
-                    var StartNode = (NavGraphNode) Graph.GetNode(Edge.FromNodeIndex);
-                    var EndNode = (NavGraphNode) Graph.GetNode(Edge.ToNodeIndex);
-
-                    e.Graphics.DrawLine(new Pen(Color.Blue, 10), new PointF(StartNode.X, StartNode.Y), new PointF(EndNode.X, EndNode.Y));
+                    e.Graphics.DrawLine(new Pen(Color.Blue, 8), new PointF(Path[i].X, Path[i].Y), new PointF(Path[i + 1].X, Path[i +1].Y));
                 }
             }
         }
