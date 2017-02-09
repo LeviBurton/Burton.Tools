@@ -16,7 +16,5 @@ namespace Burton.Lib.Graph
 
         public GraphNode() { NodeIndex = (int)NodeType.InvalidNodeIndex; }
         public GraphNode(int Index) { NodeIndex = Index; }
-
-
     }
 }
