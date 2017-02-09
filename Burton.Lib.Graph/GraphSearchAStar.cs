@@ -5,24 +5,31 @@ using Burton.Lib.Alg;
 
 namespace Burton.Lib.Graph
 {
-    public class GraphSearchDijkstra
+    public class GraphSearchAStar
     {
        public enum NodeStatus { Visited, Unvisited, NoParentAssigned };
 
         SparseGraph<GraphNode, GraphEdge> Graph;
+        public IHeuristic<SparseGraph<GraphNode, GraphEdge>> Heuristic;
+
         public List<GraphEdge> ShortestPathTree;
         public List<GraphEdge> SearchFrontier;
+
         public List<float> CostToThisNode;
+        public List<float> GCosts;
+        public List<float> FCosts;
 
         public int SourceNodeIndex;
         public int TargetNodeIndex;
 
         public bool bFound;
 
-        public GraphSearchDijkstra(SparseGraph<GraphNode,GraphEdge> Graph, int Source, int Target)
+        public GraphSearchAStar(SparseGraph<GraphNode,GraphEdge> Graph, int Source, int Target)
         {
             this.Graph = Graph;
             this.bFound = false;
+
+            Heuristic = new HeuristicEuclid<SparseGraph<GraphNode, GraphEdge>>();
 
             SourceNodeIndex = Source;
             TargetNodeIndex = Target;
@@ -32,21 +39,25 @@ namespace Burton.Lib.Graph
 
             ShortestPathTree = new List<GraphEdge>(NodeCount);
             SearchFrontier = new List<GraphEdge>(NodeCount);
-            CostToThisNode = new List<float>(ActiveNodeCount);
-        
+            CostToThisNode = new List<float>(NodeCount);
+            GCosts = new List<float>(NodeCount);
+            FCosts = new List<float>(NodeCount);
+
+            // not sure i need to initialize these...
             for (int i = 0; i < NodeCount; i++)
             {
                 ShortestPathTree.Insert(i, null);
                 SearchFrontier.Insert(i, null);
                 CostToThisNode.Insert(i, 0);
+                FCosts.Insert(i, 0);
+                GCosts.Insert(i, 0);
             }
-
         }
 
         public bool Search()
         {
-            var Q = new IndexedPriorityQueueLow<float>(CostToThisNode, Graph.NodeCount());
-
+            var Q = new IndexedPriorityQueueLow<float>(FCosts, Graph.NodeCount());
+          
             Q.Insert(SourceNodeIndex);
            
             while (!Q.IsEmpty())
@@ -64,17 +75,22 @@ namespace Burton.Lib.Graph
                 foreach (var Edge in Graph.Edges[NextClosestNode])
                 {
                     float NewCost = CostToThisNode[NextClosestNode] + Edge.EdgeCost;
+                    float HCost = Heuristic.Calculate(Graph, TargetNodeIndex, Edge.ToNodeIndex);
+
+                    float GCost = GCosts[NextClosestNode] + Edge.EdgeCost;
 
                     if (SearchFrontier[Edge.ToNodeIndex] == null)
                     {
-                        CostToThisNode[Edge.ToNodeIndex] = NewCost;
+                        FCosts[Edge.ToNodeIndex] = GCost + HCost;
+                        GCosts[Edge.ToNodeIndex] = GCost;
                         Q.Insert(Edge.ToNodeIndex);
                         SearchFrontier[Edge.ToNodeIndex] = Edge;
                     }
-                    else if ( (NewCost < CostToThisNode[Edge.ToNodeIndex]) &&
+                    else if ( (GCost < GCosts[Edge.ToNodeIndex]) &&
                               (ShortestPathTree[Edge.ToNodeIndex] == null) )
                     {
-                        CostToThisNode[Edge.ToNodeIndex] = NewCost;
+                        FCosts[Edge.ToNodeIndex] = GCost + HCost;
+                        GCosts[Edge.ToNodeIndex] = GCost;
                         Q.ChangePriority(Edge.ToNodeIndex);
                         SearchFrontier[Edge.ToNodeIndex] = Edge;
                     }
@@ -82,6 +98,11 @@ namespace Burton.Lib.Graph
             }
             
             return false;
+        }
+
+        public List<GraphEdge> GetSPT()
+        {
+            return ShortestPathTree;
         }
 
         public List<int> GetPathToTarget()
@@ -109,9 +130,5 @@ namespace Burton.Lib.Graph
             return CostToThisNode[TargetNodeIndex];
         }
 
-        public float GetCostToNode(int NodeIndex)
-        {
-            return CostToThisNode[NodeIndex];
-        }
     }
 }

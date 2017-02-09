@@ -59,8 +59,8 @@ namespace GraphVisualizerTest
                         var Node = (NavGraphNode)Graph.GetNode(Row * CellsX + Col);
                         var NeighborNode = (NavGraphNode)Graph.GetNode(NodeY * CellsX + NodeX);
 
-                        var PosNode = new Vector2(Node.LocationX, Node.LocationY);
-                        var PosNeighborNode = new Vector2(NeighborNode.LocationX, NeighborNode.LocationY);
+                        var PosNode = new Vector2(Node.X, Node.Y);
+                        var PosNeighborNode = new Vector2(NeighborNode.X, NeighborNode.Y);
 
                         float Distance = PosNode.Distance(PosNeighborNode);
 
@@ -136,7 +136,8 @@ namespace GraphVisualizerTest
 
             ////CreatePathDFS();
            // CreatePathBFS();
-            CreatePathDijkstra();
+            //CreatePathDijkstra();
+            CreatePathAStar();
 
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
             this.GridPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseDown);
@@ -149,9 +150,10 @@ namespace GraphVisualizerTest
             for (int CurNodeIndex = 0; CurNodeIndex < Graph.NodeCount(); ++CurNodeIndex)
             {
                 var Node = (NavGraphNode)Graph.GetNode(CurNodeIndex);
+
                 if (Node.NodeIndex == (int)ENodeType.InvalidNodeIndex)
                 {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
+                    e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
                     continue;
                 }
 
@@ -161,34 +163,34 @@ namespace GraphVisualizerTest
 
                 if (Terrain[Node.NodeIndex] == EBrushType.Normal)
                 {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.White), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
+                    e.Graphics.FillRectangle(new SolidBrush(Color.White), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
                 }
                 if (Terrain[Node.NodeIndex] == EBrushType.Obstacle)
                 {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
+                    e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
                 }
 
-                e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.LocationX - 15.0f, (float)Node.LocationY - 15.0f));
-                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.LocationX - SmallCircle, (float)Node.LocationY - SmallCircle, SmallCircle*2, SmallCircle*2));
+                e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.X - 15.0f, (float)Node.Y - 15.0f));
+                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.X - SmallCircle, (float)Node.Y - SmallCircle, SmallCircle*2, SmallCircle*2));
 
                 foreach (var Edge in Graph.Edges[Node.NodeIndex])
                 {
                     var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
                     var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
-                    e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.LocationX, (float)FromNode.LocationY), new PointF((float)ToNode.LocationX, (float)ToNode.LocationY)); 
+                    e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.X, (float)FromNode.Y), new PointF((float)ToNode.X, (float)ToNode.Y)); 
                 }
 
                 if (Node.NodeIndex == SourceNode)
                 {
-                    e.Graphics.FillEllipse(new SolidBrush(Color.Green), new RectangleF((float)Node.LocationX - BigCircle, (float)Node.LocationY - BigCircle, BigCircle*2, BigCircle*2));
+                    e.Graphics.FillEllipse(new SolidBrush(Color.Green), new RectangleF((float)Node.X - BigCircle, (float)Node.Y - BigCircle, BigCircle*2, BigCircle*2));
                 }
 
                 else if (Node.NodeIndex == TargetNode)
                 {
-                    e.Graphics.FillEllipse(new SolidBrush(Color.Red), new RectangleF((float)Node.LocationX - BigCircle, (float)Node.LocationY - BigCircle, BigCircle*2, BigCircle*2));
+                    e.Graphics.FillEllipse(new SolidBrush(Color.Red), new RectangleF((float)Node.X - BigCircle, (float)Node.Y - BigCircle, BigCircle*2, BigCircle*2));
                 }
 
-                e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.LocationX - (CellWidth / 2), (int)Node.LocationY - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
+                e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
             }
 
             // Draw subtree of searched nodes 
@@ -203,7 +205,7 @@ namespace GraphVisualizerTest
 
                         var EdgePen = new Pen(Color.Black, 1);
 
-                        e.Graphics.DrawLine(EdgePen, new PointF(FromNode.LocationX, FromNode.LocationY), new PointF(ToNode.LocationX, ToNode.LocationY));
+                        e.Graphics.DrawLine(EdgePen, new PointF(FromNode.X, FromNode.Y), new PointF(ToNode.X, ToNode.Y));
                     }
                 }
 
@@ -218,11 +220,36 @@ namespace GraphVisualizerTest
                     var StartNode = (NavGraphNode) Graph.GetNode(Edge.FromNodeIndex);
                     var EndNode = (NavGraphNode) Graph.GetNode(Edge.ToNodeIndex);
 
-                    e.Graphics.DrawLine(new Pen(Color.Blue, 10), new PointF(StartNode.LocationX, StartNode.LocationY), new PointF(EndNode.LocationX, EndNode.LocationY));
+                    e.Graphics.DrawLine(new Pen(Color.Blue, 10), new PointF(StartNode.X, StartNode.Y), new PointF(EndNode.X, EndNode.Y));
                 }
             }
         }
 
+        private void CreatePathAStar()
+        {
+            SubTree.Clear();
+            Path.Clear();
+
+            Stopwatch Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+            var AStar = new GraphSearchAStar(Graph, SourceNode, TargetNode);
+            AStar.Search();
+            Stopwatch.Stop();
+
+            if (AStar.bFound)
+            {
+                var PathToTarget = AStar.GetPathToTarget();
+                SubTree = AStar.ShortestPathTree;
+
+                foreach (var NodeIndex in PathToTarget)
+                {
+                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
+                    Path.Add(Node);
+                }
+            }
+
+            GridPanel.Refresh();
+        }
         private void CreatePathDijkstra()
         {
             SubTree.Clear();
@@ -333,7 +360,7 @@ namespace GraphVisualizerTest
             }
             else
             {
-                UpdateGraphFromBrush(CurrentBrushType, TileIndex);
+                UpdateGraphFromBrush(TileIndex, CurrentBrushType);
                 bShouldSearch = true;
             }
 
@@ -342,13 +369,12 @@ namespace GraphVisualizerTest
                // CreatePathBFS();
                 // CreatePathDFS();
                 //CreatePathBFS();
-                CreatePathDijkstra();
+                //CreatePathDijkstra();
+                CreatePathAStar();
             }
-
-          //  Console.Write(string.Format("{0} {1}\n", TileIndex, CurrentBrushType.ToString()));
         }
 
-        public void UpdateGraphFromBrush(EBrushType Brush, int TileIndex)
+        public void UpdateGraphFromBrush(int TileIndex, EBrushType Brush)
         {
             Terrain[TileIndex] = Brush;
 
@@ -358,14 +384,13 @@ namespace GraphVisualizerTest
             }
             else
             {
-                //make the node active again if it is currently inactive
+                // make the node active again if it is currently inactive
                 if (!Graph.IsNodePresent(TileIndex))
                 {
                     int y = TileIndex / NumCellsY;
                     int x = TileIndex - (y * NumCellsY);
                     float MidX = CellWidth / 2;
                     float MidY = CellHeight / 2;
-                    Console.WriteLine(string.Format("{0} {1} {2}", TileIndex, x, y));
 
                     Vector2 Position = new Vector2(MidX + (x * CellWidth), MidY + (y * CellHeight));
                     var NodeIndex = Graph.AddNode(new NavGraphNode(TileIndex, Position.x, Position.y));
@@ -467,19 +492,7 @@ namespace GraphVisualizerTest
     }
 
     #region Misc
-    public class NavGraphNode : GraphNode
-    {
-        public float LocationX;
-        public float LocationY;
-
-        public NavGraphNode(int Index, float LocationX, float LocationY)
-        {
-            this.NodeIndex = Index;
-            this.LocationX = LocationX;
-            this.LocationY = LocationY;
-        }
-    }
-
+ 
     public class Vector2
     {
         public float x;
