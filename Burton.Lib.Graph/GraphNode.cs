@@ -10,6 +10,7 @@ namespace Burton.Lib.Graph
         InvalidNodeIndex = -1
     }
 
+    [Serializable]
     public class GraphNode
     { 
         public int NodeIndex { get; set; }

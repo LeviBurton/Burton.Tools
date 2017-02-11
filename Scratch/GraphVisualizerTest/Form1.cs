@@ -5,18 +5,20 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace GraphVisualizerTest
 {
     public partial class Form1 : Form
     {
         public SparseGraph<GraphNode, GraphEdge> Graph;
-
+      
         List<EBrushType> Terrain = new List<EBrushType>();
         List<NavGraphNode> Path = new List<NavGraphNode>();
         List<GraphEdge> SubTree = new List<GraphEdge>();
@@ -85,7 +87,6 @@ namespace GraphVisualizerTest
 
             float MidX = CellWidth / 2;
             float MidY = CellHeight / 2;
-            Terrain.Capacity = CellsX * CellsY;
 
             for (int Row = 0; Row < CellsY; ++Row)
             {
@@ -93,8 +94,7 @@ namespace GraphVisualizerTest
                 {
                     var NodeIndex = Graph.AddNode(new NavGraphNode(Graph.GetNextFreeNodeIndex(),
                                                     MidX + (Col * CellWidth), MidY + (Row * CellHeight)));
-
-                    Terrain.Insert(NodeIndex, EBrushType.Normal);
+  
                 }
             }
 
@@ -123,11 +123,18 @@ namespace GraphVisualizerTest
         private void Form1_Load(object sender, EventArgs e)
         {     
             Graph = new SparseGraph<GraphNode, GraphEdge>(false);
+            
             CurrentBrushType = EBrushType.Source;
 
             bIsPaintingTerrain = false;
 
+            for (int i = 0; i < NumCellsX * NumCellsY; i++)
+            {
+                Terrain.Insert(i, EBrushType.Normal);
+            }
+
             CreateGrid(Graph, NumCellsX, NumCellsY);
+
             Path.Clear();
             SubTree.Clear();
 
@@ -473,8 +480,61 @@ namespace GraphVisualizerTest
             }
         }
 
+
         #endregion
 
+        private void MenuItem_OpenFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OpenFileDialog = new OpenFileDialog();
+            OpenFileDialog.Filter = "Map file | *.map";
+            OpenFileDialog.Title = "Open a Map File";
+            OpenFileDialog.ShowDialog();
+
+            if (OpenFileDialog.FileName != "")
+            {
+                using (Stream InStream = File.Open(OpenFileDialog.FileName, FileMode.Open))
+                {
+                    var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    NumCellsX = (int)BinaryFormatter.Deserialize(InStream);
+                    NumCellsY = (int)BinaryFormatter.Deserialize(InStream);
+
+                    Terrain = null;
+                    Graph = null;
+
+                    Graph = new SparseGraph<GraphNode, GraphEdge>(false);
+                    Terrain = (List<EBrushType>)BinaryFormatter.Deserialize(InStream);
+               
+                    CreateGrid(Graph, NumCellsX, NumCellsY);
+
+                    for (int i = 0; i < NumCellsX * NumCellsY; i++)
+                    {
+                        UpdateGraphFromBrush(i, Terrain[i]);
+                    }
+
+                    CreatePathAStar();
+                    GridPanel.Refresh();
+                }
+            }
+        }
+
+        private void MenuItem_SaveFile_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog SaveFileDialog = new SaveFileDialog();
+            SaveFileDialog.Filter = "Map file | *.map";
+            SaveFileDialog.Title = "Save a Map File";
+            SaveFileDialog.ShowDialog();
+
+            if (SaveFileDialog.FileName != "")
+            {
+                using (Stream OutStream = File.Open(SaveFileDialog.FileName, FileMode.Create))
+                {
+                    var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    BinaryFormatter.Serialize(OutStream, NumCellsX);
+                    BinaryFormatter.Serialize(OutStream, NumCellsY);
+                    BinaryFormatter.Serialize(OutStream, Terrain);
+                }
+            }
+        }
     }
 
     public enum EBrushType
