@@ -61,6 +61,9 @@ namespace GraphVisualizerTest
                         var Node = (NavGraphNode)Graph.GetNode(Row * CellsX + Col);
                         var NeighborNode = (NavGraphNode)Graph.GetNode(NodeY * CellsX + NodeX);
 
+                        if (NeighborNode.NodeIndex == (int)ENodeType.InvalidNodeIndex)
+                            continue;
+
                         var PosNode = new Vector2(Node.X, Node.Y);
                         var PosNeighborNode = new Vector2(NeighborNode.X, NeighborNode.Y);
 

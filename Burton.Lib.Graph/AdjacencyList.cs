@@ -66,7 +66,6 @@ namespace Burton.Lib.Graph
                     if (ToEdge.ToNodeIndex == From)
                     {
                         EdgesToRemove.Add(ToEdge);
-                   
                     }
                 }
 
@@ -110,11 +109,11 @@ namespace Burton.Lib.Graph
         }
 
         // Returns a copy of the linked list of outward edges from a vertex
-        public LinkedList<GraphEdge> this[int index]
+        public List<GraphEdge> this[int index]
         {
             get
             {
-                LinkedList<GraphEdge> EdgeList = new LinkedList<GraphEdge>(EdgeVector[index]);
+                List<GraphEdge> EdgeList = new List<GraphEdge>(EdgeVector[index]);
                 return EdgeList;
             }
         }

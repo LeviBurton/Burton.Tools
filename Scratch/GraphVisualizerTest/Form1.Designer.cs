@@ -44,10 +44,10 @@
             // 
             // GridPanel
             // 
-            this.GridPanel.Location = new System.Drawing.Point(16, 143);
+            this.GridPanel.Location = new System.Drawing.Point(16, 61);
             this.GridPanel.Margin = new System.Windows.Forms.Padding(4);
             this.GridPanel.Name = "GridPanel";
-            this.GridPanel.Size = new System.Drawing.Size(967, 778);
+            this.GridPanel.Size = new System.Drawing.Size(967, 860);
             this.GridPanel.TabIndex = 0;
             this.GridPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.GridPanel_Paint);
             // 
@@ -55,7 +55,7 @@
             // 
             this.SourceButton.AutoSize = true;
             this.SourceButton.Checked = true;
-            this.SourceButton.Location = new System.Drawing.Point(20, 114);
+            this.SourceButton.Location = new System.Drawing.Point(16, 32);
             this.SourceButton.Margin = new System.Windows.Forms.Padding(4);
             this.SourceButton.Name = "SourceButton";
             this.SourceButton.Size = new System.Drawing.Size(74, 21);
@@ -68,7 +68,7 @@
             // TargetButton
             // 
             this.TargetButton.AutoSize = true;
-            this.TargetButton.Location = new System.Drawing.Point(107, 113);
+            this.TargetButton.Location = new System.Drawing.Point(103, 31);
             this.TargetButton.Margin = new System.Windows.Forms.Padding(4);
             this.TargetButton.Name = "TargetButton";
             this.TargetButton.Size = new System.Drawing.Size(71, 21);
@@ -80,7 +80,7 @@
             // ObstacleButton
             // 
             this.ObstacleButton.AutoSize = true;
-            this.ObstacleButton.Location = new System.Drawing.Point(275, 113);
+            this.ObstacleButton.Location = new System.Drawing.Point(271, 31);
             this.ObstacleButton.Margin = new System.Windows.Forms.Padding(4);
             this.ObstacleButton.Name = "ObstacleButton";
             this.ObstacleButton.Size = new System.Drawing.Size(85, 21);
@@ -92,7 +92,7 @@
             // WaterButton
             // 
             this.WaterButton.AutoSize = true;
-            this.WaterButton.Location = new System.Drawing.Point(372, 112);
+            this.WaterButton.Location = new System.Drawing.Point(368, 30);
             this.WaterButton.Margin = new System.Windows.Forms.Padding(4);
             this.WaterButton.Name = "WaterButton";
             this.WaterButton.Size = new System.Drawing.Size(67, 21);
@@ -104,7 +104,7 @@
             // MudButton
             // 
             this.MudButton.AutoSize = true;
-            this.MudButton.Location = new System.Drawing.Point(452, 112);
+            this.MudButton.Location = new System.Drawing.Point(448, 30);
             this.MudButton.Margin = new System.Windows.Forms.Padding(4);
             this.MudButton.Name = "MudButton";
             this.MudButton.Size = new System.Drawing.Size(56, 21);
@@ -116,7 +116,7 @@
             // NormalButton
             // 
             this.NormalButton.AutoSize = true;
-            this.NormalButton.Location = new System.Drawing.Point(189, 113);
+            this.NormalButton.Location = new System.Drawing.Point(185, 31);
             this.NormalButton.Margin = new System.Windows.Forms.Padding(4);
             this.NormalButton.Name = "NormalButton";
             this.NormalButton.Size = new System.Drawing.Size(74, 21);
@@ -148,14 +148,14 @@
             // MenuItem_OpenFile
             // 
             this.MenuItem_OpenFile.Name = "MenuItem_OpenFile";
-            this.MenuItem_OpenFile.Size = new System.Drawing.Size(181, 26);
+            this.MenuItem_OpenFile.Size = new System.Drawing.Size(120, 26);
             this.MenuItem_OpenFile.Text = "Open";
             this.MenuItem_OpenFile.Click += new System.EventHandler(this.MenuItem_OpenFile_Click);
             // 
             // MenuItem_SaveFile
             // 
             this.MenuItem_SaveFile.Name = "MenuItem_SaveFile";
-            this.MenuItem_SaveFile.Size = new System.Drawing.Size(181, 26);
+            this.MenuItem_SaveFile.Size = new System.Drawing.Size(120, 26);
             this.MenuItem_SaveFile.Text = "Save";
             this.MenuItem_SaveFile.Click += new System.EventHandler(this.MenuItem_SaveFile_Click);
             // 
