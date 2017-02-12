@@ -3,36 +3,41 @@ using System.Collections.Generic;
 
 namespace Burton.Lib.Graph
 {
-    public class AdjacencyList<EdgeType> where EdgeType : GraphEdge, new()
+    [Serializable]
+    public class AdjacencyList
     {
-        public LinkedList<EdgeType>[] EdgeVector;
+        public List<GraphEdge>[] EdgeVector;
         
+        public AdjacencyList() { }
+
         // ctor: create empty adjacency list
         public AdjacencyList(int Vertices) 
         {
-            EdgeVector = new LinkedList<EdgeType>[Vertices];
+            EdgeVector = new List<GraphEdge>[Vertices];
 
             for (int i = 0; i < EdgeVector.Length; ++i)
             {
-                EdgeVector[i] = new LinkedList<EdgeType>();
+                EdgeVector[i] = new List<GraphEdge>();
             }
         }
 
         // Appends an edge to the linked list
-        public void AddEdgeAtEnd(EdgeType Edge)
+        public void AddEdgeAtEnd(GraphEdge Edge)
         {
-            EdgeVector[Edge.FromNodeIndex].AddLast(Edge);
+          //  EdgeVector[Edge.FromNodeIndex].AddLast(Edge);
+            EdgeVector[Edge.FromNodeIndex].Add(Edge);
         }
 
         // Adds a new Edge to the linked list from the front
-        public void AddEdgeAtBegin(EdgeType Edge)
+        public void AddEdgeAtBegin(GraphEdge Edge)
         {
-            EdgeVector[Edge.FromNodeIndex].AddFirst(Edge);
+        //    EdgeVector[Edge.FromNodeIndex].AddFirst(Edge);
+            EdgeVector[Edge.FromNodeIndex].Insert(0, Edge);
         }
 
-        public EdgeType GetEdge(int From, int To)
+        public GraphEdge GetEdge(int From, int To)
         {
-            EdgeType EdgeToReturn = null;
+            GraphEdge EdgeToReturn = null;
 
             foreach (var Edge in EdgeVector[From])
             {
@@ -50,19 +55,23 @@ namespace Burton.Lib.Graph
             // Foreach edge leading from this node...
             foreach (var FromEdge in EdgeVector[From])
             {
-                // get the list of edges it is pointing to
-                var ToEdge = EdgeVector[FromEdge.ToNodeIndex].First;
+                //// get the list of edges it is pointing to
+                //var ToEdge = EdgeVector[FromEdge.ToNodeIndex][0];
+                var EdgesToRemove = new List<GraphEdge>();
 
                 // foreach edge it is pointing to, check if it is us.
-                while (ToEdge != null)
+                foreach (var ToEdge in EdgeVector[FromEdge.ToNodeIndex])
                 {
                     // if the node it is pointg to is the node we want to delete, then delete that edge from the node.
-                    if (ToEdge.Value.ToNodeIndex == From)
+                    if (ToEdge.ToNodeIndex == From)
                     {
-                        EdgeVector[FromEdge.ToNodeIndex].Remove(ToEdge);
+                        EdgesToRemove.Add(ToEdge);
                     }
+                }
 
-                    ToEdge = ToEdge.Next;
+                foreach (var EdgeToRemove in EdgesToRemove)
+                {
+                    EdgeVector[FromEdge.ToNodeIndex].Remove(EdgeToRemove);
                 }
             }
 
@@ -72,7 +81,7 @@ namespace Burton.Lib.Graph
 
         public void RemoveEdge(int From, int To)
         {
-            EdgeType EdgeToRemove = null;
+            GraphEdge EdgeToRemove = null;
 
             foreach (var Edge in EdgeVector[From])
             {
@@ -88,7 +97,7 @@ namespace Burton.Lib.Graph
 
         // Removmes the first occurence of an edge and returns true if there was any change 
         // in the collection, otherwise false.
-        public bool RemoveEdge(EdgeType Edge)
+        public bool RemoveEdge(GraphEdge Edge)
         {
             return EdgeVector[Edge.FromNodeIndex].Remove(Edge);
         }
@@ -100,11 +109,11 @@ namespace Burton.Lib.Graph
         }
 
         // Returns a copy of the linked list of outward edges from a vertex
-        public LinkedList<EdgeType> this[int index]
+        public List<GraphEdge> this[int index]
         {
             get
             {
-                LinkedList<EdgeType> EdgeList = new LinkedList<EdgeType>(EdgeVector[index]);
+                List<GraphEdge> EdgeList = new List<GraphEdge>(EdgeVector[index]);
                 return EdgeList;
             }
         }
@@ -112,10 +121,10 @@ namespace Burton.Lib.Graph
         public void PrintAdjacencyList()
         {
             int i = 0;
-            foreach (LinkedList<EdgeType> list in EdgeVector)
+            foreach (List<GraphEdge> list in EdgeVector)
             {
                 Console.Write("AdjacencyList[" + i + "] -> ");
-                foreach(EdgeType edge in list)
+                foreach(GraphEdge edge in list)
                 {
                     Console.Write(edge.FromNodeIndex + "(" + edge.ToNodeIndex + ")");
                 }

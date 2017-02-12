@@ -57,7 +57,9 @@ namespace Burton.Lib.Graph
         public bool Search()
         {
             var Q = new IndexedPriorityQueueLow<float>(FCosts, Graph.NodeCount());
-          
+            if (SourceNodeIndex > Graph.NodeCount())
+                return false;
+
             Q.Insert(SourceNodeIndex);
            
             while (!Q.IsEmpty())
