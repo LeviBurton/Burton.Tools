@@ -27,11 +27,11 @@ namespace GraphVisualizerTest
 
         public int SourceNode;
         public int TargetNode;
-        public int GridWidthPx = 600;
-        public int GridHeightPx = 600;
-        public int NumCellsX = 11;
-        public int NumCellsY = 11;
-        public int BigCircle = 15;
+        public int GridWidthPx = 1280 ;
+        public int GridHeightPx = 720 ;
+        public int NumCellsX = 10;
+        public int NumCellsY = 5;
+        public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
         public int CellWidth;
@@ -59,6 +59,9 @@ namespace GraphVisualizerTest
                     if (ValidNeighbor(NodeX, NodeY, CellsX, CellsY))
                     {
                         var Node = (NavGraphNode)Graph.GetNode(Row * CellsX + Col);
+                        if (Node.NodeIndex == -1)
+                            continue;
+
                         var NeighborNode = (NavGraphNode)Graph.GetNode(NodeY * CellsX + NodeX);
 
                         if (NeighborNode.NodeIndex == (int)ENodeType.InvalidNodeIndex)
@@ -68,14 +71,13 @@ namespace GraphVisualizerTest
                         var PosNeighborNode = new Vector2(NeighborNode.X, NeighborNode.Y);
 
                         float Distance = PosNode.Distance(PosNeighborNode);
-
-                        GraphEdge NewEdge = new GraphEdge((Row) * CellsX + Col, NodeY * CellsY + NodeX, Distance);
-
+                   
+                        GraphEdge NewEdge = new GraphEdge(Node.NodeIndex, NeighborNode.NodeIndex, Distance);
                         Graph.AddEdge(NewEdge);
 
                         if (!Graph.IsDigraph())
                         {
-                            GraphEdge Edge = new GraphEdge(NodeY * NumCellsX + NodeX, Row * NumCellsX + Col, Distance);
+                            GraphEdge Edge = new GraphEdge(NeighborNode.NodeIndex, Node.NodeIndex, Distance);
                             Graph.AddEdge(Edge);
                         }
                     }
@@ -87,7 +89,7 @@ namespace GraphVisualizerTest
         {
             CellWidth = GridWidthPx / CellsX;
             CellHeight = GridHeightPx / CellsY;
-
+            Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
             float MidX = CellWidth / 2;
             float MidY = CellHeight / 2;
 
@@ -135,8 +137,12 @@ namespace GraphVisualizerTest
             {
                 Terrain.Insert(i, EBrushType.Normal);
             }
-
+            
             CreateGrid(Graph, NumCellsX, NumCellsY);
+
+            GridPanel.Width = CellWidth * NumCellsX;
+            GridPanel.Height = CellHeight * NumCellsY;
+            Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
 
             Path.Clear();
             SubTree.Clear();
@@ -212,13 +218,11 @@ namespace GraphVisualizerTest
                     {
                         var FromNode = Graph.GetNode(SubTree[i].FromNodeIndex) as NavGraphNode;
                         var ToNode = Graph.GetNode(SubTree[i].ToNodeIndex) as NavGraphNode;
-
-                        var EdgePen = new Pen(Color.Black, 1);
+                        var EdgePen = new Pen(Color.FromArgb(255, 25, 25, 25), 1);
 
                         e.Graphics.DrawLine(EdgePen, new PointF(FromNode.X, FromNode.Y), new PointF(ToNode.X, ToNode.Y));
                     }
                 }
-
             }
 
             // Draw Path
@@ -226,7 +230,7 @@ namespace GraphVisualizerTest
             {
                 for (int i = 0; i < Path.Count - 1; i++)
                 {
-                    e.Graphics.DrawLine(new Pen(Color.Blue, 8), new PointF(Path[i].X, Path[i].Y), new PointF(Path[i + 1].X, Path[i +1].Y));
+                    e.Graphics.DrawLine(new Pen(Color.Blue, 3), new PointF(Path[i].X, Path[i].Y), new PointF(Path[i + 1].X, Path[i +1].Y));
                 }
             }
         }
@@ -344,8 +348,11 @@ namespace GraphVisualizerTest
         { 
             int TileIndex = (int)Point.Y / CellHeight  * NumCellsX + (int)Point.X / CellWidth;
 
-            if (TileIndex < 0 || TileIndex > NumCellsX * NumCellsY)
+            if ((Point.X > NumCellsX * CellWidth || Point.Y > NumCellsY * CellHeight) ||
+                (Point.X < 0 || Point.Y < 0) || 
+                TileIndex >= Graph.NodeCount())
             {
+                Console.WriteLine("Ignoreing: {0} {1}", TileIndex, NumCellsX * NumCellsY);
                 return;
             }
 
@@ -375,8 +382,8 @@ namespace GraphVisualizerTest
                // CreatePathBFS();
                 // CreatePathDFS();
                 //CreatePathBFS();
-                //CreatePathDijkstra();
-                CreatePathAStar();
+               // CreatePathDijkstra();
+               CreatePathAStar();
             }
         }
 
@@ -393,8 +400,8 @@ namespace GraphVisualizerTest
                 // make the node active again if it is currently inactive
                 if (!Graph.IsNodePresent(TileIndex))
                 {
-                    int y = TileIndex / NumCellsY;
-                    int x = TileIndex - (y * NumCellsY);
+                    int y = (TileIndex / NumCellsX) ;
+                    int x = TileIndex - (y * NumCellsX);
                     float MidX = CellWidth / 2;
                     float MidY = CellHeight / 2;
 
@@ -515,6 +522,7 @@ namespace GraphVisualizerTest
                     }
 
                     CreatePathAStar();
+                
                     GridPanel.Refresh();
                 }
             }

@@ -44,6 +44,7 @@
             // 
             // GridPanel
             // 
+            this.GridPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GridPanel.Location = new System.Drawing.Point(16, 61);
             this.GridPanel.Margin = new System.Windows.Forms.Padding(4);
             this.GridPanel.Name = "GridPanel";
