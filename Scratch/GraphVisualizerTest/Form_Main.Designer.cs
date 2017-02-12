@@ -1,6 +1,6 @@
 ﻿namespace GraphVisualizerTest
 {
-    partial class Form1
+    partial class Form_Main
     {
         /// <summary>
         /// Required designer variable.
@@ -160,7 +160,7 @@
             this.MenuItem_SaveFile.Text = "Save";
             this.MenuItem_SaveFile.Click += new System.EventHandler(this.MenuItem_SaveFile_Click);
             // 
-            // Form1
+            // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -175,8 +175,8 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Form_Main";
+            this.Text = "Form_Main";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

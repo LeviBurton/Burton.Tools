@@ -119,7 +119,9 @@ namespace Burton.Lib.Graph
 
             Path.Insert(0, Node);
 
-            while ( (Node != SourceNodeIndex) && (ShortestPathTree[Node] != null)) 
+            int NodeCount = Graph.NodeCount();
+
+            while ( (Node != SourceNodeIndex) && (ShortestPathTree[Node] != null) && Path.Count <= NodeCount) 
             {
                 Node = ShortestPathTree[Node].FromNodeIndex;
                 Path.Insert(0, Node);

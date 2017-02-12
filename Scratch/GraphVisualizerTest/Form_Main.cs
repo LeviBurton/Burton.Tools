@@ -15,7 +15,7 @@ using System.Xml.Serialization;
 
 namespace GraphVisualizerTest
 {
-    public partial class Form1 : Form
+    public partial class Form_Main : Form
     {
         public SparseGraph<GraphNode, GraphEdge> Graph;
       
@@ -27,10 +27,10 @@ namespace GraphVisualizerTest
 
         public int SourceNode;
         public int TargetNode;
-        public int GridWidthPx = 1280 ;
-        public int GridHeightPx = 720 ;
-        public int NumCellsX = 10;
-        public int NumCellsY = 5;
+        public int GridWidthPx = 1280;
+        public int GridHeightPx = 720;
+        public int NumCellsX = 20;
+        public int NumCellsY = 10;
         public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
@@ -39,7 +39,7 @@ namespace GraphVisualizerTest
 
         public bool bIsPaintingTerrain;
 
-        public Form1()
+        public Form_Main()
         {
             InitializeComponent();
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
@@ -150,6 +150,11 @@ namespace GraphVisualizerTest
 
             SourceNode = 60;
             TargetNode = 16;
+
+
+            var BrushTool = new Form_BrushTool();
+            BrushTool.Owner = this;
+            BrushTool.Show();
 
             ////CreatePathDFS();
            // CreatePathBFS();
