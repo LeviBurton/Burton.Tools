@@ -39,6 +39,19 @@ namespace GraphVisualizerTest
 
         public bool bIsPaintingTerrain;
 
+        public Form1()
+        {
+            InitializeComponent();
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
+
+            // Double buffer our panel.  This allows us to do it without subclassing Panel.
+            typeof(Panel).InvokeMember("DoubleBuffered",
+                BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
+                null,
+                GridPanel,
+                new object[] { true });
+        }
+
         public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
         {
             return !((x < 0) || (x >= NumCellsX) || (y < 0) || (y >= NumCellsY));
@@ -59,7 +72,8 @@ namespace GraphVisualizerTest
                     if (ValidNeighbor(NodeX, NodeY, CellsX, CellsY))
                     {
                         var Node = (NavGraphNode)Graph.GetNode(Row * CellsX + Col);
-                        if (Node.NodeIndex == -1)
+
+                        if (Node.NodeIndex == -(int)ENodeType.InvalidNodeIndex)
                             continue;
 
                         var NeighborNode = (NavGraphNode)Graph.GetNode(NodeY * CellsX + NodeX);
@@ -98,7 +112,7 @@ namespace GraphVisualizerTest
                 for (int Col = 0; Col < CellsX; ++Col)
                 {
                     var NodeIndex = Graph.AddNode(new NavGraphNode(Graph.GetNextFreeNodeIndex(),
-                                                    MidX + (Col * CellWidth), MidY + (Row * CellHeight)));
+                                                                   MidX + (Col * CellWidth), MidY + (Row * CellHeight)));
   
                 }
             }
@@ -110,19 +124,6 @@ namespace GraphVisualizerTest
                     AddAllNeighborsToGridNode(Graph, Row, Col, CellsX, CellsY);
                 }
             }
-        }
-
-        public Form1()
-        {
-            InitializeComponent();
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
-
-            // Double buffer our panel.  This allows us to do it without subclassing Panel.
-            typeof(Panel).InvokeMember("DoubleBuffered",
-                BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-                null,
-                GridPanel,
-                new object[] { true });
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -200,7 +201,6 @@ namespace GraphVisualizerTest
                 {
                     e.Graphics.FillEllipse(new SolidBrush(Color.Green), new RectangleF((float)Node.X - BigCircle, (float)Node.Y - BigCircle, BigCircle*2, BigCircle*2));
                 }
-
                 else if (Node.NodeIndex == TargetNode)
                 {
                     e.Graphics.FillEllipse(new SolidBrush(Color.Red), new RectangleF((float)Node.X - BigCircle, (float)Node.Y - BigCircle, BigCircle*2, BigCircle*2));
@@ -230,7 +230,7 @@ namespace GraphVisualizerTest
             {
                 for (int i = 0; i < Path.Count - 1; i++)
                 {
-                    e.Graphics.DrawLine(new Pen(Color.Blue, 3), new PointF(Path[i].X, Path[i].Y), new PointF(Path[i + 1].X, Path[i +1].Y));
+                    e.Graphics.DrawLine(new Pen(Color.Blue, 3), new PointF(Path[i].X, Path[i].Y), new PointF(Path[i + 1].X, Path[i + 1].Y));
                 }
             }
         }
