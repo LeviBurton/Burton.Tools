@@ -128,7 +128,7 @@ namespace GraphVisualizerTest
 
         private void Form1_Load(object sender, EventArgs e)
         {     
-            Graph = new SparseGraph<GraphNode, GraphEdge>(false);
+            Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
             
             CurrentBrushType = EBrushType.Source;
 
@@ -516,7 +516,7 @@ namespace GraphVisualizerTest
                     Terrain = null;
                     Graph = null;
 
-                    Graph = new SparseGraph<GraphNode, GraphEdge>(false);
+                    Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
                     Terrain = (List<EBrushType>)BinaryFormatter.Deserialize(InStream);
                
                     CreateGrid(Graph, NumCellsX, NumCellsY);
