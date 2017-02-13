@@ -27,8 +27,8 @@ namespace GraphVisualizerTest
         public int TargetNode;
         public int GridWidthPx = 600;
         public int GridHeightPx = 600;
-        public int NumCellsX = 11;
-        public int NumCellsY = 11;
+        public int NumCellsX = 10;
+        public int NumCellsY = 10;
         public int BigCircle = 15;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
@@ -170,14 +170,14 @@ namespace GraphVisualizerTest
                     e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
                 }
 
-                e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.X - 15.0f, (float)Node.Y - 15.0f));
-                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.X - SmallCircle, (float)Node.Y - SmallCircle, SmallCircle*2, SmallCircle*2));
+               // e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.X - 15.0f, (float)Node.Y - 15.0f));
+                //e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.X - SmallCircle, (float)Node.Y - SmallCircle, SmallCircle*2, SmallCircle*2));
 
                 foreach (var Edge in Graph.Edges[Node.NodeIndex])
                 {
                     var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
                     var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
-                    e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.X, (float)FromNode.Y), new PointF((float)ToNode.X, (float)ToNode.Y)); 
+                   // e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.X, (float)FromNode.Y), new PointF((float)ToNode.X, (float)ToNode.Y)); 
                 }
 
                 if (Node.NodeIndex == SourceNode)
@@ -203,7 +203,7 @@ namespace GraphVisualizerTest
                         var FromNode = Graph.GetNode(SubTree[i].FromNodeIndex) as NavGraphNode;
                         var ToNode = Graph.GetNode(SubTree[i].ToNodeIndex) as NavGraphNode;
 
-                        var EdgePen = new Pen(Color.Black, 1);
+                        var EdgePen = new Pen(Color.Black, 2);
 
                         e.Graphics.DrawLine(EdgePen, new PointF(FromNode.X, FromNode.Y), new PointF(ToNode.X, ToNode.Y));
                     }
