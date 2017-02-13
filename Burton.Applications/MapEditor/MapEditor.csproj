@@ -60,11 +60,11 @@
     <Compile Include="Form_Main.Designer.cs">
       <DependentUpon>Form_Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_BrushTool.cs">
+    <Compile Include="Form_Palette_Brush.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_BrushTool.Designer.cs">
-      <DependentUpon>Form_BrushTool.cs</DependentUpon>
+    <Compile Include="Form_Palette_Brush.Designer.cs">
+      <DependentUpon>Form_Palette_Brush.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,8 +72,8 @@
     <EmbeddedResource Include="CustomControls\UserControl1.resx">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_BrushTool.resx">
-      <DependentUpon>Form_BrushTool.cs</DependentUpon>
+    <EmbeddedResource Include="Form_Palette_Brush.resx">
+      <DependentUpon>Form_Palette_Brush.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Main.resx">
       <DependentUpon>Form_Main.cs</DependentUpon>

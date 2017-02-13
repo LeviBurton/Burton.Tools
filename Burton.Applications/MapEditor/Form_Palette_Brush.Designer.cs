@@ -1,6 +1,6 @@
 ﻿namespace GraphVisualizerTest
 {
-    partial class Form_BrushTool
+    partial class Form_Palette_Brush
     {
         /// <summary>
         /// Required designer variable.
@@ -30,13 +30,17 @@
         {
             this.SuspendLayout();
             // 
-            // Form_BrushTool
+            // Form_Palette_Brush
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(398, 59);
-            this.Name = "Form_BrushTool";
-            this.Text = "Form_BrushTool";
+            this.ClientSize = new System.Drawing.Size(282, 0);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(300, 100);
+            this.MinimizeBox = false;
+            this.Name = "Form_Palette_Brush";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Text = "Brushes";
             this.ResumeLayout(false);
 
         }

@@ -152,7 +152,7 @@ namespace GraphVisualizerTest
             TargetNode = 16;
 
 
-            var BrushTool = new Form_BrushTool();
+            var BrushTool = new Form_Palette_Brush();
             BrushTool.Owner = this;
             BrushTool.Show();
 
@@ -550,6 +550,21 @@ namespace GraphVisualizerTest
                     BinaryFormatter.Serialize(OutStream, Terrain);
                 }
             }
+        }
+
+        private void MenuItem_Exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void MenuItem_View_Brushes_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MenuItem_View_BrushManager_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

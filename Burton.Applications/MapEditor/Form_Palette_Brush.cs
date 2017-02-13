@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace GraphVisualizerTest
 {
-    public partial class Form_BrushTool : Form
+    public partial class Form_Palette_Brush : Form
     {
         ComboBox_BrushSelector BrushSelector;
 
-        public Form_BrushTool()
+        public Form_Palette_Brush()
         {
             InitializeComponent();
 
