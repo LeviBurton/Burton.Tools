@@ -13,13 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scratch", "Scratch", "{3D61
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Types.Tuple", "Burton.Lib.Types.Tuple\Burton.Lib.Types.Tuple.csproj", "{D0788EFD-E9EC-4159-A0D5-FAF34E15A34A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphVisualizerTest", "Scratch\GraphVisualizerTest\GraphVisualizerTest.csproj", "{990DA749-B203-4C3F-89A4-F22CC26E6657}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexedPriorityQueueTests", "Scratch\IndexedPriorityQueueTests\IndexedPriorityQueueTests.csproj", "{1837B6D7-4A54-4961-995F-B70B70D00C9B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "Scratch\WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{FA28794B-F0F2-443A-A7BE-C311B2464E73}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexedPriorityQueue Console Test", "Scratch\IndexedPriorityQueue Console Test\IndexedPriorityQueue Console Test.csproj", "{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Burton.Applications", "Burton.Applications", "{93B75227-7725-4B5E-9E96-33993F8A1A06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor_WinForms", "Burton.Applications\MapEditor_WinForms\MapEditor_WinForms.csproj", "{990DA749-B203-4C3F-89A4-F22CC26E6657}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor_WPF", "Burton.Applications\MapEditor_WPF\MapEditor_WPF.csproj", "{13A66743-E8F5-470F-BC57-E75A0C7DE94F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +47,6 @@ Global
 		{D0788EFD-E9EC-4159-A0D5-FAF34E15A34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0788EFD-E9EC-4159-A0D5-FAF34E15A34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0788EFD-E9EC-4159-A0D5-FAF34E15A34A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{990DA749-B203-4C3F-89A4-F22CC26E6657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{990DA749-B203-4C3F-89A4-F22CC26E6657}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{990DA749-B203-4C3F-89A4-F22CC26E6657}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{990DA749-B203-4C3F-89A4-F22CC26E6657}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1837B6D7-4A54-4961-995F-B70B70D00C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1837B6D7-4A54-4961-995F-B70B70D00C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1837B6D7-4A54-4961-995F-B70B70D00C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,14 +59,23 @@ Global
 		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{990DA749-B203-4C3F-89A4-F22CC26E6657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{990DA749-B203-4C3F-89A4-F22CC26E6657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{990DA749-B203-4C3F-89A4-F22CC26E6657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{990DA749-B203-4C3F-89A4-F22CC26E6657}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13A66743-E8F5-470F-BC57-E75A0C7DE94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13A66743-E8F5-470F-BC57-E75A0C7DE94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13A66743-E8F5-470F-BC57-E75A0C7DE94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13A66743-E8F5-470F-BC57-E75A0C7DE94F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{990DA749-B203-4C3F-89A4-F22CC26E6657} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 		{1837B6D7-4A54-4961-995F-B70B70D00C9B} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 		{FA28794B-F0F2-443A-A7BE-C311B2464E73} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 		{CCDE9554-388D-4B6F-B277-CCAE1EFBFA47} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
+		{990DA749-B203-4C3F-89A4-F22CC26E6657} = {93B75227-7725-4B5E-9E96-33993F8A1A06}
+		{13A66743-E8F5-470F-BC57-E75A0C7DE94F} = {93B75227-7725-4B5E-9E96-33993F8A1A06}
 	EndGlobalSection
 EndGlobal

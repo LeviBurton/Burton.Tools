@@ -1,0 +1,30 @@
+﻿<Window x:Class="MapEditor_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapEditor_WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1380">
+    <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open" Click="File_Open_Click"/>
+                    <MenuItem Header="_Save" Click="File_Save_Click" d:IsHidden="True"/>
+                </MenuItem>
+            </Menu>
+            <StackPanel Name="Foo" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Canvas Height="{Binding ActualHeight, ElementName=Foo}" Width="{Binding ActualWidth, ElementName=Foo}">
+                    <Canvas.Background>
+                        <LinearGradientBrush>
+                            <GradientStop Color="#FF7790D4" Offset="1"/>
+                            <GradientStop Color="#FF3B5499" Offset="0.017"/>
+                        </LinearGradientBrush>
+                    </Canvas.Background>
+                </Canvas>
+
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

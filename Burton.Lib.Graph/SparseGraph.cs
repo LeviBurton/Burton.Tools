@@ -5,19 +5,24 @@ namespace Burton.Lib.Graph
 {
     public enum ENodeType { InvalidNodeIndex = -1 }
 
+    [Serializable]
     public class SparseGraph<NodeType, EdgeType> where NodeType : GraphNode
                                                  where EdgeType : GraphEdge
     {
+        public SparseGraph()
+        {
+        }
+
         /// <summary>
         /// Vector/array nodes that comprise this Graph
         /// </summary>
-        private List<NodeType> Nodes = new List<NodeType>(1024 * 1024);
+        public List<NodeType> Nodes = new List<NodeType>();
 
         /// <summary>
         /// A list of adjacency edge lists.
         /// Each node index keys into the list of edges associated with that node
         /// </summary>
-        public AdjacencyList<GraphEdge> Edges = null;
+        public AdjacencyList Edges = null;
 
         /// <summary>
         /// Is this a directed graoh?
@@ -188,6 +193,7 @@ namespace Burton.Lib.Graph
         // methods for loading saving graphs from an open file
         public bool Save(string FileName)
         {
+
             return false;
         }
 
@@ -196,13 +202,11 @@ namespace Burton.Lib.Graph
             return false;
         }
 
-        public SparseGraph(bool bIsDigraph)
+        public SparseGraph(bool bIsDigraph, int NodeCount)
         {
             this.bIsDigraph = bIsDigraph;
             NextNodeIndex = 0;
-
-            // FIXME: The initial size of this is currently arbitrary.
-            Edges = new AdjacencyList<GraphEdge>(1024 * 1024);
+            Edges = new AdjacencyList(NodeCount);
         }
     }
 }

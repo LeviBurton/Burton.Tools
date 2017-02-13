@@ -57,7 +57,10 @@ namespace Burton.Lib.Graph
         public bool Search()
         {
             var Q = new IndexedPriorityQueueLow<float>(FCosts, Graph.NodeCount());
-          
+
+            if (SourceNodeIndex > Graph.NodeCount())
+                return false;
+
             Q.Insert(SourceNodeIndex);
            
             while (!Q.IsEmpty())
@@ -116,7 +119,9 @@ namespace Burton.Lib.Graph
 
             Path.Insert(0, Node);
 
-            while ( (Node != SourceNodeIndex) && (ShortestPathTree[Node] != null) && (Path.Count < Graph.NodeCount() ) )
+            int NodeCount = Graph.NodeCount();
+
+            while ( (Node != SourceNodeIndex) && (ShortestPathTree[Node] != null) && Path.Count <= NodeCount) 
             {
                 Node = ShortestPathTree[Node].FromNodeIndex;
                 Path.Insert(0, Node);
