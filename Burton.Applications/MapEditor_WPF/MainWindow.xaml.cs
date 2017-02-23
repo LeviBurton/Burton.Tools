@@ -175,6 +175,10 @@ namespace MapEditor_WPF
              StartNode = (NavGraphNode)Graph.GetNode(1);
              EndNode = (NavGraphNode)Graph.GetNode(13);
             PathTest.Items.Add(new { StartPoint = new Point(StartNode.X, StartNode.Y), EndPoint = new Point(EndNode.X, EndNode.Y) });
+
+            StartNode = (NavGraphNode)Graph.GetNode(9);
+            EndNode = (NavGraphNode)Graph.GetNode(3);
+            PathTest.Items.Add(new { StartPoint = new Point(StartNode.X, StartNode.Y), EndPoint = new Point(EndNode.X, EndNode.Y) });
             // This
             //for (int CurNodeIndex = 0; CurNodeIndex < Graph.NodeCount(); ++CurNodeIndex)
             //{

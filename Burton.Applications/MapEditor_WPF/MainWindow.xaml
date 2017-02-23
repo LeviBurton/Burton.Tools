@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:MapEditor_WPF"
         mc:Ignorable="d"
 
-        Title="ListViewDataBindingSample" Height="700" Width="700">
+        Title="ListViewDataBindingSample" Height="700" Width="700" Background="Black">
     <StackPanel Width="600" Height="600" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+        
+        <!-- Node/Grid drawing stuff -->
         <ItemsControl Name="GraphNodeBounds" ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -38,12 +40,12 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Path Stroke="#FF6C6C6C" StrokeThickness="1" Fill="Black" >
+                    <Path Stroke="#FF6C6C6C" StrokeThickness="1" Fill="#FF8B8B8B" >
                         <Path.Data>
                             <EllipseGeometry 
                                 Center="{Binding Path=CenterPoint}" 
                                 RadiusX="5" 
-                                RadiusY="5" />  
+                                RadiusY="5" />
                         </Path.Data>
                     </Path>
 
@@ -56,7 +58,6 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>-->
         </ItemsControl>
-        
         <ItemsControl Name="PathTest" ItemsSource="{Binding TestPath}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -73,7 +74,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
         <ItemsControl Name="GraphNodeNames" ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -94,6 +94,5 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>-->
         </ItemsControl>
-
     </StackPanel>
 </Window>
