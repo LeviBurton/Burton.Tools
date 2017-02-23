@@ -17,6 +17,18 @@ using System.Windows.Shapes;
 
 namespace MapEditor_WPF
 {
+    public class User
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+
+        public override string ToString()
+        {
+            return this.Name + ", " + this.Age + " years old";
+        }
+        public string Mail { get; set; }
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -32,10 +44,10 @@ namespace MapEditor_WPF
 
         public int SourceNode;
         public int TargetNode;
-        public int GridWidthPx = 1280;
-        public int GridHeightPx = 720;
-        public int NumCellsX = 20;
-        public int NumCellsY = 10;
+        public int GridWidthPx = 600;
+        public int GridHeightPx = 600;
+        public int NumCellsX = 5;
+        public int NumCellsY = 5;
         public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
@@ -74,6 +86,7 @@ namespace MapEditor_WPF
          //   GridPanel.Height = CellHeight * NumCellsY;
           //  Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
 
+            
             Path.Clear();
             SubTree.Clear();
 
@@ -84,6 +97,11 @@ namespace MapEditor_WPF
             // CreatePathBFS();
             //CreatePathDijkstra();
             //CreatePathAStar();
+        }
+
+        public void RenderGraph()
+        {
+         
         }
 
         #region Menu Click Handlers
@@ -122,7 +140,24 @@ namespace MapEditor_WPF
                 {
                     var NodeIndex = Graph.AddNode(new NavGraphNode(Graph.GetNextFreeNodeIndex(),
                                                                    MidX + (Col * CellWidth), MidY + (Row * CellHeight)));
+                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
 
+                    var VisualGraphNode = new VisualGraphNode()
+                    {
+                        CenterPoint = new Point(Node.X, Node.Y),
+                        Name = Node.NodeIndex.ToString(),
+                        BoundingRect = new Rect(Node.X - CellWidth/2, Node.Y - CellHeight/2, CellWidth, CellHeight),
+                        X = Node.X,
+                        Y = Node.Y,
+                        Width = CellHeight,
+                        Height = CellWidth,
+                        Color = Color.FromArgb(255, 0, 0, 0)
+                    };
+
+                    GraphNodes.Items.Add(VisualGraphNode);
+                    GraphNodeBounds.Items.Add(VisualGraphNode);
+                    GraphNodeNames.Items.Add(VisualGraphNode);
+                 
                 }
             }
 
@@ -133,6 +168,31 @@ namespace MapEditor_WPF
                     AddAllNeighborsToGridNode(Graph, Row, Col, CellsX, CellsY);
                 }
             }
+
+            var StartNode = (NavGraphNode)Graph.GetNode(10);
+            var EndNode = (NavGraphNode)Graph.GetNode(4);
+            PathTest.Items.Add(new { StartPoint = new Point(StartNode.X, StartNode.Y), EndPoint = new Point(EndNode.X, EndNode.Y) });
+             StartNode = (NavGraphNode)Graph.GetNode(1);
+             EndNode = (NavGraphNode)Graph.GetNode(13);
+            PathTest.Items.Add(new { StartPoint = new Point(StartNode.X, StartNode.Y), EndPoint = new Point(EndNode.X, EndNode.Y) });
+
+            StartNode = (NavGraphNode)Graph.GetNode(9);
+            EndNode = (NavGraphNode)Graph.GetNode(3);
+            PathTest.Items.Add(new { StartPoint = new Point(StartNode.X, StartNode.Y), EndPoint = new Point(EndNode.X, EndNode.Y) });
+            // This
+            //for (int CurNodeIndex = 0; CurNodeIndex < Graph.NodeCount(); ++CurNodeIndex)
+            //{
+            //    var Node = (NavGraphNode)Graph.GetNode(CurNodeIndex);
+            //    GraphItems.Items.Add(new VisualGraphNode
+            //    {
+            //        X = Node.X,
+            //        Y = Node.Y,
+            //        Width = CellHeight,
+            //        Height = CellWidth,
+            //        Color = Color.FromArgb(255, 0, 0, 0)
+            //    });
+
+            //}
         }
 
         public bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)

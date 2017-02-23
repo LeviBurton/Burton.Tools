@@ -5,26 +5,94 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MapEditor_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1380">
-    <Grid>
-        <DockPanel>
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_File">
-                    <MenuItem Header="_Open" Click="File_Open_Click"/>
-                    <MenuItem Header="_Save" Click="File_Save_Click" d:IsHidden="True"/>
-                </MenuItem>
-            </Menu>
-            <StackPanel Name="Foo" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Canvas Height="{Binding ActualHeight, ElementName=Foo}" Width="{Binding ActualWidth, ElementName=Foo}">
-                    <Canvas.Background>
-                        <LinearGradientBrush>
-                            <GradientStop Color="#FF7790D4" Offset="1"/>
-                            <GradientStop Color="#FF3B5499" Offset="0.017"/>
-                        </LinearGradientBrush>
-                    </Canvas.Background>
-                </Canvas>
 
-            </StackPanel>
-        </DockPanel>
-    </Grid>
+        Title="ListViewDataBindingSample" Height="700" Width="700" Background="Black">
+    <StackPanel Width="600" Height="600" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+        
+        <!-- Node/Grid drawing stuff -->
+        <ItemsControl Name="GraphNodeBounds" ItemsSource="{Binding Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Path Fill="White" Stroke="#FFAB9898" StrokeThickness="1">
+                        <Path.Data>
+                            <RectangleGeometry Rect="{Binding BoundingRect}"/>
+                        </Path.Data>
+                    </Path>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <!--<ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>-->
+        </ItemsControl>
+        <ItemsControl Name="GraphNodes" ItemsSource="{Binding Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Path Stroke="#FF6C6C6C" StrokeThickness="1" Fill="#FF8B8B8B" >
+                        <Path.Data>
+                            <EllipseGeometry 
+                                Center="{Binding Path=CenterPoint}" 
+                                RadiusX="5" 
+                                RadiusY="5" />
+                        </Path.Data>
+                    </Path>
+
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <!--<ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>-->
+        </ItemsControl>
+        <ItemsControl Name="PathTest" ItemsSource="{Binding TestPath}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Path Stroke="#FF030EFA" StrokeThickness="2"  StrokeStartLineCap="Triangle" StrokeEndLineCap="Triangle" >
+                        <Path.Data>
+                            <LineGeometry StartPoint="{Binding StartPoint}" EndPoint="{Binding EndPoint}"></LineGeometry>
+                        </Path.Data>
+                    </Path>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl Name="GraphNodeNames" ItemsSource="{Binding Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas Visibility="Visible">
+                        <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextOptions.TextRenderingMode="Auto" FontSize="9" Canvas.Top="{Binding Y}" Canvas.Left="{Binding X}" Content="{Binding Name}"></Label>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <!--<ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>-->
+        </ItemsControl>
+    </StackPanel>
 </Window>
