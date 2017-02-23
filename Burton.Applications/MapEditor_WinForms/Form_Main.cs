@@ -27,10 +27,10 @@ namespace GraphVisualizerTest
 
         public int SourceNode;
         public int TargetNode;
-        public int GridWidthPx = 1280;
+        public int GridWidthPx = 360;
         public int GridHeightPx = 720;
-        public int NumCellsX = 20;
-        public int NumCellsY = 10;
+        public int NumCellsX = 10;
+        public int NumCellsY = 20;
         public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
@@ -91,8 +91,8 @@ namespace GraphVisualizerTest
 
                         if (!Graph.IsDigraph())
                         {
-                            GraphEdge Edge = new GraphEdge(NeighborNode.NodeIndex, Node.NodeIndex, Distance);
-                            Graph.AddEdge(Edge);
+                            //   GraphEdge Edge = new GraphEdge(NeighborNode.NodeIndex, Node.NodeIndex, Distance);
+                            //   Graph.AddEdge(Edge);
                         }
                     }
                 }

@@ -46,8 +46,8 @@ namespace MapEditor_WPF
         public int TargetNode;
         public int GridWidthPx = 600;
         public int GridHeightPx = 600;
-        public int NumCellsX = 5;
-        public int NumCellsY = 5;
+        public int NumCellsX = 10;
+        public int NumCellsY = 10;
         public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
@@ -90,18 +90,35 @@ namespace MapEditor_WPF
             Path.Clear();
             SubTree.Clear();
 
-            SourceNode = 60;
-            TargetNode = 16;
+            SourceNode = 5;
+            TargetNode = 60;
 
             ////CreatePathDFS();
             // CreatePathBFS();
             //CreatePathDijkstra();
-            //CreatePathAStar();
+            CreatePathAStar();
         }
 
-        public void RenderGraph()
+        private void CreatePathAStar()
         {
-         
+            SubTree.Clear();
+            Path.Clear();
+
+            var AStar = new GraphSearchAStar(Graph, SourceNode, TargetNode);
+            AStar.Search();
+     
+            if (AStar.bFound)
+            {
+                var PathToTarget = AStar.GetPathToTarget();
+                SubTree = AStar.ShortestPathTree;
+
+                foreach (var NodeIndex in PathToTarget)
+                {
+                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
+                    Path.Add(Node);
+                    SearchPath.Points.Add(new Point(Node.X, Node.Y));
+                }
+            }
         }
 
         #region Menu Click Handlers

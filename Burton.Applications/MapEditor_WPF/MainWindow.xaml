@@ -58,7 +58,9 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>-->
         </ItemsControl>
-        <ItemsControl Name="PathTest" ItemsSource="{Binding TestPath}">
+
+ 
+        <ItemsControl Name="PathTest" ItemsSource="{Binding TestPath}" Visibility="Hidden">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
@@ -74,7 +76,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ItemsControl Name="GraphNodeNames" ItemsSource="{Binding Items}">
+        <ItemsControl Name="GraphNodeNames" ItemsSource="{Binding Items}" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
@@ -94,5 +96,8 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>-->
         </ItemsControl>
+        <Polyline Name="SearchPath" StrokeThickness="4" Stroke="Green" HorizontalAlignment="Left" VerticalAlignment="Top"></Polyline>
+
     </StackPanel>
+    
 </Window>
