@@ -29,15 +29,15 @@ namespace GraphVisualizerTest
 
         public int SourceNode;
         public int TargetNode;
-        public int GridWidthPx = 1280;
-        public int GridHeightPx = 720;
-        public int NumCellsX = 15;
+        public int GridWidthPx = 0;
+        public int GridHeightPx = 0;
+        public int NumCellsX = 20;
         public int NumCellsY = 10;
         public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
-        public int CellWidth;
-        public int CellHeight;
+        public int CellWidth = 64;
+        public int CellHeight = 64;
 
         public bool bIsPaintingTerrain;
 
@@ -67,6 +67,10 @@ namespace GraphVisualizerTest
         private void Setup()
         {
             Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
+        
+
+            GridWidthPx = CellWidth * NumCellsX;
+            GridHeightPx = CellHeight * NumCellsY;
 
             CurrentBrushType = EBrushType.Source;
 
@@ -79,15 +83,16 @@ namespace GraphVisualizerTest
 
             CreateGrid(Graph, NumCellsX, NumCellsY);
 
-            GridPanel.Width = CellWidth * NumCellsX;
-            GridPanel.Height = CellHeight * NumCellsY;
+            GridPanel.Width = GridWidthPx;
+            GridPanel.Height = GridHeightPx;
+
             Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
 
             Path.Clear();
             SubTree.Clear();
 
-            SourceNode = 60;
-            TargetNode = 16;
+            SourceNode = 0;
+            TargetNode = Graph.NodeCount() - 1;
 
             var BrushTool = new Form_Palette_Brush();
 
@@ -177,9 +182,13 @@ namespace GraphVisualizerTest
 
         public void CreateGrid(SparseGraph<GraphNode, GraphEdge> Graph, int CellsX, int CellsY)
         {
-            CellWidth = GridWidthPx / CellsX;
-            CellHeight = GridHeightPx / CellsY;
-            Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
+            //CellWidth = GridWidthPx / CellsX;
+            //CellHeight = GridHeightPx / CellsY;
+
+            //CellWidth = 32;
+            //CellHeight = 32;
+
+         
             float MidX = CellWidth / 2;
             float MidY = CellHeight / 2;
 
@@ -216,7 +225,6 @@ namespace GraphVisualizerTest
                     continue;
                 }
 
-            
                 if (Terrain[Node.NodeIndex] == EBrushType.Normal)
                 {
                     e.Graphics.FillRectangle(new SolidBrush(Color.White), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
@@ -238,7 +246,7 @@ namespace GraphVisualizerTest
                 sf.LineAlignment = StringAlignment.Near;
                 sf.Alignment = StringAlignment.Near;
 
-                e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.X - 8.0f, (float)Node.Y - 25.0f));
+               // e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.X - 2.0f, (float)Node.Y - 10.0f));
                 e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.X - SmallCircle, (float)Node.Y - SmallCircle, SmallCircle*2, SmallCircle*2));
 
                 foreach (var Edge in Graph.Edges[Node.NodeIndex])
@@ -702,7 +710,7 @@ namespace GraphVisualizerTest
 
         public TileBrush()
         {
-            Image = Image.FromFile(ImageFileName);
+           
         }
     }
 
