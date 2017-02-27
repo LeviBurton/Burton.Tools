@@ -7,8 +7,8 @@
         mc:Ignorable="d"
 
         Title="ListViewDataBindingSample" Height="700" Width="700" Background="Black">
-    <StackPanel Width="600" Height="600" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
-        
+    <Grid Width="700" Height="700" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top" ShowGridLines="True">
+
         <!-- Node/Grid drawing stuff -->
         <ItemsControl Name="GraphNodeBounds" ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
@@ -18,19 +18,20 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Path Fill="White" Stroke="#FFAB9898" StrokeThickness="1">
+                    <Rectangle  Width="{Binding Width}" Height="{Binding Height}"  Stroke="White" Fill="#FFDC0000" ></Rectangle>
+                    <!--<Path Fill="White" Stroke="#FFAB9898" StrokeThickness="1">
                         <Path.Data>
                             <RectangleGeometry Rect="{Binding BoundingRect}"/>
                         </Path.Data>
-                    </Path>
+                    </Path>-->
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-            <!--<ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemContainerStyle>
                 <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding X}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                    <Setter Property="Canvas.Left" Value="{Binding BoundingRect.Left}" />
+                    <Setter Property="Canvas.Top" Value="{Binding BoundingRect.Top}" />
                 </Style>
-            </ItemsControl.ItemContainerStyle>-->
+            </ItemsControl.ItemContainerStyle>
         </ItemsControl>
         <ItemsControl Name="GraphNodes" ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
@@ -40,26 +41,24 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Path Stroke="#FF6C6C6C" StrokeThickness="1" Fill="#FF8B8B8B" >
-                        <Path.Data>
-                            <EllipseGeometry 
-                                Center="{Binding Path=CenterPoint}" 
-                                RadiusX="5" 
-                                RadiusY="5" />
-                        </Path.Data>
-                    </Path>
-
+                    <Ellipse  
+                      Height="{Binding Height}"  
+                      Width="{Binding Width}"  
+                      StrokeThickness="1"  
+                      Stroke="#FF0000FF"
+                  
+                        />              
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-            <!--<ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemContainerStyle>
                 <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding X}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                    <Setter Property="Canvas.Left" Value="{Binding BoundingRect.Left}" />
+                    <Setter Property="Canvas.Top" Value="{Binding BoudningRect.Top}" />
                 </Style>
-            </ItemsControl.ItemContainerStyle>-->
+            </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
- 
+
         <ItemsControl Name="PathTest" ItemsSource="{Binding TestPath}" Visibility="Hidden">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -76,6 +75,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+    
         <ItemsControl Name="GraphNodeNames" ItemsSource="{Binding Items}" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -85,7 +85,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas Visibility="Visible">
-                        <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextOptions.TextRenderingMode="Auto" FontSize="9" Canvas.Top="{Binding Y}" Canvas.Left="{Binding X}" Content="{Binding Name}"></Label>
+                        <Label  TextOptions.TextRenderingMode="Auto" FontSize="9" Canvas.Top="{Binding CenterY}" Canvas.Left="{Binding CenterX}" Content="{Binding Name}"></Label>
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -98,6 +98,7 @@
         </ItemsControl>
         <Polyline Name="SearchPath" StrokeThickness="4" Stroke="Green" HorizontalAlignment="Left" VerticalAlignment="Top"></Polyline>
 
-    </StackPanel>
-    
+    </Grid>
+
 </Window>
+

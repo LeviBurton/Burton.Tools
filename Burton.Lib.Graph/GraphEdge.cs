@@ -28,9 +28,9 @@ namespace Burton.Lib.Graph
         /// <summary>
         /// The cost of traversing the Edge
         /// </summary>
-        public float EdgeCost;
+        public double EdgeCost;
 
-        public GraphEdge(int FromNodeIndex, int ToNodeIndex, float EdgeCost)
+        public GraphEdge(int FromNodeIndex, int ToNodeIndex, double EdgeCost)
         {
             this.FromNodeIndex = FromNodeIndex;
             this.ToNodeIndex = ToNodeIndex;

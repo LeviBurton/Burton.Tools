@@ -15,9 +15,9 @@ namespace Burton.Lib.Graph
         public List<GraphEdge> ShortestPathTree;
         public List<GraphEdge> SearchFrontier;
 
-        public List<float> CostToThisNode;
-        public List<float> GCosts;
-        public List<float> FCosts;
+        public List<double> CostToThisNode;
+        public List<double> GCosts;
+        public List<double> FCosts;
 
         public int SourceNodeIndex;
         public int TargetNodeIndex;
@@ -39,9 +39,9 @@ namespace Burton.Lib.Graph
 
             ShortestPathTree = new List<GraphEdge>(NodeCount);
             SearchFrontier = new List<GraphEdge>(NodeCount);
-            CostToThisNode = new List<float>(NodeCount);
-            GCosts = new List<float>(NodeCount);
-            FCosts = new List<float>(NodeCount);
+            CostToThisNode = new List<double>(NodeCount);
+            GCosts = new List<double>(NodeCount);
+            FCosts = new List<double>(NodeCount);
 
             // not sure i need to initialize these...
             for (int i = 0; i < NodeCount; i++)
@@ -56,7 +56,7 @@ namespace Burton.Lib.Graph
 
         public bool Search()
         {
-            var Q = new IndexedPriorityQueueLow<float>(FCosts, Graph.NodeCount());
+            var Q = new IndexedPriorityQueueLow<double>(FCosts, Graph.NodeCount());
 
             if (SourceNodeIndex > Graph.NodeCount())
                 return false;
@@ -77,10 +77,9 @@ namespace Burton.Lib.Graph
 
                 foreach (var Edge in Graph.Edges[NextClosestNode])
                 {
-                    float NewCost = CostToThisNode[NextClosestNode] + Edge.EdgeCost;
-                    float HCost = Heuristic.Calculate(Graph, TargetNodeIndex, Edge.ToNodeIndex);
-
-                    float GCost = GCosts[NextClosestNode] + Edge.EdgeCost;
+                    double NewCost = CostToThisNode[NextClosestNode] + Edge.EdgeCost;
+                    double HCost = Heuristic.Calculate(Graph, TargetNodeIndex, Edge.ToNodeIndex);
+                    double GCost = GCosts[NextClosestNode] + Edge.EdgeCost;
 
                     if (SearchFrontier[Edge.ToNodeIndex] == null)
                     {
@@ -130,10 +129,14 @@ namespace Burton.Lib.Graph
             return Path;
         }
 
-        public float GetCostToTarget()
+        public double GetCostToTarget()
         {
-            return CostToThisNode[TargetNodeIndex];
+            return GCosts[TargetNodeIndex];
         }
 
+        public double GetCostToNode(int NodeIndex)
+        {
+            return CostToThisNode[NodeIndex];
+        }
     }
 }

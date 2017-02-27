@@ -24,18 +24,21 @@ namespace MapEditor_WPF
         public Point CenterPoint { get; set; }
         public Rect BoundingRect { get; set; }
         public string Name { get; set; }
-        private double _X;
-        public double X
+        public double Left;
+        public double Top;
+
+        private double _CenterX;
+        public double CenterX
         {
-            get { return _X; }
-            set { _X = value; OnPropertyChanged(); }
+            get { return _CenterX; }
+            set { _CenterX = value; OnPropertyChanged(); }
         }
 
-        private double _Y;
-        public double Y
+        private double _CenterY;
+        public double CenterY
         {
-            get { return _Y; }
-            set { _Y = value; OnPropertyChanged(); }
+            get { return _CenterY; }
+            set { _CenterY = value; OnPropertyChanged(); }
         }
 
         private double _Width;

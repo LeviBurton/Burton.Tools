@@ -12,7 +12,7 @@ namespace Burton.Lib.Graph
         SparseGraph<GraphNode, GraphEdge> Graph;
         public List<GraphEdge> ShortestPathTree;
         public List<GraphEdge> SearchFrontier;
-        public List<float> CostToThisNode;
+        public List<double> CostToThisNode;
 
         public int SourceNodeIndex;
         public int TargetNodeIndex;
@@ -32,7 +32,7 @@ namespace Burton.Lib.Graph
 
             ShortestPathTree = new List<GraphEdge>(NodeCount);
             SearchFrontier = new List<GraphEdge>(NodeCount);
-            CostToThisNode = new List<float>(ActiveNodeCount);
+            CostToThisNode = new List<double>(ActiveNodeCount);
         
             for (int i = 0; i < NodeCount; i++)
             {
@@ -45,7 +45,7 @@ namespace Burton.Lib.Graph
 
         public bool Search()
         {
-            var Q = new IndexedPriorityQueueLow<float>(CostToThisNode, Graph.NodeCount());
+            var Q = new IndexedPriorityQueueLow<double>(CostToThisNode, Graph.NodeCount());
 
             Q.Insert(SourceNodeIndex);
            
@@ -63,7 +63,7 @@ namespace Burton.Lib.Graph
 
                 foreach (var Edge in Graph.Edges[NextClosestNode])
                 {
-                    float NewCost = CostToThisNode[NextClosestNode] + Edge.EdgeCost;
+                    double NewCost = CostToThisNode[NextClosestNode] + Edge.EdgeCost;
 
                     if (SearchFrontier[Edge.ToNodeIndex] == null)
                     {
@@ -104,12 +104,12 @@ namespace Burton.Lib.Graph
             return Path;
         }
 
-        public float GetCostToTarget()
+        public double GetCostToTarget()
         {
             return CostToThisNode[TargetNodeIndex];
         }
 
-        public float GetCostToNode(int NodeIndex)
+        public double GetCostToNode(int NodeIndex)
         {
             return CostToThisNode[NodeIndex];
         }
