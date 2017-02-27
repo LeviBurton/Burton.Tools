@@ -21,6 +21,7 @@ namespace GraphVisualizerTest
 
             TileBrushManager = InTileBrushManager;
             TileBrushImageList = new ImageList();
+      
         }
 
         private void TileBrushesWindow_Load(object sender, EventArgs e)
@@ -33,10 +34,13 @@ namespace GraphVisualizerTest
             {
                 ListViewItem item = new ListViewItem();
                 item.Text = Brush.Name;
-                item.ImageIndex = Brush.BrushID;
+          
+               // item.ImageIndex = Brush.BrushID;
+                TileBrushImageList.Images.Add(Brush.Image);
                 TileBrushListView.Items.Add(item);
             }
 
+            TileBrushListView.LargeImageList = TileBrushImageList;
         }
     }
 }

@@ -693,9 +693,17 @@ namespace GraphVisualizerTest
     {
         public int BrushID;
         public string Name;
+
+        public string ImageFileName;
+        public Image Image;
         public Color Color;
         public int Width;
         public int Height;
+
+        public TileBrush()
+        {
+            Image = Image.FromFile(ImageFileName);
+        }
     }
 
     #region Misc
