@@ -16,9 +16,11 @@ namespace GraphVisualizerTest
         public List<TileBrush> Brushes = new List<TileBrush>();
         public string BrushesFile;
         public int NextValidID;
+        public string Name;
 
-        public TileBrushManager()
+        public TileBrushManager(string Name)
         {
+            this.Name = Name;
             NextValidID = 0;
             Brushes.Clear();
             BrushesFile = string.Empty;
@@ -36,8 +38,10 @@ namespace GraphVisualizerTest
             var obj = (TileBrushManager)formatter.Deserialize(stream);
             NextValidID = obj.NextValidID;
             Brushes = obj.Brushes;
-            stream.Close();
+            Name = obj.Name;
 
+            stream.Close();
+        
             BrushesFile = FileName;
         }
 

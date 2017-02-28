@@ -96,26 +96,28 @@ namespace GraphVisualizerTest
 
             var BrushTool = new Form_Palette_Brush();
 
-            var SimpleBrushManager = new TileBrushManager();
-            SimpleBrushManager.AddBrush(new TileBrush(Color.Red.ToString(), Color.Red, 64, 64));
-            SimpleBrushManager.AddBrush(new TileBrush(Color.Green.ToString(), Color.Green, 64, 64));
-            SimpleBrushManager.AddBrush(new TileBrush(Color.Blue.ToString(), Color.Blue, 64, 64));
-            TileBrushManagers.Add(SimpleBrushManager);
+            var SimpleBrushManager = new TileBrushManager("Simple");
+            //SimpleBrushManager.AddBrush(new TileBrush(Color.Red.ToString(), Color.Red, 64, 64));
+            //SimpleBrushManager.AddBrush(new TileBrush(Color.Green.ToString(), Color.Green, 64, 64));
+            //SimpleBrushManager.AddBrush(new TileBrush(Color.Blue.ToString(), Color.Blue, 64, 64));
+            //TileBrushManagers.Add(SimpleBrushManager);
 
-            var ColorfulBrushManager = new TileBrushManager();
-            ColorfulBrushManager.AddBrush(new TileBrush(Color.Cyan.ToString(), Color.Cyan, 64, 64));
-            ColorfulBrushManager.AddBrush(new TileBrush(Color.Magenta.ToString(), Color.Magenta, 64, 64));
-            ColorfulBrushManager.AddBrush(new TileBrush(Color.Yellow.ToString(), Color.Yellow, 64, 64));
-            ColorfulBrushManager.AddBrush(new TileBrush(Color.DarkSlateGray.ToString(), Color.DarkSlateGray, 64, 64));
-            TileBrushManagers.Add(ColorfulBrushManager);
+            var ColorfulBrushManager = new TileBrushManager("Colorful");
+            //ColorfulBrushManager.AddBrush(new TileBrush(Color.Cyan.ToString(), Color.Cyan, 64, 64));
+            //ColorfulBrushManager.AddBrush(new TileBrush(Color.Magenta.ToString(), Color.Magenta, 64, 64));
+            //ColorfulBrushManager.AddBrush(new TileBrush(Color.Yellow.ToString(), Color.Yellow, 64, 64));
+            //ColorfulBrushManager.AddBrush(new TileBrush(Color.DarkSlateGray.ToString(), Color.DarkSlateGray, 64, 64));
+            //TileBrushManagers.Add(ColorfulBrushManager);
 
-            // 
             //SimpleBrushManager.SaveBrushes("rgb.brushes");
             //ColorfulBrushManager.SaveBrushes("colorful.brushes");
 
             // load the brushes from the file system into their brush managers. 
             SimpleBrushManager.LoadBrushes("rgb.brushes");
+            TileBrushManagers.Add(SimpleBrushManager);
+
             ColorfulBrushManager.LoadBrushes("colorful.brushes");
+            TileBrushManagers.Add(ColorfulBrushManager);
 
             var Window_TileBrushManager = new Window_TileBrushManager(ColorfulBrushManager);
             Window_TileBrushManager.Owner = this;
