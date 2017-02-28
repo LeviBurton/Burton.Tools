@@ -44,15 +44,15 @@ namespace MapEditor_WPF
 
         public int SourceNode;
         public int TargetNode;
-        public int GridWidthPx = 600;
-        public int GridHeightPx = 600;
+        public int GridWidthPx = 675;
+        public int GridHeightPx = 655;
         public int NumCellsX = 10;
         public int NumCellsY = 10;
         public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
-        public int CellWidth;
-        public int CellHeight;
+        public double CellWidth;
+        public double CellHeight;
 
         public bool bIsPaintingTerrain;
 
@@ -61,7 +61,7 @@ namespace MapEditor_WPF
             InitializeComponent();
             InitializeApplication();
         }
-        
+
         private void InitializeApplication()
         {
             Setup();
@@ -82,11 +82,11 @@ namespace MapEditor_WPF
 
             CreateGrid(Graph, NumCellsX, NumCellsY);
 
-          //  GridPanel.Width = CellWidth * NumCellsX;
-         //   GridPanel.Height = CellHeight * NumCellsY;
-          //  Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
+            //  GridPanel.Width = CellWidth * NumCellsX;
+            //   GridPanel.Height = CellHeight * NumCellsY;
+            //  Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
 
-            
+
             Path.Clear();
             SubTree.Clear();
 
@@ -107,7 +107,7 @@ namespace MapEditor_WPF
 
             var AStar = new GraphSearchAStar(Graph, SourceNode, TargetNode);
             AStar.Search();
-     
+
             if (AStar.bFound)
             {
                 var PathToTarget = AStar.GetPathToTarget();
@@ -148,9 +148,9 @@ namespace MapEditor_WPF
         {
             CellWidth = GridWidthPx / CellsX;
             CellHeight = GridHeightPx / CellsY;
-           // Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
-            float MidX = CellWidth / 2;
-            float MidY = CellHeight / 2;
+            // Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
+            double MidX = CellWidth / 2;
+            double MidY = CellHeight / 2;
 
             for (int Row = 0; Row < CellsY; ++Row)
             {
@@ -164,18 +164,21 @@ namespace MapEditor_WPF
                     {
                         CenterPoint = new Point(Node.X, Node.Y),
                         Name = Node.NodeIndex.ToString(),
-                        BoundingRect = new Rect(Node.X - CellWidth/2, Node.Y - CellHeight/2, CellWidth, CellHeight),
-                        X = Node.X,
-                        Y = Node.Y,
+                        BoundingRect = new Rect(Node.X - CellWidth / 2, Node.Y - CellHeight / 2, CellWidth, CellHeight),
+                        CenterX = Node.X,
+                        CenterY = Node.Y,
+                        Top = Node.Y - CellHeight / 2,
+                        Left = Node.X - CellWidth / 2,
                         Width = CellHeight,
                         Height = CellWidth,
                         Color = Color.FromArgb(255, 0, 0, 0)
                     };
 
+        
                     GraphNodes.Items.Add(VisualGraphNode);
                     GraphNodeBounds.Items.Add(VisualGraphNode);
                     GraphNodeNames.Items.Add(VisualGraphNode);
-                 
+
                 }
             }
 
@@ -190,8 +193,8 @@ namespace MapEditor_WPF
             var StartNode = (NavGraphNode)Graph.GetNode(10);
             var EndNode = (NavGraphNode)Graph.GetNode(4);
             PathTest.Items.Add(new { StartPoint = new Point(StartNode.X, StartNode.Y), EndPoint = new Point(EndNode.X, EndNode.Y) });
-             StartNode = (NavGraphNode)Graph.GetNode(1);
-             EndNode = (NavGraphNode)Graph.GetNode(13);
+            StartNode = (NavGraphNode)Graph.GetNode(1);
+            EndNode = (NavGraphNode)Graph.GetNode(13);
             PathTest.Items.Add(new { StartPoint = new Point(StartNode.X, StartNode.Y), EndPoint = new Point(EndNode.X, EndNode.Y) });
 
             StartNode = (NavGraphNode)Graph.GetNode(9);
@@ -245,7 +248,7 @@ namespace MapEditor_WPF
                         var PosNode = new Vector2(Node.X, Node.Y);
                         var PosNeighborNode = new Vector2(NeighborNode.X, NeighborNode.Y);
 
-                        float Distance = PosNode.Distance(PosNeighborNode);
+                        double Distance = PosNode.Distance(PosNeighborNode);
 
                         GraphEdge NewEdge = new GraphEdge(Node.NodeIndex, NeighborNode.NodeIndex, Distance);
                         Graph.AddEdge(NewEdge);
@@ -253,7 +256,7 @@ namespace MapEditor_WPF
                         if (!Graph.IsDigraph())
                         {
                             GraphEdge Edge = new GraphEdge(NeighborNode.NodeIndex, Node.NodeIndex, Distance);
-                           
+
                             Graph.AddEdge(Edge);
                         }
                     }
@@ -277,24 +280,25 @@ namespace MapEditor_WPF
 
     public class Vector2
     {
-        public float x;
-        public float y;
+        public double x;
+        public double y;
 
-        public Vector2(float x, float y)
+        public Vector2(double x, double y)
         {
             this.x = x;
             this.y = y;
         }
 
         //------------------------------------------------------------------------
-        public float Distance(Vector2 v2)
+        public double Distance(Vector2 v2)
         {
-            float ySeparation = v2.y - y;
-            float xSeparation = v2.x - x;
+            double ySeparation = v2.y - y;
+            double xSeparation = v2.x - x;
 
-            return (float)Math.Sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
+            return (double)Math.Sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
         }
     }
 
     #endregion
 }
+

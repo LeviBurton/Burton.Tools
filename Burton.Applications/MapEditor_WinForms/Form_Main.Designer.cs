@@ -138,7 +138,7 @@
             this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1045, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1251, 28);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -155,21 +155,21 @@
             // MenuItem_OpenFile
             // 
             this.MenuItem_OpenFile.Name = "MenuItem_OpenFile";
-            this.MenuItem_OpenFile.Size = new System.Drawing.Size(181, 26);
+            this.MenuItem_OpenFile.Size = new System.Drawing.Size(120, 26);
             this.MenuItem_OpenFile.Text = "Open";
             this.MenuItem_OpenFile.Click += new System.EventHandler(this.MenuItem_OpenFile_Click);
             // 
             // MenuItem_SaveFile
             // 
             this.MenuItem_SaveFile.Name = "MenuItem_SaveFile";
-            this.MenuItem_SaveFile.Size = new System.Drawing.Size(181, 26);
+            this.MenuItem_SaveFile.Size = new System.Drawing.Size(120, 26);
             this.MenuItem_SaveFile.Text = "Save";
             this.MenuItem_SaveFile.Click += new System.EventHandler(this.MenuItem_SaveFile_Click);
             // 
             // MenuItem_Exit
             // 
             this.MenuItem_Exit.Name = "MenuItem_Exit";
-            this.MenuItem_Exit.Size = new System.Drawing.Size(181, 26);
+            this.MenuItem_Exit.Size = new System.Drawing.Size(120, 26);
             this.MenuItem_Exit.Text = "Exit";
             this.MenuItem_Exit.Click += new System.EventHandler(this.MenuItem_Exit_Click);
             // 
@@ -200,7 +200,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1045, 937);
+            this.ClientSize = new System.Drawing.Size(1251, 937);
             this.Controls.Add(this.NormalButton);
             this.Controls.Add(this.MudButton);
             this.Controls.Add(this.WaterButton);

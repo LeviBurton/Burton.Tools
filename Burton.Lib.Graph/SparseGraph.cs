@@ -137,6 +137,17 @@ namespace Burton.Lib.Graph
             Edges.RemoveEdge(From, To);
         }
 
+        public void SetEdgeCost(int From, int To, double Cost)
+        {
+            foreach (var Edge in Edges[From])
+            {
+                if (Edge.ToNodeIndex == To)
+                {
+                    Edge.EdgeCost = Cost;
+                }
+            }
+
+        }
         /// <summary>
         /// Returns the number of active + inactive enodes present in the graph.
         /// </summary>
