@@ -23,7 +23,8 @@ namespace GraphVisualizerTest
         List<EBrushType> Terrain = new List<EBrushType>();
         List<NavGraphNode> Path = new List<NavGraphNode>();
         List<GraphEdge> SubTree = new List<GraphEdge>();
-        TileBrushManager TileBrushManager = new TileBrushManager();
+
+        public List<TileBrushManager> TileBrushManagers = new List<GraphVisualizerTest.TileBrushManager>();
 
         public EBrushType CurrentBrushType;
 
@@ -67,7 +68,6 @@ namespace GraphVisualizerTest
         private void Setup()
         {
             Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
-        
 
             GridWidthPx = CellWidth * NumCellsX;
             GridHeightPx = CellHeight * NumCellsY;
@@ -96,13 +96,37 @@ namespace GraphVisualizerTest
 
             var BrushTool = new Form_Palette_Brush();
 
-            TileBrushManager.LoadBrushes(string.Empty);
+            var SimpleBrushManager = new TileBrushManager();
+            SimpleBrushManager.AddBrush(new TileBrush(Color.Red.ToString(), Color.Red, 64, 64));
+            SimpleBrushManager.AddBrush(new TileBrush(Color.Green.ToString(), Color.Green, 64, 64));
+            SimpleBrushManager.AddBrush(new TileBrush(Color.Blue.ToString(), Color.Blue, 64, 64));
+            TileBrushManagers.Add(SimpleBrushManager);
 
-            var TileBrushesWindow = new TileBrushesWindow(TileBrushManager);
+            var ColorfulBrushManager = new TileBrushManager();
+            ColorfulBrushManager.AddBrush(new TileBrush(Color.Cyan.ToString(), Color.Cyan, 64, 64));
+            ColorfulBrushManager.AddBrush(new TileBrush(Color.Magenta.ToString(), Color.Magenta, 64, 64));
+            ColorfulBrushManager.AddBrush(new TileBrush(Color.Yellow.ToString(), Color.Yellow, 64, 64));
+            ColorfulBrushManager.AddBrush(new TileBrush(Color.DarkSlateGray.ToString(), Color.DarkSlateGray, 64, 64));
+            TileBrushManagers.Add(ColorfulBrushManager);
 
-            TileBrushesWindow.Owner = this;
-            TileBrushesWindow.Show();
-          
+            // 
+            //SimpleBrushManager.SaveBrushes("rgb.brushes");
+            //ColorfulBrushManager.SaveBrushes("colorful.brushes");
+
+            // load the brushes from the file system into their brush managers. 
+            SimpleBrushManager.LoadBrushes("rgb.brushes");
+            ColorfulBrushManager.LoadBrushes("colorful.brushes");
+
+            var Window_TileBrushManager = new Window_TileBrushManager(ColorfulBrushManager);
+            Window_TileBrushManager.Owner = this;
+            Window_TileBrushManager.Text = ColorfulBrushManager.BrushesFile;
+            Window_TileBrushManager.Show();
+
+            var Window_SimpleBrushManager = new Window_TileBrushManager(SimpleBrushManager);
+            Window_SimpleBrushManager.Owner = this;
+            Window_SimpleBrushManager.Text = SimpleBrushManager.BrushesFile;
+            Window_SimpleBrushManager.Show();
+
             ////CreatePathDFS();
             // CreatePathBFS();
             //CreatePathDijkstra();
@@ -655,64 +679,6 @@ namespace GraphVisualizerTest
         Target = 5
     }
 
-    public class TileBrushManager
-    {
-        public List<TileBrush> Brushes = new List<TileBrush>();
-
-        public TileBrushManager()
-        {
-        }
-
-        public void CreateTestBrushes()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                var Brush = new TileBrush();
-                Brush.BrushID = i;
-                Brush.Name = string.Format("Brush {0}", Brush.BrushID);
-                Brush.Color = Color.FromArgb(255, 0, 0, 0);
-                AddBrush(Brush);
-            }
-        }
-
-        public void LoadBrushes(string FileName)
-        {
-            // Load brushes from their own file
-            CreateTestBrushes();
-        }
-
-        public void SaveBrushes()
-        {
-            // Save Brushes to their own file
-        }
-
-        public void AddBrush(TileBrush NewBrush)
-        {
-            Brushes.Add(NewBrush);
-        }
-
-        public TileBrush GetBrush(int BrushID)
-        {
-            return Brushes[BrushID];
-        }
-    }
-
-    public class TileBrush
-    {
-        public int BrushID;
-        public string Name;
-
-        public string ImageFileName;
-        public Image Image;
-        public Color Color;
-        public int Width;
-        public int Height;
-
-        public TileBrush()
-        {
-           
-        }
-    }
 
     #region Misc
  
