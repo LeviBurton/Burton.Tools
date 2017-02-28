@@ -96,6 +96,7 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>-->
         </ItemsControl>
+        
         <Polyline Name="SearchPath" StrokeThickness="4" Stroke="Green" HorizontalAlignment="Left" VerticalAlignment="Top"></Polyline>
 
     </StackPanel>
