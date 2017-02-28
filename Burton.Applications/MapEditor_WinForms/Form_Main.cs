@@ -32,13 +32,13 @@ namespace GraphVisualizerTest
         public int TargetNode;
         public int GridWidthPx = 0;
         public int GridHeightPx = 0;
-        public int NumCellsX = 20;
-        public int NumCellsY = 10;
+        public int NumCellsX = 10;
+        public int NumCellsY = 5;
         public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
-        public int CellWidth = 64;
-        public int CellHeight = 64;
+        public int CellWidth = 128 ;
+        public int CellHeight = 128;
 
         public bool bIsPaintingTerrain;
 
@@ -97,26 +97,26 @@ namespace GraphVisualizerTest
             var BrushTool = new Form_Palette_Brush();
 
             var SimpleBrushManager = new TileBrushManager("Simple");
-            //SimpleBrushManager.AddBrush(new TileBrush(Color.Red.ToString(), Color.Red, 64, 64));
-            //SimpleBrushManager.AddBrush(new TileBrush(Color.Green.ToString(), Color.Green, 64, 64));
-            //SimpleBrushManager.AddBrush(new TileBrush(Color.Blue.ToString(), Color.Blue, 64, 64));
+            SimpleBrushManager.AddBrush(new TileBrush(Color.Red.ToString(), Color.Red, 64, 64));
+            SimpleBrushManager.AddBrush(new TileBrush(Color.Green.ToString(), Color.Green, 64, 64));
+            SimpleBrushManager.AddBrush(new TileBrush(Color.Blue.ToString(), Color.Blue, 64, 64));
             //TileBrushManagers.Add(SimpleBrushManager);
 
             var ColorfulBrushManager = new TileBrushManager("Colorful");
-            //ColorfulBrushManager.AddBrush(new TileBrush(Color.Cyan.ToString(), Color.Cyan, 64, 64));
-            //ColorfulBrushManager.AddBrush(new TileBrush(Color.Magenta.ToString(), Color.Magenta, 64, 64));
-            //ColorfulBrushManager.AddBrush(new TileBrush(Color.Yellow.ToString(), Color.Yellow, 64, 64));
-            //ColorfulBrushManager.AddBrush(new TileBrush(Color.DarkSlateGray.ToString(), Color.DarkSlateGray, 64, 64));
+            ColorfulBrushManager.AddBrush(new TileBrush(Color.Cyan.ToString(), Color.Cyan, 64, 64));
+            ColorfulBrushManager.AddBrush(new TileBrush(Color.Magenta.ToString(), Color.Magenta, 64, 64));
+            ColorfulBrushManager.AddBrush(new TileBrush(Color.Yellow.ToString(), Color.Yellow, 64, 64));
+            ColorfulBrushManager.AddBrush(new TileBrush(Color.DarkSlateGray.ToString(), Color.DarkSlateGray, 64, 64));
             //TileBrushManagers.Add(ColorfulBrushManager);
 
             //SimpleBrushManager.SaveBrushes("rgb.brushes");
             //ColorfulBrushManager.SaveBrushes("colorful.brushes");
 
             // load the brushes from the file system into their brush managers. 
-            SimpleBrushManager.LoadBrushes("rgb.brushes");
+            SimpleBrushManager.SaveBrushes("rgb.brushes");
             TileBrushManagers.Add(SimpleBrushManager);
 
-            ColorfulBrushManager.LoadBrushes("colorful.brushes");
+            ColorfulBrushManager.SaveBrushes("colorful.brushes");
             TileBrushManagers.Add(ColorfulBrushManager);
 
             var Window_TileBrushManager = new Window_TileBrushManager(ColorfulBrushManager);
