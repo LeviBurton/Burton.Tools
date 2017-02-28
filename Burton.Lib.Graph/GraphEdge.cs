@@ -5,8 +5,20 @@ using System.Text;
 
 namespace Burton.Lib.Graph
 {
+    [Serializable]
     public class GraphEdge
     {
+        // Default Accessor Implementation
+        public int this[int index]
+        {
+            get
+            {
+
+                return 0;
+            }
+            set { /* Do Nothing */ }
+        }
+
         /// <summary>
         /// An edge connects two nodes.  Valid node indices are always positive
         /// </summary>
@@ -29,14 +41,14 @@ namespace Burton.Lib.Graph
         {
             this.FromNodeIndex = FromNodeIndex;
             this.ToNodeIndex = ToNodeIndex;
-            this.EdgeCost = 1.0;
+            this.EdgeCost = 1.0f;
         }
 
         public GraphEdge()
         {
             this.FromNodeIndex = (int)NodeType.InvalidNodeIndex;
             this.ToNodeIndex = (int)NodeType.InvalidNodeIndex;
-            this.EdgeCost = 1.0;
+            this.EdgeCost = 1.0f;
         }
     }
 }

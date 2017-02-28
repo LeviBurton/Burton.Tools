@@ -13,7 +13,7 @@ namespace Burton.Lib.Graph
         List<int> VisitedNodes;
         List<int> Route;
 
-        public List<GraphEdge> TraversedEdges;
+        public List<GraphEdge> SpanningTree;
 
         public int SourceNodeIndex;
         public int TargetNodeIndex;
@@ -26,7 +26,7 @@ namespace Burton.Lib.Graph
             this.SourceNodeIndex = Source;
             this.TargetNodeIndex = Target;
 
-            TraversedEdges = new List<GraphEdge>();
+            SpanningTree = new List<GraphEdge>();
 
             VisitedNodes = new List<int>();
             for (int i = 0; i < Graph.NodeCount(); i++)
@@ -44,7 +44,7 @@ namespace Burton.Lib.Graph
         public bool Search()
         {
             Stack<GraphEdge> Stack = new Stack<GraphEdge>();
-            TraversedEdges.Clear();
+            SpanningTree.Clear();
             bFound = false;
             GraphEdge Dummy = new GraphEdge(SourceNodeIndex, SourceNodeIndex, 0);
 
@@ -62,7 +62,10 @@ namespace Burton.Lib.Graph
                 VisitedNodes[Next.ToNodeIndex] = (int)NodeStatus.Visited;
 
                 // keep track of which edges we have traversed to find a path
-                TraversedEdges.Add(Next);
+                if (Next != Dummy)
+                {
+                    SpanningTree.Add(Next);
+                }
 
                 // did we find the target?
                 if (Next.ToNodeIndex == TargetNodeIndex)

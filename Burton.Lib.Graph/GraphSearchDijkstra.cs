@@ -11,12 +11,8 @@ namespace Burton.Lib.Graph
 
         SparseGraph<GraphNode, GraphEdge> Graph;
         public List<GraphEdge> ShortestPathTree;
-        public List<GraphEdge> TraversedEdges;
         public List<GraphEdge> SearchFrontier;
-
-        public List<int> VisitedNodes;
-        public List<int> Route;
-        public List<float> CostToThisNode;
+        public List<double> CostToThisNode;
 
         public int SourceNodeIndex;
         public int TargetNodeIndex;
@@ -34,50 +30,88 @@ namespace Burton.Lib.Graph
             int ActiveNodeCount = Graph.ActiveNodeCount();
             int NodeCount = Graph.NodeCount();
 
-            ShortestPathTree = new List<GraphEdge>();
-            TraversedEdges = new List<GraphEdge>();
-            SearchFrontier = new List<GraphEdge>();
-
-            VisitedNodes = new List<int>(NodeCount);
-            Route = new List<int>(ActiveNodeCount);
-            CostToThisNode = new List<float>(ActiveNodeCount);
-            Route = new List<int>(Graph.NodeCount());
-
-            for (int i = 0; i < Graph.NodeCount(); i++)
+            ShortestPathTree = new List<GraphEdge>(NodeCount);
+            SearchFrontier = new List<GraphEdge>(NodeCount);
+            CostToThisNode = new List<double>(ActiveNodeCount);
+        
+            for (int i = 0; i < NodeCount; i++)
             {
-                VisitedNodes.Insert(i, (int)NodeStatus.Unvisited);
+                ShortestPathTree.Insert(i, null);
+                SearchFrontier.Insert(i, null);
+                CostToThisNode.Insert(i, 0);
             }
 
-            for (int i = 0; i < Graph.NodeCount(); i++)
-            {
-                Route.Insert(i, (int)NodeStatus.NoParentAssigned);
-            }
         }
 
         public bool Search()
         {
-            var PriQueue = new PriorityQueue<float>();
+            var Q = new IndexedPriorityQueueLow<double>(CostToThisNode, Graph.NodeCount());
+
+            Q.Insert(SourceNodeIndex);
+           
+            while (!Q.IsEmpty())
+            {
+                int NextClosestNode = Q.Pop();
+
+                ShortestPathTree[NextClosestNode] = SearchFrontier[NextClosestNode];
+
+                if (NextClosestNode == TargetNodeIndex)
+                {
+                    bFound = true;
+                    return true;
+                }
+
+                foreach (var Edge in Graph.Edges[NextClosestNode])
+                {
+                    double NewCost = CostToThisNode[NextClosestNode] + Edge.EdgeCost;
+
+                    if (SearchFrontier[Edge.ToNodeIndex] == null)
+                    {
+                        CostToThisNode[Edge.ToNodeIndex] = NewCost;
+                        Q.Insert(Edge.ToNodeIndex);
+                        SearchFrontier[Edge.ToNodeIndex] = Edge;
+                    }
+                    else if ( (NewCost < CostToThisNode[Edge.ToNodeIndex]) &&
+                              (ShortestPathTree[Edge.ToNodeIndex] == null) )
+                    {
+                        CostToThisNode[Edge.ToNodeIndex] = NewCost;
+                        Q.ChangePriority(Edge.ToNodeIndex);
+                        SearchFrontier[Edge.ToNodeIndex] = Edge;
+                    }
+                }
+            }
+            
             return false;
         }
 
-        public Stack<int> GetPathToTarget()
+        public List<int> GetPathToTarget()
         {
-            var Path = new Stack<int>();
+            var Path = new List<int>(Graph.NodeCount());
 
-            if (!bFound || TargetNodeIndex < 0)
+            if (TargetNodeIndex < 0)
                 return Path;
 
             int Node = TargetNodeIndex;
 
-            Path.Push(Node);
+            Path.Insert(0, Node);
 
-            while (Node != SourceNodeIndex)
+            while ( (Node != SourceNodeIndex) && (ShortestPathTree[Node] != null) && (Path.Count < Graph.NodeCount() ) )
             {
-                Node = Route[Node];
-                Path.Push(Node);
+                Node = ShortestPathTree[Node].FromNodeIndex;
+                Path.Insert(0, Node);
             }
-
+            
             return Path;
+        }
+
+        public double GetCostToTarget()
+        {
+            return CostToThisNode[TargetNodeIndex];
+        }
+
+        public double GetCostToNode(int NodeIndex)
+        {
+            return CostToThisNode[NodeIndex];
         }
     }
 }
