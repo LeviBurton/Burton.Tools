@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceManager.cs" />
     <Compile Include="TileBrushManager.cs" />
     <Compile Include="Window_TileBrushManager.cs">
       <SubType>Form</SubType>
@@ -116,7 +117,11 @@
       <Name>Burton.Lib.Graph</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>robocopy "$(SolutionDir)Content_NoSC" "$(TargetDir)Content_NoSC" /MIR /njh /ndl</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

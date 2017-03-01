@@ -24,6 +24,8 @@ namespace GraphVisualizerTest
         List<NavGraphNode> Path = new List<NavGraphNode>();
         List<GraphEdge> SubTree = new List<GraphEdge>();
 
+        ResourceManager ResourceManager;
+
         public List<TileBrushManager> TileBrushManagers = new List<GraphVisualizerTest.TileBrushManager>();
 
         public EBrushType CurrentBrushType;
@@ -62,12 +64,23 @@ namespace GraphVisualizerTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            ResourceManager = new ResourceManager();
+            ResourceManager.LoadResources("Content_NoSC");
+
             Setup();
         }
 
         private void Setup()
         {
+            
             Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
+
+            var ContentFiles = Directory.GetDirectories("Content_NoSC");
+
+            foreach (var File in ContentFiles)
+            {
+                Console.WriteLine(File.ToString());
+            }
 
             GridWidthPx = CellWidth * NumCellsX;
             GridHeightPx = CellHeight * NumCellsY;
