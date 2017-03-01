@@ -103,6 +103,7 @@ namespace MapEditor_WPF
         {
             SubTree.Clear();
             Path.Clear();
+            SearchPath.Points.Clear();
 
             var AStar = new GraphSearchAStar(Graph, SourceNode, TargetNode);
             AStar.Search();
