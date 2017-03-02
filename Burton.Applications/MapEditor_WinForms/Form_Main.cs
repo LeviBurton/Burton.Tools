@@ -24,7 +24,7 @@ namespace GraphVisualizerTest
         List<NavGraphNode> Path = new List<NavGraphNode>();
         List<GraphEdge> SubTree = new List<GraphEdge>();
 
-        ResourceManager ResourceManager;
+        TileImageManager TileImageManager;
 
         public List<TileBrushManager> TileBrushManagers = new List<GraphVisualizerTest.TileBrushManager>();
 
@@ -64,9 +64,7 @@ namespace GraphVisualizerTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ResourceManager = new ResourceManager();
-            ResourceManager.LoadResources("Content_NoSC");
-
+         
             Setup();
         }
 
@@ -75,12 +73,12 @@ namespace GraphVisualizerTest
             
             Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
 
-            var ContentFiles = Directory.GetDirectories("Content_NoSC");
+            TileImageManager = new TileImageManager();
 
-            foreach (var File in ContentFiles)
-            {
-                Console.WriteLine(File.ToString());
-            }
+            // Note -- we don't want to do this all the time, since this
+            //TileImageManager.ImportFolder("Content_NoSC", true, "*.png");
+
+            TileImageManager.Load();
 
             GridWidthPx = CellWidth * NumCellsX;
             GridHeightPx = CellHeight * NumCellsY;
