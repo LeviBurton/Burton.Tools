@@ -1,6 +1,6 @@
 ﻿namespace GraphVisualizerTest
 {
-    partial class Form1
+    partial class Form_Main
     {
         /// <summary>
         /// Required designer variable.
@@ -39,6 +39,10 @@
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_OpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_SaveFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItem_View_Brushes = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItem_View_BrushManager = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -130,10 +134,11 @@
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FileMenu});
+            this.FileMenu,
+            this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1045, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1251, 28);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -141,7 +146,8 @@
             // 
             this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItem_OpenFile,
-            this.MenuItem_SaveFile});
+            this.MenuItem_SaveFile,
+            this.MenuItem_Exit});
             this.FileMenu.Name = "FileMenu";
             this.FileMenu.Size = new System.Drawing.Size(44, 24);
             this.FileMenu.Text = "File";
@@ -160,11 +166,41 @@
             this.MenuItem_SaveFile.Text = "Save";
             this.MenuItem_SaveFile.Click += new System.EventHandler(this.MenuItem_SaveFile_Click);
             // 
-            // Form1
+            // MenuItem_Exit
+            // 
+            this.MenuItem_Exit.Name = "MenuItem_Exit";
+            this.MenuItem_Exit.Size = new System.Drawing.Size(120, 26);
+            this.MenuItem_Exit.Text = "Exit";
+            this.MenuItem_Exit.Click += new System.EventHandler(this.MenuItem_Exit_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItem_View_Brushes,
+            this.MenuItem_View_BrushManager});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // MenuItem_View_Brushes
+            // 
+            this.MenuItem_View_Brushes.Name = "MenuItem_View_Brushes";
+            this.MenuItem_View_Brushes.Size = new System.Drawing.Size(183, 26);
+            this.MenuItem_View_Brushes.Text = "Brushes";
+            this.MenuItem_View_Brushes.Click += new System.EventHandler(this.MenuItem_View_Brushes_Click);
+            // 
+            // MenuItem_View_BrushManager
+            // 
+            this.MenuItem_View_BrushManager.Name = "MenuItem_View_BrushManager";
+            this.MenuItem_View_BrushManager.Size = new System.Drawing.Size(183, 26);
+            this.MenuItem_View_BrushManager.Text = "Brush Manager";
+            this.MenuItem_View_BrushManager.Click += new System.EventHandler(this.MenuItem_View_BrushManager_Click);
+            // 
+            // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1045, 937);
+            this.ClientSize = new System.Drawing.Size(1251, 937);
             this.Controls.Add(this.NormalButton);
             this.Controls.Add(this.MudButton);
             this.Controls.Add(this.WaterButton);
@@ -175,8 +211,8 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Form_Main";
+            this.Text = "Form_Main";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -198,6 +234,10 @@
         private System.Windows.Forms.ToolStripMenuItem FileMenu;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_OpenFile;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_SaveFile;
+        private System.Windows.Forms.ToolStripMenuItem MenuItem_Exit;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuItem_View_Brushes;
+        private System.Windows.Forms.ToolStripMenuItem MenuItem_View_BrushManager;
     }
 }
 

@@ -16,7 +16,7 @@ namespace Burton.Lib.Graph
         /// <summary>
         /// Vector/array nodes that comprise this Graph
         /// </summary>
-        public List<NodeType> Nodes = new List<NodeType>(1024 * 1024);
+        public List<NodeType> Nodes = new List<NodeType>();
 
         /// <summary>
         /// A list of adjacency edge lists.
@@ -137,6 +137,17 @@ namespace Burton.Lib.Graph
             Edges.RemoveEdge(From, To);
         }
 
+        public void SetEdgeCost(int From, int To, double Cost)
+        {
+            foreach (var Edge in Edges[From])
+            {
+                if (Edge.ToNodeIndex == To)
+                {
+                    Edge.EdgeCost = Cost;
+                }
+            }
+
+        }
         /// <summary>
         /// Returns the number of active + inactive enodes present in the graph.
         /// </summary>
@@ -202,13 +213,11 @@ namespace Burton.Lib.Graph
             return false;
         }
 
-        public SparseGraph(bool bIsDigraph)
+        public SparseGraph(bool bIsDigraph, int NodeCount)
         {
             this.bIsDigraph = bIsDigraph;
             NextNodeIndex = 0;
-
-            // FIXME: The initial size of this is currently arbitrary.
-            Edges = new AdjacencyList(1024 * 1024);
+            Edges = new AdjacencyList(NodeCount);
         }
     }
 }

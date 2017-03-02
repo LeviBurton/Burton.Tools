@@ -7,12 +7,12 @@ namespace Burton.Lib.Graph
     [Serializable]
     public class NavGraphNode : GraphNode
     {
-        public float X;
-        public float Y;
+        public double X;
+        public double Y;
 
         public NavGraphNode() { }
 
-        public NavGraphNode(int Index, float LocationX, float LocationY)
+        public NavGraphNode(int Index, double LocationX, double LocationY)
         {
             this.NodeIndex = Index;
             this.X = LocationX;

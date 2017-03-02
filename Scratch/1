@@ -1,0 +1,129 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Tuesday, February 28, 2017 11:19:54 PM
+   Source : C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\
+     Dest : C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Burton.Applications\MapEditor_WinForms\bin\Debug\Content_NoSC\
+
+    Files : *.*
+	    
+  Options : *.* /NFL /S /E /DCOPY:DA /COPY:DAT /PURGE /MIR /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   0	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\
+	                   3	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\
+	                  35	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\
+	                  48	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\altars\
+	                 146	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\floor\
+	                  24	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\floor\grass\
+	                  28	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\gateways\
+	                  11	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\shops\
+	                   4	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\vaults\
+	                 189	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\wall\
+	                   1	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\wall\banners\
+	                   5	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\wall\torches\
+	                  68	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-dngn\water\
+	                  72	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-misc\
+	                 133	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\
+	                 106	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\animals\
+	                  64	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\demons\
+	                  16	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\draco\
+	                   6	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\fungi_plants\
+	                   6	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\holy\
+	                  26	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\nonliving\
+	                  27	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\panlord\
+	                   4	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\spriggan\
+	                  26	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\statues\
+	                  32	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\undead\
+	                  15	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\undead\skeletons\
+	                  18	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\undead\spectrals\
+	                  69	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\dc-mon\unique\
+	                  91	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\effect\
+	                   7	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\gui\
+	                   0	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\
+	                  41	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\amulet\
+	                   5	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\amulet\artefact\
+	                  58	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\armour\
+	                  27	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\armour\artefact\
+	                   8	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\armour\bardings\
+	                  20	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\armour\brands\
+	                   7	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\armour\headgear\
+	                   9	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\armour\shields\
+	                  30	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\book\
+	                   7	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\book\artefact\
+	                  25	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\food\
+	                   6	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\food\chunk_brands\
+	                  25	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\misc\
+	                   8	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\misc\runes\
+	                  42	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\potion\
+	                  52	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\ring\
+	                   4	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\ring\artefact\
+	                  21	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\rod\
+	                  26	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\scroll\
+	                  23	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\staff\
+	                  33	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\wand\
+	                  80	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\weapon\
+	                  45	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\weapon\artefact\
+	                  29	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\weapon\brands\
+	                  14	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\item\weapon\ranged\
+	                   0	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\
+	                   8	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\barding\
+	                  85	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\base\
+	                  11	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\beard\
+	                 139	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\body\
+	                  21	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\boots\
+	                  11	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\cloak\
+	                  10	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\drchead\
+	                  10	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\drcwing\
+	                   1	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\ench\
+	                  21	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\gloves\
+	                  32	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\hair\
+	                   1	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\halo\
+	                 149	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\hand1\
+	                  40	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\hand1\artefact\
+	                  25	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\hand1\misc\
+	                  36	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\hand2\
+	                  32	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\hand2\misc\
+	                  86	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\head\
+	                  34	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\legs\
+	                   7	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\player\transform\
+	                   1	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\
+	                  13	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\air\
+	                   3	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\conjuration\
+	                  12	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\disciplines\
+	                   4	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\divination\
+	                  11	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\earth\
+	                  19	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\enchantment\
+	                  14	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\fire\
+	                  13	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\ice\
+	                  24	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\necromancy\
+	                  11	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\poison\
+	                  16	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\summoning\
+	                  12	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\translocation\
+	                   3	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\spells\transmutation\
+	                   0	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\
+	                  15	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\armour\
+	                   5	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\books\
+	                  19	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\features\
+	                   5	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\gui\
+	                  29	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\monsters\
+	                  31	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\other\
+	                   9	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\potions\
+	                  15	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\rings\
+	                  21	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\spells\
+	                  34	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\spells\components\
+	                  20	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\UNUSED\weapons\
+	                   5	C:\Users\Brittany\Documents\Visual Studio 2015\Projects\Burton.Tools\Content_NoSC\Tiles_Crawl\utility\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :       104         0       104         0         0         0
+   Files :      3048         0      3048         0         0         0
+   Bytes :    3.52 m         0    3.52 m         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+   Ended : Tuesday, February 28, 2017 11:19:54 PM
+

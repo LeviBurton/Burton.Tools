@@ -24,8 +24,11 @@ namespace Burton.Lib.Graph
         // Appends an edge to the linked list
         public void AddEdgeAtEnd(GraphEdge Edge)
         {
-          //  EdgeVector[Edge.FromNodeIndex].AddLast(Edge);
-            EdgeVector[Edge.FromNodeIndex].Add(Edge);
+            //  EdgeVector[Edge.FromNodeIndex].AddLast(Edge);
+            if (!EdgeVector[Edge.FromNodeIndex].Contains(Edge))
+            {
+                EdgeVector[Edge.FromNodeIndex].Add(Edge);
+            }
         }
 
         // Adds a new Edge to the linked list from the front
