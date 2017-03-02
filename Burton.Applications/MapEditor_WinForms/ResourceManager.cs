@@ -55,7 +55,6 @@ namespace GraphVisualizerTest
             {
                 Console.WriteLine(excpt.Message);
             }
-
         }
     }
 }
