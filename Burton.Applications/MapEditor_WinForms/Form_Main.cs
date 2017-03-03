@@ -18,7 +18,8 @@ namespace GraphVisualizerTest
     public partial class Form_Main : Form
     {
         public SparseGraph<GraphNode, GraphEdge> Graph;
-      
+        public TileMap CurrentMap;
+
         // List of brush type ids that represent the tiles brush.
         List<EBrushType> Terrain = new List<EBrushType>();
         List<NavGraphNode> Path = new List<NavGraphNode>();
@@ -70,40 +71,18 @@ namespace GraphVisualizerTest
 
         private void Setup()
         {
-            
-            Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
-
-            TileImageManager = new TileImageManager();
-
-            // Note -- we don't want to do this all the time, since this
-            //TileImageManager.ImportFolder("Content_NoSC", true, "*.png");
-
-            TileImageManager.Load();
-
-            GridWidthPx = CellWidth * NumCellsX;
-            GridHeightPx = CellHeight * NumCellsY;
+            CurrentMap = new TileMap(NumCellsY, NumCellsX);
+            CurrentMap.Setup();
+            CurrentMap.ClearTerrain();
 
             CurrentBrushType = EBrushType.Source;
-
+            TileImageManager = new TileImageManager();
             bIsPaintingTerrain = false;
-
-            for (int i = 0; i < NumCellsX * NumCellsY; i++)
-            {
-                Terrain.Insert(i, EBrushType.Normal);
-            }
-
-            CreateGrid(Graph, NumCellsX, NumCellsY);
-
-            GridPanel.Width = GridWidthPx;
-            GridPanel.Height = GridHeightPx;
-
+            GridPanel.Width = CurrentMap.TileMapWidth;
+            GridPanel.Height = CurrentMap.TileMapHeight;
             Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
-
-            Path.Clear();
-            SubTree.Clear();
-
-            SourceNode = 0;
-            TargetNode = Graph.NodeCount() - 1;
+            Width = GridPanel.Width;
+            Height = GridPanel.Height;
 
             var BrushTool = new Form_Palette_Brush();
 
@@ -140,195 +119,16 @@ namespace GraphVisualizerTest
             Window_SimpleBrushManager.Text = SimpleBrushManager.BrushesFile;
             Window_SimpleBrushManager.Show();
 
-            ////CreatePathDFS();
-            // CreatePathBFS();
-            //CreatePathDijkstra();
-            CreatePathAStar();
-
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
             this.GridPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseDown);
             this.GridPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseUp);
         }
 
-        public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
-        {
-            return !((x < 0) || (x >= NumCellsX) || (y < 0) || (y >= NumCellsY));
-        }
-
-        public void AddAllNeighborsToGridNode(SparseGraph<GraphNode, GraphEdge> Graph, int Row, int Col, int CellsX, int CellsY)
-        {
-            for (int i = -1; i < 2; ++i)
-            {
-                for (int j = -1; j < 2; ++j)
-                {
-                    int NodeX = (Col + j);
-                    int NodeY = (Row + i);
-
-                    if ((i == 0) && (j == 0))
-                        continue;
-
-                    if (ValidNeighbor(NodeX, NodeY, CellsX, CellsY))
-                    {
-                        var Node = (NavGraphNode)Graph.GetNode(Row * CellsX + Col);
-
-                        if (Node.NodeIndex == -(int)ENodeType.InvalidNodeIndex)
-                            continue;
-
-                        var NeighborNode = (NavGraphNode)Graph.GetNode(NodeY * CellsX + NodeX);
-
-                        if (NeighborNode.NodeIndex == (int)ENodeType.InvalidNodeIndex)
-                            continue;
-
-                        var PosNode = new Vector2(Node.X, Node.Y);
-                        var PosNeighborNode = new Vector2(NeighborNode.X, NeighborNode.Y);
-
-                        double Distance = PosNode.Distance(PosNeighborNode);
-                   
-                        GraphEdge NewEdge = new GraphEdge(Node.NodeIndex, NeighborNode.NodeIndex, Distance);
-                        Graph.AddEdge(NewEdge);
-
-                        if (!Graph.IsDigraph())
-                        {
-                            GraphEdge Edge = new GraphEdge(NeighborNode.NodeIndex, Node.NodeIndex, Distance);
-                            Graph.AddEdge(Edge);
-                        }
-                    }
-                }
-            }
-        }
-
-        public void WeightNavGraphNodeEdges(SparseGraph<GraphNode, GraphEdge> Graph, int NodeIndex, double Weight)
-        {
-            if (NodeIndex > Graph.NodeCount())
-            {
-                throw new ArgumentException(string.Format("{0} out of bounds: {1}", NodeIndex, Graph.NodeCount()));
-            }
-
-            foreach (var Edge in Graph.Edges[NodeIndex])
-            {
-                var NodeFrom = (NavGraphNode)Graph.GetNode(Edge.FromNodeIndex);
-                var NodeTo = (NavGraphNode)Graph.GetNode(Edge.ToNodeIndex);
-                var PosFrom = new Vector2(NodeFrom.X, NodeFrom.Y);
-                var PosTo = new Vector2(NodeTo.X, NodeTo.Y);
-
-                double Distance = PosFrom.Distance(PosTo);
-
-                Graph.SetEdgeCost(Edge.FromNodeIndex, Edge.ToNodeIndex, Distance * Weight);
-            }
-        }
-
-        public void CreateGrid(SparseGraph<GraphNode, GraphEdge> Graph, int CellsX, int CellsY)
-        {
-            //CellWidth = GridWidthPx / CellsX;
-            //CellHeight = GridHeightPx / CellsY;
-
-            //CellWidth = 32;
-            //CellHeight = 32;
-
-         
-            float MidX = CellWidth / 2;
-            float MidY = CellHeight / 2;
-
-            for (int Row = 0; Row < CellsY; ++Row)
-            {
-                for (int Col = 0; Col < CellsX; ++Col)
-                {
-                    var NodeIndex = Graph.AddNode(new NavGraphNode(Graph.GetNextFreeNodeIndex(),
-                                                                   MidX + (Col * CellWidth), MidY + (Row * CellHeight)));
-  
-                }
-            }
-
-            for (int Row = 0; Row < CellsY; ++Row)
-            {
-                for (int Col = 0; Col < CellsX; ++Col)
-                {
-                    AddAllNeighborsToGridNode(Graph, Row, Col, CellsX, CellsY);
-                }
-            }
-        }
-
-
         private void GridPanel_Paint(object sender, PaintEventArgs e)
         {
-            // Draw Grid, Terrain, Nodes, Edges and Labels
-            for (int CurNodeIndex = 0; CurNodeIndex < Graph.NodeCount(); ++CurNodeIndex)
+            if (CurrentMap != null)
             {
-                var Node = (NavGraphNode)Graph.GetNode(CurNodeIndex);
-
-                if (Node.NodeIndex == (int)ENodeType.InvalidNodeIndex)
-                {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
-                    continue;
-                }
-
-                if (Terrain[Node.NodeIndex] == EBrushType.Normal)
-                {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.White), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
-                }
-                if (Terrain[Node.NodeIndex] == EBrushType.Obstacle)
-                {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
-                }
-                if (Terrain[Node.NodeIndex] == EBrushType.Water)
-                {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.LightBlue), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
-                }
-                if (Terrain[Node.NodeIndex] == EBrushType.Mud)
-                {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.SandyBrown), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
-                }
-
-                StringFormat sf = new StringFormat();
-                sf.LineAlignment = StringAlignment.Near;
-                sf.Alignment = StringAlignment.Near;
-
-               // e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.X - 2.0f, (float)Node.Y - 10.0f));
-                e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.X - SmallCircle, (float)Node.Y - SmallCircle, SmallCircle*2, SmallCircle*2));
-
-                foreach (var Edge in Graph.Edges[Node.NodeIndex])
-                {
-                    var FromNode = Graph.GetNode(Edge.FromNodeIndex) as NavGraphNode;
-                    var ToNode = Graph.GetNode(Edge.ToNodeIndex) as NavGraphNode;
-                    e.Graphics.DrawLine(new Pen(Color.LightGray), new PointF((float)FromNode.X, (float)FromNode.Y), new PointF((float)ToNode.X, (float)ToNode.Y)); 
-                }
-
-                if (Node.NodeIndex == SourceNode)
-                {
-                    e.Graphics.FillEllipse(new SolidBrush(Color.Green), new RectangleF((float)Node.X - BigCircle, (float)Node.Y - BigCircle, BigCircle*2, BigCircle*2));
-                }
-                else if (Node.NodeIndex == TargetNode)
-                {
-                    e.Graphics.FillEllipse(new SolidBrush(Color.Red), new RectangleF((float)Node.X - BigCircle, (float)Node.Y - BigCircle, BigCircle*2, BigCircle*2));
-                }
-
-                e.Graphics.DrawRectangle(new Pen(Color.DarkGray), new Rectangle(new Point((int)Node.X - (CellWidth / 2), (int)Node.Y - (CellHeight / 2)), new Size(CellWidth, CellHeight)));
-            }
-
-            // Draw subtree of searched nodes 
-            if (SubTree != null && SubTree.Count > 0)
-            {
-                for (int i = 0; i < SubTree.Count; ++i)
-                {
-                    if (SubTree[i] != null)
-                    {
-                        var FromNode = Graph.GetNode(SubTree[i].FromNodeIndex) as NavGraphNode;
-                        var ToNode = Graph.GetNode(SubTree[i].ToNodeIndex) as NavGraphNode;
-                        var EdgePen = new Pen(Color.FromArgb(255, 25, 25, 25), 1);
-
-                        e.Graphics.DrawLine(EdgePen, new PointF((float)FromNode.X, (float)FromNode.Y), new PointF((float)ToNode.X, (float)ToNode.Y));
-                    }
-                }
-            }
-
-            // Draw Path
-            if (Path.Count > 0)
-            {
-                for (int i = 0; i < Path.Count - 1; i++)
-                {
-                    e.Graphics.DrawLine(new Pen(Color.Blue, 3), new PointF((float)Path[i].X, (float) Path[i].Y), 
-                                                                new PointF((float)Path[i + 1].X, (float)Path[i + 1].Y));
-                }
+                CurrentMap.Paint(sender, e);
             }
         }
 
@@ -386,7 +186,6 @@ namespace GraphVisualizerTest
 
             GridPanel.Refresh();
         }
-
         private void CreatePathBFS()
         {
             SubTree.Clear();
@@ -412,7 +211,6 @@ namespace GraphVisualizerTest
 
             GridPanel.Refresh();
         }
-
         private void CreatePathDFS()
         {
             SubTree.Clear();
@@ -446,14 +244,17 @@ namespace GraphVisualizerTest
         }
 
         private void PaintTerrain(PointF Point)
-        { 
-            int TileIndex = (int)Point.Y / CellHeight  * NumCellsX + (int)Point.X / CellWidth;
+        {
+            if (CurrentMap == null || CurrentMap.Graph == null)
+                return;
 
-            if ((Point.X > NumCellsX * CellWidth || Point.Y > NumCellsY * CellHeight) ||
+            int TileIndex = (int)Point.Y / CurrentMap.TileWidth  * CurrentMap.NumCellsX + (int)Point.X / CurrentMap.TileHeight;
+
+            if ((Point.X > CurrentMap.NumCellsX * CurrentMap.TileWidth || Point.Y > CurrentMap.NumCellsY * CurrentMap.TileHeight) ||
                 (Point.X < 0 || Point.Y < 0) || 
-                TileIndex >= Graph.NodeCount())
+                TileIndex >= CurrentMap.Graph.NodeCount())
             {
-                Console.WriteLine("Ignoreing: {0} {1}", TileIndex, NumCellsX * NumCellsY);
+                Console.WriteLine("Ignoreing: {0} {1}", TileIndex, CurrentMap.Graph.NodeCount());
                 return;
             }
 
@@ -464,79 +265,32 @@ namespace GraphVisualizerTest
                 if (CurrentBrushType == EBrushType.Source)
                 {
                     SourceNode = TileIndex;
+                    CurrentMap.SourceNode = TileIndex;
                     bShouldSearch = true;
                 }
                 else if (CurrentBrushType == EBrushType.Target)
                 {
-                    TargetNode = TileIndex;
+                    CurrentMap.TargetNode = TileIndex;
                     bShouldSearch = true;
                 }
             }
             else
             {
-                UpdateGraphFromBrush(TileIndex, CurrentBrushType);
+                CurrentMap.UpdateGraphFromBrush(TileIndex, CurrentBrushType);
                 bShouldSearch = true;
             }
 
+            GridPanel.Refresh();
+
             if (bShouldSearch)
             {
-               // CreatePathBFS();
+                
+                // CreatePathBFS();
                 // CreatePathDFS();
                 //CreatePathBFS();
-               // CreatePathDijkstra();
-               CreatePathAStar();
+                // CreatePathDijkstra();
+                //  CreatePathAStar();
             }
-        }
-
-        public void UpdateGraphFromBrush(int TileIndex, EBrushType Brush)
-        {
-            Terrain[TileIndex] = Brush;
-
-            if (Brush == EBrushType.Obstacle)
-            {
-                Graph.RemoveNode(TileIndex);
-            }
-            else
-            {
-                // make the node active again if it is currently inactive
-                if (!Graph.IsNodePresent(TileIndex))
-                {
-                    int y = (TileIndex / NumCellsX) ;
-                    int x = TileIndex - (y * NumCellsX);
-                    float MidX = CellWidth / 2;
-                    float MidY = CellHeight / 2;
-
-                    Vector2 Position = new Vector2(MidX + (x * CellWidth), MidY + (y * CellHeight));
-                    var NodeIndex = Graph.AddNode(new NavGraphNode(TileIndex, Position.x, Position.y));
-
-                    AddAllNeighborsToGridNode(Graph, y, x, NumCellsX, NumCellsY);
-                }
-
-                double TerrainCost = 1.0;
-
-                if (CurrentBrushType == EBrushType.Water)
-                {
-                    TerrainCost = 2.0;
-                }
-                else if (CurrentBrushType == EBrushType.Normal)
-                {
-                    TerrainCost = 1.0;
-                }
-                else if (CurrentBrushType == EBrushType.Mud)
-                {
-                    TerrainCost = 1.5;
-                }
-
-                WeightNavGraphNodeEdges(Graph, TileIndex, TerrainCost);
-
-            }
-
-            Terrain[TileIndex] = Brush;
-        }
-
-        public void WeightNavGraphNodeEdges(int NodeIndex, float Weight)
-        {
-
         }
 
         #region GridPanel Mouse Events
@@ -621,29 +375,10 @@ namespace GraphVisualizerTest
 
             if (OpenFileDialog.FileName != "")
             {
-                using (Stream InStream = File.Open(OpenFileDialog.FileName, FileMode.Open))
-                {
-                    var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    NumCellsX = (int)BinaryFormatter.Deserialize(InStream);
-                    NumCellsY = (int)BinaryFormatter.Deserialize(InStream);
-
-                    Terrain = null;
-                    Graph = null;
-
-                    Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
-                    Terrain = (List<EBrushType>)BinaryFormatter.Deserialize(InStream);
-               
-                    CreateGrid(Graph, NumCellsX, NumCellsY);
-
-                    for (int i = 0; i < NumCellsX * NumCellsY; i++)
-                    {
-                        UpdateGraphFromBrush(i, Terrain[i]);
-                    }
-
-                    CreatePathAStar();
-                
-                    GridPanel.Refresh();
-                }
+                CurrentMap.Load(OpenFileDialog.FileName);
+                GridPanel.Width = CurrentMap.TileMapWidth;
+                GridPanel.Height = CurrentMap.TileMapHeight;
+                GridPanel.Refresh();
             }
         }
 
@@ -691,7 +426,6 @@ namespace GraphVisualizerTest
         Source = 4,
         Target = 5
     }
-
 
     #region Misc
  

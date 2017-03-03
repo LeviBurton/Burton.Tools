@@ -96,7 +96,7 @@ namespace MapEditor_WPF
             ////CreatePathDFS();
             // CreatePathBFS();
             //CreatePathDijkstra();
-            CreatePathAStar();
+           // CreatePathAStar();
         }
 
         private void CreatePathAStar()
