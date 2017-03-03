@@ -19,8 +19,6 @@ namespace GraphVisualizerTest
         public List<NavGraphNode> Path = new List<NavGraphNode>();
         public List<GraphEdge> SubTree = new List<GraphEdge>();
 
-        TileImageManager TileImageManager;
-
         public List<TileBrushManager> TileBrushManagers = new List<GraphVisualizerTest.TileBrushManager>();
 
         // Testing pathing

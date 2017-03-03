@@ -111,12 +111,12 @@ namespace GraphVisualizerTest
 
             var Window_TileBrushManager = new Window_TileBrushManager(ColorfulBrushManager);
             Window_TileBrushManager.Owner = this;
-            Window_TileBrushManager.Text = ColorfulBrushManager.BrushesFile;
+            Window_TileBrushManager.Text = ColorfulBrushManager.Path;
             Window_TileBrushManager.Show();
 
             var Window_SimpleBrushManager = new Window_TileBrushManager(SimpleBrushManager);
             Window_SimpleBrushManager.Owner = this;
-            Window_SimpleBrushManager.Text = SimpleBrushManager.BrushesFile;
+            Window_SimpleBrushManager.Text = SimpleBrushManager.Path;
             Window_SimpleBrushManager.Show();
 
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
