@@ -26,7 +26,7 @@ namespace GraphVisualizerTest
             BrushesFile = string.Empty;
         }
 
-        public void LoadBrushes(string FileName)
+        public void Load(string FileName)
         {
             // Load brushes from their own file
             IFormatter formatter = new BinaryFormatter();
@@ -45,7 +45,7 @@ namespace GraphVisualizerTest
             BrushesFile = FileName;
         }
 
-        public void SaveBrushes(string FileName)
+        public void Save(string FileName)
         {
             // Save ourself to our own file.  
             // this means each manager will be its own database 
@@ -60,7 +60,7 @@ namespace GraphVisualizerTest
             BrushesFile = FileName;
         }
 
-        public int AddBrush(TileBrush NewBrush)
+        public int Add(TileBrush NewBrush)
         {
             NewBrush.BrushID = NextValidID++;
             Brushes.Add(NewBrush);
@@ -68,7 +68,7 @@ namespace GraphVisualizerTest
             return NextValidID;
         }
 
-        public TileBrush GetBrush(int BrushID)
+        public TileBrush Get(int BrushID)
         {
             return Brushes[BrushID];
         }
