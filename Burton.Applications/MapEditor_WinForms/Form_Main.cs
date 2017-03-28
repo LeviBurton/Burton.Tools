@@ -17,6 +17,8 @@ namespace GraphVisualizerTest
 {
     public partial class Form_Main : Form
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public SparseGraph<GraphNode, GraphEdge> Graph;
         public TileMap CurrentMap;
 
@@ -80,6 +82,7 @@ namespace GraphVisualizerTest
             bIsPaintingTerrain = false;
             GridPanel.Width = CurrentMap.TileMapWidth;
             GridPanel.Height = CurrentMap.TileMapHeight;
+           
             Size = new System.Drawing.Size(GridPanel.Width + 35, GridPanel.Height + 100);
             Width = GridPanel.Width;
             Height = GridPanel.Height;
@@ -112,12 +115,12 @@ namespace GraphVisualizerTest
             var Window_TileBrushManager = new Window_TileBrushManager(ColorfulBrushManager);
             Window_TileBrushManager.Owner = this;
             Window_TileBrushManager.Text = ColorfulBrushManager.Path;
-            Window_TileBrushManager.Show();
+          //  Window_TileBrushManager.Show();
 
             var Window_SimpleBrushManager = new Window_TileBrushManager(SimpleBrushManager);
             Window_SimpleBrushManager.Owner = this;
             Window_SimpleBrushManager.Text = SimpleBrushManager.Path;
-            Window_SimpleBrushManager.Show();
+          //  Window_SimpleBrushManager.Show();
 
             this.GridPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseMove);
             this.GridPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GridPanel_MouseDown);
@@ -429,26 +432,6 @@ namespace GraphVisualizerTest
 
     #region Misc
  
-    public class Vector2
-    {
-        public double x;
-        public double y;
-
-        public Vector2(double x, double y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-        //------------------------------------------------------------------------
-        public double Distance(Vector2 v2)
-        {
-            double ySeparation = v2.y - y;
-            double xSeparation = v2.x - x;
-
-            return Math.Sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
-        }
-    }
     #endregion
 
 }

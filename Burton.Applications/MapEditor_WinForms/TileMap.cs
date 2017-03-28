@@ -1,4 +1,5 @@
 ﻿using Burton.Lib.Graph;
+using Burton.Lib.Math;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -54,7 +55,7 @@ namespace GraphVisualizerTest
         {
             bCanDraw = false;
 
-            Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
+            Graph = new SparseGraph<GraphNode, GraphEdge>(false);
 
             CreateGrid();
 
@@ -83,6 +84,7 @@ namespace GraphVisualizerTest
                 {
                     var NodeIndex = Graph.AddNode(new NavGraphNode(Graph.GetNextFreeNodeIndex(),
                                                                    MidX + (Col * TileWidth), MidY + (Row * TileWidth)));
+                    Graph.Edges.Insert(NodeIndex, new List<GraphEdge>());
                 }
             }
 
@@ -181,7 +183,7 @@ namespace GraphVisualizerTest
                     float MidY = TileHeight / 2;
 
                     Vector2 Position = new Vector2(MidX + (x * TileWidth), MidY + (y * TileHeight));
-                    var NodeIndex = Graph.AddNode(new NavGraphNode(TileIndex, Position.x, Position.y));
+                    var NodeIndex = Graph.AddNode(new NavGraphNode(TileIndex, Position.X, Position.Y));
 
                     AddAllNeighborsToGridNode(y, x, NumCellsX, NumCellsY);
                 }
@@ -245,7 +247,7 @@ namespace GraphVisualizerTest
                 sf.LineAlignment = StringAlignment.Near;
                 sf.Alignment = StringAlignment.Near;
 
-                // e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.X - 2.0f, (float)Node.Y - 10.0f));
+               // e.Graphics.DrawString(string.Format("{0}", Node.NodeIndex), Font, Brushes.Black, new PointF((float)Node.X - 2.0f, (float)Node.Y - 10.0f));
                 e.Graphics.FillEllipse(new SolidBrush(Color.Black), new RectangleF((float)Node.X - SmallCircle, (float)Node.Y - SmallCircle, SmallCircle * 2, SmallCircle * 2));
 
                 foreach (var Edge in Graph.Edges[Node.NodeIndex])

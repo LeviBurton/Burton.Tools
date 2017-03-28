@@ -11,7 +11,7 @@ namespace Burton.Lib.Graph
             double y = x2 - x1;
             double x = y2 - y1;
 
-            return Math.Sqrt(y * y + x * x);
+            return System.Math.Sqrt(y * y + x * x);
         }
 
         public double Calculate(T Graph, int Node1, int Node2)

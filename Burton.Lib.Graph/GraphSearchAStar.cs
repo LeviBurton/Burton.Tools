@@ -22,6 +22,7 @@ namespace Burton.Lib.Graph
         public int SourceNodeIndex;
         public int TargetNodeIndex;
 
+
         public bool bFound;
 
         public GraphSearchAStar(SparseGraph<GraphNode,GraphEdge> Graph, int Source, int Target)
@@ -43,7 +44,7 @@ namespace Burton.Lib.Graph
             GCosts = new List<double>(NodeCount);
             FCosts = new List<double>(NodeCount);
 
-            // not sure i need to initialize these...
+            // not sure i need to initialize these...nt);
             for (int i = 0; i < NodeCount; i++)
             {
                 ShortestPathTree.Insert(i, null);

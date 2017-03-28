@@ -69,7 +69,7 @@ namespace MapEditor_WPF
 
         private void Setup()
         {
-            Graph = new SparseGraph<GraphNode, GraphEdge>(false, NumCellsX * NumCellsY);
+            Graph = new SparseGraph<GraphNode, GraphEdge>(false);
 
             CurrentBrushType = EBrushType.Source;
 
