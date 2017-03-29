@@ -9,14 +9,33 @@ namespace Burton.Lib.Characters
     {
         public string Name { get; set; }
 
-        // Basic Attributes
-        public int Strength { get; set; }
-        public int Health { get; set; }
-        public int Dexterity { get; set; }
-        public int Intelligence { get; set; }
+        // Ability Scores
+        // ===============================
+        // When creating a new character, roll 4d6, discard the lowest result,
+        // then add the 3 together.
+        // Repeat for all 6, then assign them to your abilities
+        //
+        //
+        // Ability Checks
+        // ===============================
+        // Task Difficulty      DC
+        // ------------------------
+        // Very Easy            5
+        // Easy                 10
+        // Medium               15
+        // Hard                 20
+        // Very Hard            25
+        // Nearly Impossible    30
 
-        public double BasicSpeed { get { return (Health + Dexterity) / 4;  } }
-        public double Movement { get { return BasicSpeed; } }
+        public int Strength { get; set; }
+        public int Dexterity { get; set; }
+        public int Constitution { get; set; }
+        public int Intelligence { get; set; }
+        public int Wisdom { get; set; }
+        public int Charisma { get; set; }
+
+        // Weight in pounds they can carry.
+        public int CarryingCapacity { get { return Strength * 15;  } }
 
         // Character skills
         public List<Skill> Skills;

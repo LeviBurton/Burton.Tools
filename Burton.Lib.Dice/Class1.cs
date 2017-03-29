@@ -22,7 +22,21 @@ namespace Burton.Lib.Dice
             this.Random = new Random(this.Seed);
         }
 
-        public int Roll(int NumDice, int NumSides)
+        // Returns an array containing the results of each dice roll.
+        public int[] Roll(int NumDice, int NumSides)
+        {
+            int[] Result = new int[NumDice];
+
+            for (int Roll = 0; Roll < NumDice; Roll++)
+            {
+                Result[Roll] = Random.Next(1, NumSides + 1);
+            }
+
+            return Result;
+        }
+
+        // Returns the sum of the dice rolls.
+        public int RollSum(int NumDice, int NumSides)
         {
             int Sum = 0;
 
