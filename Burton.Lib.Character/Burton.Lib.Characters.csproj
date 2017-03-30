@@ -49,12 +49,19 @@
     <Compile Include="Skill.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Burton.Lib.Dice\Burton.Lib.Dice.csproj">
+      <Project>{3267817f-744f-48d1-b0d6-bfdd4dcb68a7}</Project>
+      <Name>Burton.Lib.Dice</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Burton.Lib.SimpleDB\Burton.Lib.SimpleDB.csproj">
       <Project>{ba7539b2-df91-47a3-9c9e-400a8362897e}</Project>
       <Name>Burton.Lib.SimpleDB</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetPath)" "C:\Users\levib\Documents\Unity\D205E\Assets"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

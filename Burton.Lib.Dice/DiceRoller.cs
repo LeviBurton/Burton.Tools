@@ -7,12 +7,27 @@ namespace Burton.Lib.Dice
 {
     public class DiceRoller
     {
-        private Random Random;
+        public Random Random;
         public int Seed;
+        
+        private static DiceRoller _Instance = null;
+        
+        public static DiceRoller Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                {
+                    _Instance = new DiceRoller();
+                }
+
+                return _Instance;
+            }
+        }
 
         public DiceRoller()
         {
-            Seed = Environment.TickCount;
+            this.Seed = Environment.TickCount;
             this.Random = new Random(Seed);
         }
 
@@ -22,6 +37,12 @@ namespace Burton.Lib.Dice
             this.Random = new Random(this.Seed);
         }
 
+        public void SetSeed(int Seed)
+        {
+            this.Seed = Seed;
+            this.Random = new Random(Seed);
+        }
+
         // Returns an array containing the results of each dice roll.
         public List<int> Roll(int NumDice, int NumSides)
         {
@@ -29,12 +50,13 @@ namespace Burton.Lib.Dice
 
             for (int Roll = 0; Roll < NumDice; Roll++)
             {
-                Result.Add(Random.Next(1, NumSides + 1));
+                Result.Add(DiceRoller.Instance.Random.Next(1, NumSides + 1));
             }
 
             return Result;
         }
 
+  
         // Returns the sum of the dice rolls.
         public int RollSum(int NumDice, int NumSides)
         {

@@ -171,7 +171,8 @@ namespace Burton.Lib.Characters
 
         public int GetModifier()
         {
-            return AbilityModifierTable.GetModifier(CurrentValue);
+            return (CurrentValue - 10) / 2;
+            //return AbilityModifierTable.GetModifier(CurrentValue);
         }
 
         public Ability(EAbility TypeID, int MinValue, int MaxValue, int CurrentValue)

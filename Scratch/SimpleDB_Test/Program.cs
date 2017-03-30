@@ -33,33 +33,40 @@ namespace SimpleDB_Test
 
         static void Main(string[] args)
         {
-            //// TestOne();
-            var Roller = new DiceRoller();
-
-            AbilityModifierTable.InitTable();
+            //AbilityModifierTable.InitTable();
             DifficultyClassesTable.InitTable();
+
+            // All dice rolls go through the single roller instance.
+            // We can pass a seed to guaruntee the same results on every roll.
+            DiceRoller.Instance.SetSeed(100);
 
             var Char = new Character(new Cleric());
 
-            foreach (var CharAbility in Char.Abilities)
+            ConsoleKey Key;
+
+            do
             {
-                // Roll 4D6 and remove the lowest die.
-                var Roll = Roller.Roll(4, 6);
-                Roll.Sort();
-                Roll.RemoveAt(0);
-                CharAbility.CurrentValue = Roll.Sum();
-                Console.WriteLine("{0}: {1} ({2}) ", CharAbility.ShortName, CharAbility.CurrentValue, CharAbility.GetModifier());
-            }
+                Key = Console.ReadKey(true).Key;
 
-            var Check = Roller.Roll(1, 20);
-            var Ability = Char.GetAbility(EAbility.Strength);
-            var Modifier = Ability.GetModifier();
-            var Difficulty = DifficultyClassesTable.GetDifficultyByClass(EDifficultyClass.Easy);
+                if (Key == ConsoleKey.R)
+                {
+                    Char.RollAbilities();
 
-            var TheFinalResult = Check.Sum() + Modifier;
+                    int avg = 0;
 
+                    foreach (var CharAbility in Char.Abilities)
+                    {
+                        avg += CharAbility.CurrentValue;
 
-            Console.Read();
+                        Console.WriteLine("{0}: {1} ({2}) ", CharAbility.ShortName, CharAbility.CurrentValue, CharAbility.GetModifier());
+                    }
+
+                    avg /= 6;
+                    Console.WriteLine("AVG: {0}", avg);
+
+                    Console.WriteLine();
+                }
+            } while (Key != ConsoleKey.Escape);
         }
 
         static void LoadQuirks()
