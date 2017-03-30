@@ -10,6 +10,7 @@ namespace Burton.Lib
     public class DbItem
     {
         public int ID { get; set;  }
+        public string Name { get; set; }
     }
 
     [Serializable]
@@ -36,6 +37,11 @@ namespace Burton.Lib
             Item.ID = GetNextValidID();
             Items.Add(Item);
             return Item.ID;
+        }
+
+        public Type Get(string Name)
+        {
+            return (Type)Items.Where(x => x.Name == Name).SingleOrDefault();
         }
 
         public Type Get(int ID)

@@ -8,16 +8,17 @@ namespace Burton.Lib.Characters.Skills
     [Serializable]
     public class Skill : DbItem
     {
-        public string Name { get; set; }
         public string Description { get; set; }
+        public EAbility AbilityModifier { get; set; }
 
         public Skill()
         {     
         }
 
-        public Skill(string Name)
+        public Skill(string Name, EAbility AbilityModifier)
         {
             this.Name = Name;
+            this.AbilityModifier = AbilityModifier;
         }
     }
 }

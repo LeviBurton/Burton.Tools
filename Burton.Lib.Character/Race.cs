@@ -7,7 +7,6 @@ namespace Burton.Lib.Characters
 {
     public class Race : DbItem
     {
-        public string Name { get; set; }
 
         public Race()
         {

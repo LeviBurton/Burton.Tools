@@ -39,8 +39,7 @@ namespace SimpleDB_Test
             AbilityModifierTable.InitTable();
             DifficultyClassesTable.InitTable();
 
-            var Char = new Character();
-            var Str = Char.GetAbility(EAbility.Strength);
+            var Char = new Character(new Cleric());
 
             foreach (var CharAbility in Char.Abilities)
             {
@@ -77,13 +76,7 @@ namespace SimpleDB_Test
 
         static void SaveSkillsTest()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                var Skill = new Skill(string.Format("Skill {0}", i));
-                Skills.Add(Skill);
-            }
-
-            Skills.Save("Skills.sdb");
+          
         }
 
         static void SaveQuirksTest()

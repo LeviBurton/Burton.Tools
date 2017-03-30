@@ -46,12 +46,22 @@ namespace Burton.Lib.Characters
             Table.Columns.Add(new DataColumn("Name", typeof(string)));
             Table.Columns.Add(new DataColumn("Value", typeof(int)));
 
+            // Ability Checks
+            // ===============================
+            // Task Difficulty      DC
+            // ------------------------
+            // Very Easy            5
+            // Easy                 10
+            // Medium               15
+            // Hard                 20
+            // Very Hard            25
+            // Nearly Impossible    30
             Table.Rows.Add(new Object[] { EDifficultyClass.VeryEasy, "Very Easy", 5 });
             Table.Rows.Add(new Object[] { EDifficultyClass.Easy, "Easy", 10 });
             Table.Rows.Add(new Object[] { EDifficultyClass.Medium, "Medium", 15 });
             Table.Rows.Add(new Object[] { EDifficultyClass.Hard, "Hard", 20 });
-            Table.Rows.Add(new Object[] { EDifficultyClass.VeryHard, "Very Hard", 20 });
-            Table.Rows.Add(new Object[] { EDifficultyClass.NearlyImpossible, "Nearly Impossible", 25 });
+            Table.Rows.Add(new Object[] { EDifficultyClass.VeryHard, "Very Hard", 25 });
+            Table.Rows.Add(new Object[] { EDifficultyClass.NearlyImpossible, "Nearly Impossible", 30 });
 
             Table.AcceptChanges();
         }
@@ -76,6 +86,7 @@ namespace Burton.Lib.Characters
             Table = new DataTable("AbilityModifiers");
             Table.Columns.Add(new DataColumn("Value", typeof(int)));
             Table.Columns.Add(new DataColumn("Modifier", typeof(int)));
+
             Table.Rows.Add(new Object[] { 0, 0 });
             Table.Rows.Add(new Object[] { 1, -5 });
             Table.Rows.Add(new Object[] { 2, -4 });

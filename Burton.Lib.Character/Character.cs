@@ -16,18 +16,6 @@ namespace Burton.Lib.Characters
         // When creating a new character, roll 4d6, discard the lowest result,
         // then add the 3 together.
         // Repeat for all 6, then assign them to your abilities
-        //
-        //
-        // Ability Checks
-        // ===============================
-        // Task Difficulty      DC
-        // ------------------------
-        // Very Easy            5
-        // Easy                 10
-        // Medium               15
-        // Hard                 20
-        // Very Hard            25
-        // Nearly Impossible    30
         public List<Ability> Abilities;
 
         // Weight in pounds they can carry.
@@ -40,21 +28,15 @@ namespace Burton.Lib.Characters
         }
 
         public Class Class { get; set; }
-        public int ClassID { get; set; }
 
         public int Level { get; set; }
 
-        // Character skills
-        public List<Skill> Skills;
-
-        // Character quirks
-        public List<Quirk> Quirks;
-
-        public Character()
+        public Character(Class CharacterClass)
         {
             Abilities = new List<Ability>(6);
+            Class = CharacterClass;
             Level = 1;
-
+        
             var AbilityTypes = Enum.GetValues(typeof(EAbility));
             foreach (int AbilityType in AbilityTypes)
             {
