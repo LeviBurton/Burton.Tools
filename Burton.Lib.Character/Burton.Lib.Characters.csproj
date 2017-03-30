@@ -38,9 +38,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Class.cs" />
     <Compile Include="Quirk.cs" />
     <Compile Include="QuirksDB.cs" />
+    <Compile Include="Race.cs" />
     <Compile Include="SkillsDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Skill.cs" />

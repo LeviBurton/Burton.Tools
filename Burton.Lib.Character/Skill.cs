@@ -9,6 +9,7 @@ namespace Burton.Lib.Characters.Skills
     public class Skill : DbItem
     {
         public string Name { get; set; }
+        public string Description { get; set; }
 
         public Skill()
         {     

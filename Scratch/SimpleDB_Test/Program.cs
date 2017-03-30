@@ -1,4 +1,5 @@
 ﻿using Burton.Lib;
+using Burton.Lib.Characters;
 using Burton.Lib.Characters.Quirks;
 using Burton.Lib.Characters.Skills;
 using Burton.Lib.Dice;
@@ -33,20 +34,31 @@ namespace SimpleDB_Test
         static void Main(string[] args)
         {
             //// TestOne();
-            //var Roller = new DiceRoller();
+            var Roller = new DiceRoller();
 
-            //int Target = 8;
-            //int Roll = Roller.Roll(1, 20);
+            AbilityModifierTable.InitTable();
+            DifficultyClassesTable.InitTable();
 
-            //if (Roll <= Target)
-            //{
-            //    Console.Write("win!");
-            //}
+            var Char = new Character();
+            var Str = Char.GetAbility(EAbility.Strength);
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    Console.WriteLine(Roller.Roll(1, 12));
-            //}
+            foreach (var CharAbility in Char.Abilities)
+            {
+                // Roll 4D6 and remove the lowest die.
+                var Roll = Roller.Roll(4, 6);
+                Roll.Sort();
+                Roll.RemoveAt(0);
+                CharAbility.CurrentValue = Roll.Sum();
+                Console.WriteLine("{0}: {1} ({2}) ", CharAbility.ShortName, CharAbility.CurrentValue, CharAbility.GetModifier());
+            }
+
+            var Check = Roller.Roll(1, 20);
+            var Ability = Char.GetAbility(EAbility.Strength);
+            var Modifier = Ability.GetModifier();
+            var Difficulty = DifficultyClassesTable.GetDifficultyByClass(EDifficultyClass.Easy);
+
+            var TheFinalResult = Check.Sum() + Modifier;
+
 
             Console.Read();
         }

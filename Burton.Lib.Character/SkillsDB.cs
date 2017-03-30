@@ -11,5 +11,6 @@ namespace Burton.Lib.Characters.Skills
         public SkillsDB()
         {
         }
+
     }
 }

@@ -23,13 +23,13 @@ namespace Burton.Lib.Dice
         }
 
         // Returns an array containing the results of each dice roll.
-        public int[] Roll(int NumDice, int NumSides)
+        public List<int> Roll(int NumDice, int NumSides)
         {
-            int[] Result = new int[NumDice];
+            List<int> Result = new List<int>(NumDice);
 
             for (int Roll = 0; Roll < NumDice; Roll++)
             {
-                Result[Roll] = Random.Next(1, NumSides + 1);
+                Result.Add(Random.Next(1, NumSides + 1));
             }
 
             return Result;

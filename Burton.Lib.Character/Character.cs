@@ -2,6 +2,8 @@
 
 using Burton.Lib.Characters.Quirks;
 using Burton.Lib.Characters.Skills;
+using System;
+using System.ComponentModel;
 
 namespace Burton.Lib.Characters
 {
@@ -26,21 +28,50 @@ namespace Burton.Lib.Characters
         // Hard                 20
         // Very Hard            25
         // Nearly Impossible    30
-
-        public int Strength { get; set; }
-        public int Dexterity { get; set; }
-        public int Constitution { get; set; }
-        public int Intelligence { get; set; }
-        public int Wisdom { get; set; }
-        public int Charisma { get; set; }
+        public List<Ability> Abilities;
 
         // Weight in pounds they can carry.
-        public int CarryingCapacity { get { return Strength * 15;  } }
+        public int CarryingCapacity
+        {
+            get
+            {
+                return Abilities[(int)EAbility.Strength].CurrentValue * 15;
+            }
+        }
+
+        public Class Class { get; set; }
+        public int ClassID { get; set; }
+
+        public int Level { get; set; }
 
         // Character skills
         public List<Skill> Skills;
 
         // Character quirks
         public List<Quirk> Quirks;
+
+        public Character()
+        {
+            Abilities = new List<Ability>(6);
+            Level = 1;
+
+            var AbilityTypes = Enum.GetValues(typeof(EAbility));
+            foreach (int AbilityType in AbilityTypes)
+            {
+                var ToAdd = new Ability((EAbility)AbilityType, 1, 30, 0);
+                ToAdd.PropertyChanged += OnAbilityScoreChanged;
+                Abilities.Insert(AbilityType, ToAdd);
+            }
+        }
+
+        public Ability GetAbility(EAbility AbilityType)
+        {
+            return Abilities[(int)AbilityType];
+        }
+
+        public void OnAbilityScoreChanged(object Sender, PropertyChangedEventArgs e)
+        {
+            var AbilityThatChanged = (Ability)Sender;
+        }
     }
 }
