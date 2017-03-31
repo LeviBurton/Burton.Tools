@@ -39,14 +39,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ability.cs" />
+    <Compile Include="Armor.cs" />
+    <Compile Include="EquipmentDB.cs" />
+    <Compile Include="ArmorDB.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Class.cs" />
+    <Compile Include="Equipment.cs" />
     <Compile Include="Quirk.cs" />
     <Compile Include="QuirksDB.cs" />
     <Compile Include="Race.cs" />
     <Compile Include="SkillsDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Skill.cs" />
+    <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Burton.Lib.Dice\Burton.Lib.Dice.csproj">

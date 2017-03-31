@@ -43,6 +43,7 @@ namespace Burton.Lib.Dice
             this.Random = new Random(Seed);
         }
 
+
         // Returns an array containing the results of each dice roll.
         public List<int> Roll(int NumDice, int NumSides)
         {
@@ -56,7 +57,18 @@ namespace Burton.Lib.Dice
             return Result;
         }
 
-  
+        public List<int> Roll(int[] Dice)
+        {
+            List<int> Result = new List<int>(Dice[0]);
+
+            for (int Roll = 0; Roll < Dice[0]; Roll++)
+            {
+                Result.Add(DiceRoller.Instance.Random.Next(1, Dice[1] + 1));
+            }
+
+            return Result;
+        }
+
         // Returns the sum of the dice rolls.
         public int RollSum(int NumDice, int NumSides)
         {

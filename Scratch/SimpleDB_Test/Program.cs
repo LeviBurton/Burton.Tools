@@ -38,11 +38,26 @@ namespace SimpleDB_Test
 
             // All dice rolls go through the single roller instance.
             // We can pass a seed to guaruntee the same results on every roll.
-            DiceRoller.Instance.SetSeed(100);
+           // DiceRoller.Instance.SetSeed(100);
 
             var Char = new Character(new Cleric());
 
             ConsoleKey Key;
+
+            // Lots of testing stuff.
+            var Armor = (EquipmentDB.Instance.Get("Chain Mail") as Armor);
+
+            var Armors = EquipmentDB.Instance.Items.Where(item => item.Type == EEquipmentType.Armor).ToList();
+            var Weapons = EquipmentDB.Instance.Items.Where(item => item.Type == EEquipmentType.Weapon).ToList();
+            var Test = EquipmentDB.Instance.Items.Where(item => item.GetType() == typeof(Armor)).ToList();
+            var RangePropertyWeapons = Weapons.Where(weapon => (weapon as Weapon).WeaponProperties.Contains(EWeaponProperty.Range)).ToList();
+            var RangedWeapon = Weapons.Where(weapon => (weapon as Weapon).SubType == EEquipmentSubType.Martial_Ranged ||
+                                                              (weapon as Weapon).SubType == EEquipmentSubType.Simple_Ranged).ToList();
+
+            var Bow = (EquipmentDB.Instance.Items.Where(item => item.Name == "Longbow").Single() as Weapon);
+
+            var RareWeapons = EquipmentDB.Instance.Items.Where(item => item.Rarity == EEquipmentRarity.Rare && 
+                                                                       item.Type == EEquipmentType.Weapon).ToList();
 
             do
             {
@@ -52,6 +67,20 @@ namespace SimpleDB_Test
                 {
                     Char.RollAbilities();
 
+                    Char.Equipment.Add(Bow);
+                    Char.Equipment.Add(Armor);
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        var Attack = DiceRoller.Instance.Roll(Bow.Damage).Sum();
+                        Console.WriteLine(string.Format("{0}, {1}D{2}, damage: {3}", Bow.Name, Bow.Damage[0], Bow.Damage[1], Attack));
+                    }
+
+                    if (Armor != null && Char.CanEquip(Armor))
+                    {
+                        Char.EquipArmor(Armor);
+                    }
+                 
                     int avg = 0;
 
                     foreach (var CharAbility in Char.Abilities)

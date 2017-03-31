@@ -105,6 +105,9 @@ namespace Burton.Lib.Characters
         public AlignmentMorality AlignmentMorality;
         public AlignmentAttitude AlignmentAttitude;
 
+        // Their current equipment (weapons, armor, etc -- everything)
+        public List<Equipment> Equipment;
+
         // Weight in pounds they can carry.
         public int CarryingCapacity
         {
@@ -114,9 +117,13 @@ namespace Burton.Lib.Characters
             }
         }
 
+        public Armor EquippedArmor;
+
         public Character(Class CharacterClass)
         {
             Abilities = new List<Ability>(6);
+            Equipment = new List<Equipment>();
+
             Class = CharacterClass;
             Level = 1;
             AlignmentAttitude = new AlignmentAttitude();
@@ -128,6 +135,24 @@ namespace Burton.Lib.Characters
                 var ToAdd = new Ability((EAbility)AbilityType, 1, 30, 0);
                 Abilities.Insert(AbilityType, ToAdd);
             }
+        }
+
+        public bool CanEquip(Equipment E)
+        {
+            bool bCanEquip = true;
+            foreach (var Requirement in E.AbilityRequirements)
+            {
+                if (GetAbility(Requirement.ID).CurrentValue < Requirement.CurrentValue)
+                {
+                    bCanEquip = false;
+                }
+            }
+            return bCanEquip;
+        }
+
+        public void EquipArmor(Armor ArmorToEquip)
+        {
+            EquippedArmor = ArmorToEquip;
         }
 
         public void RollAbilities()
