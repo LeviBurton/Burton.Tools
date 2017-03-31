@@ -38,21 +38,6 @@ namespace Burton.Lib.Characters
         Martial_Ranged
     }
 
-    public enum EWeaponProperty
-    {
-        Ammunition,
-        Finesse,
-        Heavy,
-        Light,
-        Loading,
-        Range,
-        Reach,
-        Special,
-        Thrown,
-        Two_Handed,
-        Versatile
-    }
-
     [Serializable]
     public class Equipment : DbItem
     {

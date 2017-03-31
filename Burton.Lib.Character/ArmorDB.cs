@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Burton.Lib.Characters
 {
+    // NOT USED
     public class ArmorDB : SimpleDB<Armor>
     {
         private static ArmorDB _Instance;

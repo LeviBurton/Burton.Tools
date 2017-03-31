@@ -12,6 +12,21 @@ namespace Burton.Lib.Characters
         Piercing
     }
 
+    public enum EWeaponProperty
+    {
+        Ammunition,
+        Finesse,
+        Heavy,
+        Light,
+        Loading,
+        Range,
+        Reach,
+        Special,
+        Thrown,
+        Two_Handed,
+        Versatile
+    }
+
     [Serializable]
     public class Weapon : Equipment
     {
