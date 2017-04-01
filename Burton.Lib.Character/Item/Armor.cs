@@ -15,5 +15,12 @@ namespace Burton.Lib.Characters
         {
             this.ArmorClass = ArmorClass;
         }
+
+        public Armor(Armor Other)
+            : base(EItemType.Armor, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.Cost, Other.Weight, Other.AbilityModifierType)
+        {
+            this.ID = Other.ID;
+            this.ArmorClass = Other.ArmorClass;
+        }
     }
 }

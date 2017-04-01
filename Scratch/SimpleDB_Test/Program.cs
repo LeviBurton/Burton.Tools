@@ -38,26 +38,12 @@ namespace SimpleDB_Test
 
             // All dice rolls go through the single roller instance.
             // We can pass a seed to guaruntee the same results on every roll.
-           // DiceRoller.Instance.SetSeed(100);
+            // DiceRoller.Instance.SetSeed(100);
 
             var Char = new Character(new Cleric());
+            var ItemManager = new ItemManager();
 
             ConsoleKey Key;
-
-            // Lots of testing stuff.
-            var Armor = (ItemDB.Instance.Get("Chain Mail") as Armor);
-
-            var Armors = ItemDB.Instance.Items.Where(item => item.Type == EItemType.Armor).ToList();
-            var Weapons = ItemDB.Instance.Items.Where(item => item.Type == EItemType.Weapon).ToList();
-            var Test = ItemDB.Instance.Items.Where(item => item.GetType() == typeof(Armor)).ToList();
-            var RangePropertyWeapons = Weapons.Where(weapon => (weapon as Weapon).WeaponProperties.Contains(EWeaponProperty.Range)).ToList();
-            var RangedWeapon = Weapons.Where(weapon => (weapon as Weapon).SubType == EItemSubType.Martial_Ranged ||
-                                                              (weapon as Weapon).SubType == EItemSubType.Simple_Ranged).ToList();
-
-            var Bow = (ItemDB.Instance.Items.Where(item => item.Name == "Longbow").Single() as Weapon);
-
-            var RareWeapons = ItemDB.Instance.Items.Where(item => item.Rarity == EItemRarity.Rare && 
-                                                                       item.Type == EItemType.Weapon).ToList();
 
             do
             {
@@ -66,22 +52,19 @@ namespace SimpleDB_Test
                 if (Key == ConsoleKey.R)
                 {
                     Char.RollAbilities();
-
-                    Char.Equipment.Add(Bow);
-                    Char.Equipment.Add(Armor);
-
-                    for (int i = 0; i < 10; i++)
-                    {
-                        var Attack = DiceRoller.Instance.Roll(Bow.Damage).Sum();
-                        Console.WriteLine(string.Format("{0}, {1}D{2}, damage: {3}", Bow.Name, Bow.Damage[0], Bow.Damage[1], Attack));
-                    }
-
-                    if (Armor != null && Char.CanEquip(Armor))
-                    {
-                        Char.EquipArmor(Armor);
-                    }
-                 
+                   
                     int avg = 0;
+
+                    var AllItems = ItemManager.GetItemsCopy();
+                    var LongBow = AllItems.Where(x => x.ID == 11).SingleOrDefault();
+                    var Armor = AllItems.Where(x => x.Type == EItemType.Armor).ToList();
+
+                    var Test = ItemManager.GetItemCopy<Weapon>(11);
+
+                    foreach (var Item in AllItems)
+                    {
+                        Console.WriteLine("{0} {1}", Item.ID, Item.Name);
+                    }
 
                     foreach (var CharAbility in Char.Abilities)
                     {

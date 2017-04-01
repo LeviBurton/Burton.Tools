@@ -5,31 +5,28 @@ using System.Text;
 
 namespace Burton.Lib.Characters
 {
-    // NOT USED
-    public class ArmorDB : SimpleDB<Armor>
+    public class WeaponManager
     {
-        private static ArmorDB _Instance;
-
-        public static ArmorDB Instance
+        private static WeaponManager _Instance;
+        public static WeaponManager Instance
         {
             get
             {
                 if (_Instance == null)
-                    _Instance = new ArmorDB();
+                    _Instance = new WeaponManager();
 
                 return _Instance;
             }
         }
 
         // Skills and Proficiencies are closely related to each other.
-        public ArmorDB()
+        public WeaponManager()
         {
-          //  InitBase();
+          //  Console.WriteLine("Weapon Manager, using ItemDB: " + ItemDB.Instance.ToString());
         }
 
-        public void InitBase()
+        public void Init()
         {
-            Items.Clear();
 
         }
     }

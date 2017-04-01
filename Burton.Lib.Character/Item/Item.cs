@@ -14,6 +14,7 @@ namespace Burton.Lib.Characters
         Legendary
     }
 
+    // We need a SimpleDB and Type for each of these.
     public enum EItemType
     {
         Armor,

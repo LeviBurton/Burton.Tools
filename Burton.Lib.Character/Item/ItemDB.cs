@@ -7,24 +7,24 @@ namespace Burton.Lib.Characters
 {
     public class ItemDB : SimpleDB<Item>
     {
-        private static ItemDB _Instance;
+        //private static ItemDB _Instance;
 
-        public static ItemDB Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new ItemDB();
+        //public static ItemDB Instance
+        //{
+        //    get
+        //    {
+        //        if (_Instance == null)
+        //            _Instance = new ItemDB();
 
-                return _Instance;
-            }
-        }
+        //        return _Instance;
+        //    }
+        //}
 
         // Skills and Proficiencies are closely related to each other.
         public ItemDB()
         {
             InitBase();
-            Save("Items.sdb");
+           // Save("Items.sdb");
         }
 
         public void InitBase()
@@ -32,34 +32,34 @@ namespace Burton.Lib.Characters
             Items.Clear();
             //Load("Items.sdb");
             // return;
-            AddBaseArmors();
-            AddBaseWeapons();
+         //   AddBaseArmors();
+        //    AddBaseWeapons();
         }
 
         public void AddBaseArmors()
         {
-            // Just create some base game armor types that will always be around.
-            var Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Padded", "Padded Armor", 5, 8);
-            Add(Armor);
+            //// Just create some base game armor types that will always be around.
+            //var Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Padded", "Padded Armor", 5, 8);
+            //Add(Armor);
 
-            Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Leather", "Leather Armor", 11, 10);
-            Add(Armor);
+            //Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Leather", "Leather Armor", 11, 10);
+            //Add(Armor);
 
-            Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 12, "Studded Leather", "Studded Leather Armor", 45, 13);
-            Add(Armor);
+            //Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 12, "Studded Leather", "Studded Leather Armor", 45, 13);
+            //Add(Armor);
 
-            Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 12, "Hide", "Hide Armor", 10, 12);
-            Add(Armor);
+            //Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 12, "Hide", "Hide Armor", 10, 12);
+            //Add(Armor);
 
-            Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 13, "Chain Shirt", "Chain Shirt Armor", 50, 20);
-            Add(Armor);
+            //Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 13, "Chain Shirt", "Chain Shirt Armor", 50, 20);
+            //Add(Armor);
 
-            Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 14, "Ring Mail", "Ring Mail Armor", 14, 40);
-            Add(Armor);
+            //Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 14, "Ring Mail", "Ring Mail Armor", 14, 40);
+            //Add(Armor);
 
-            Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55);
-            Armor.AbilityRequirements.Add(new Ability(EAbility.Strength, 1, 0, 13));
-            Add(Armor);
+            //Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55);
+            //Armor.AbilityRequirements.Add(new Ability(EAbility.Strength, 1, 0, 13));
+            //Add(Armor);
 
         }
 
