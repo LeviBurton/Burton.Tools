@@ -34,14 +34,28 @@ namespace Burton.Lib.Characters
             AddBaseWeapons();
         }
 
-        public void AddArmor(Armor Armor)
+        // Create a copy of Item and a add it to the ItemDB
+        public void AddItem<T>(T Item)
         {
-            ItemDB.Add(new Armor(Armor));
+            var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            ItemDB.Add((Item)NewItem);
         }
 
-        public void AddWeapon(Weapon Weapon)
+        // Get a copy of the Item by ID
+        public T GetItemCopy<T>(int ID)
         {
-            ItemDB.Add(new Weapon(Weapon));
+            Item Item = null;
+
+            try
+            {
+                Item = ItemDB.Get(ID);
+            }
+            catch (Exception Ex)
+            {
+                return default(T);
+            }
+
+            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
         }
 
         // Returns a list containing copies of the items in the ItemDB
@@ -64,22 +78,7 @@ namespace Burton.Lib.Characters
             return Result;
         }
 
-        public Item GetItemCopy<T>(int ID)
-        {
-            var Item = ItemDB.Get(ID);
-       
-            if (typeof(T) == typeof(Armor))
-            {
-                return new Armor((Armor)Item);
-            }
-            else if (typeof(T) == typeof(Weapon))
-            {
-                return new Weapon((Weapon)Item);
-            }
-         
-            return Item;
-        }
-
+        // Some defaults to play with
         public void AddBaseWeapons()
         {
             var Weapon = new Weapon(EItemSubType.Martial_Melee,
@@ -93,7 +92,7 @@ namespace Burton.Lib.Characters
                               3);
             Weapon.WeaponProperties.Add(EWeaponProperty.Versatile);
             Weapon.VersatileDamage = new int[2] { 1, 10 };
-            AddWeapon(Weapon);
+            AddItem<Weapon>(Weapon);
 
             Weapon = new Weapon(EItemSubType.Martial_Melee,
                                 EItemRarity.Common,
@@ -106,7 +105,7 @@ namespace Burton.Lib.Characters
                                 2);
             Weapon.WeaponProperties.Add(EWeaponProperty.Versatile);
             Weapon.VersatileDamage = new int[2] { 1, 10 };
-            AddWeapon(Weapon);
+            AddItem<Weapon>(Weapon);
 
             Weapon = new Weapon(EItemSubType.Martial_Melee,
                                 EItemRarity.Rare,
@@ -120,8 +119,7 @@ namespace Burton.Lib.Characters
             Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
             Weapon.WeaponProperties.Add(EWeaponProperty.Reach);
             Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
-
-            AddWeapon(Weapon);
+            AddItem<Weapon>(Weapon);
 
             Weapon = new Weapon(EItemSubType.Martial_Ranged,
                                 EItemRarity.Common,
@@ -141,7 +139,7 @@ namespace Burton.Lib.Characters
             // ammo type the weapon requires
             Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
             Weapon.Range = new int[2] { 150, 600 };
-            AddWeapon(Weapon);
+            AddItem<Weapon>(Weapon);
 
             Weapon = new Weapon(EItemSubType.Martial_Ranged,
                                 EItemRarity.Common,
@@ -159,33 +157,33 @@ namespace Burton.Lib.Characters
             Weapon.WeaponProperties.Add(EWeaponProperty.Loading);
             Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
             Weapon.Range = new int[2] { 100, 400 };
-            AddWeapon(Weapon);
+            AddItem<Weapon>(Weapon);
         }
 
         public void AddBaseArmors()
         {
             //// Just create some base game armor types that will always be around.
             var Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Padded", "Padded Armor", 5, 8);
-            AddArmor(Armor);
+            AddItem<Armor>(Armor);
 
             Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Leather", "Leather Armor", 11, 10);
-            AddArmor(Armor);
+            AddItem<Armor>(Armor);
 
             Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 12, "Studded Leather", "Studded Leather Armor", 45, 13);
-            AddArmor(Armor);
+            AddItem<Armor>(Armor);
 
             Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 12, "Hide", "Hide Armor", 10, 12);
-            AddArmor(Armor);
+            AddItem<Armor>(Armor);
 
             Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 13, "Chain Shirt", "Chain Shirt Armor", 50, 20);
-            AddArmor(Armor);
+            AddItem<Armor>(Armor);
 
             Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 14, "Ring Mail", "Ring Mail Armor", 14, 40);
-            AddArmor(Armor);
+            AddItem<Armor>(Armor);
 
             Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55);
             Armor.AbilityRequirements.Add(new Ability(EAbility.Strength, 1, 0, 13));
-            AddArmor(Armor);
+            AddItem<Armor>(Armor);
 
         }
     }

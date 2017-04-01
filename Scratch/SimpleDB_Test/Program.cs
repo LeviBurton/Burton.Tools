@@ -56,10 +56,9 @@ namespace SimpleDB_Test
                     int avg = 0;
 
                     var AllItems = ItemManager.GetItemsCopy();
-                    var LongBow = AllItems.Where(x => x.ID == 11).SingleOrDefault();
-                    var Armor = AllItems.Where(x => x.Type == EItemType.Armor).ToList();
-
-                    var Test = ItemManager.GetItemCopy<Weapon>(11);
+                
+                    Weapon LongBow = ItemManager.GetItemCopy<Weapon>(11);
+                    Armor LeatherArmor = ItemManager.GetItemCopy<Armor>(1);
 
                     foreach (var Item in AllItems)
                     {
