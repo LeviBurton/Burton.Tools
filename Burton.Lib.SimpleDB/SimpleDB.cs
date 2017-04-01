@@ -22,14 +22,14 @@ namespace Burton.Lib
         private static int NextValidID = 0;
         public static int GetNextValidID()
         {
-            return NextValidID++;
+            return ++NextValidID;
         }
 
         public List<Type> Items = null;
 
         public SimpleDB()
         {
-            Items = new List<Type>(1024);
+            Items = new List<Type>();
         }
 
         public int Add(Type Item)
@@ -41,12 +41,17 @@ namespace Burton.Lib
 
         public Type Get(string Name)
         {
-            return (Type)Items.Where(x => x.Name == Name).SingleOrDefault();
+            return (Type)Items.Where(x => x != null).Where(x => x.Name == Name).SingleOrDefault();
         }
 
         public Type Get(int ID)
         {
-            return Items[ID];
+            if (ID < 0)
+            {
+                throw new ArgumentException("ID < 0");
+            }
+
+            return Items[ID - 1];
         }
 
         public void Delete(int ID)

@@ -28,20 +28,38 @@ namespace Burton.Lib.Characters
     }
 
     [Serializable]
-    public class Weapon : Equipment
+    public class Weapon : Item
     {
         public EDamageType DamageType;
+        public string DamageTypeName
+        {
+            get { return DamageType.ToString().Replace("_", " "); }
+        }
+
         public List<EWeaponProperty> WeaponProperties;
         public int[] Damage = new int[2];
         public int[] Range = new int[2];
         public int[] VersatileDamage = new int[2];
 
-        public Weapon(EEquipmentSubType SubType, EEquipmentRarity Rarity, EDamageType DamageType, EAbility ModifierType, int[] Damage, string Name, string Description, int Cost, int Weight)
-            : base(EEquipmentType.Weapon, SubType, Rarity, Name, Description, Cost, Weight, ModifierType)
+        public Weapon(EItemSubType SubType, EItemRarity Rarity, EDamageType DamageType, EAbility ModifierType, int[] Damage, string Name, string Description, int Cost, int Weight)
+            : base(EItemType.Weapon, SubType, Rarity, Name, Description, Cost, Weight, ModifierType)
         {
             this.DamageType = DamageType;
             this.Damage = Damage;
             this.WeaponProperties = new List<EWeaponProperty>();
+        }
+
+        // Make a "deep" copy.
+        // Probably could be better, but what do I know.
+        public Weapon(Weapon Other)
+            : base(EItemType.Weapon, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.Cost, Other.Weight, Other.AbilityModifierType)
+        {
+            this.ID = Other.ID;
+            this.DamageType = Other.DamageType;
+            this.Damage = Other.Damage;
+            this.Name = Other.Name;
+            this.Description = Other.Description;
+            this.WeaponProperties = new List<EWeaponProperty>(Other.WeaponProperties);
         }
     }
 }

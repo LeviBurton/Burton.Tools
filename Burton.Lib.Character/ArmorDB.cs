@@ -24,7 +24,7 @@ namespace Burton.Lib.Characters
         // Skills and Proficiencies are closely related to each other.
         public ArmorDB()
         {
-            InitBase();
+          //  InitBase();
         }
 
         public void InitBase()

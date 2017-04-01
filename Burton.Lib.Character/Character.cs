@@ -66,10 +66,7 @@ namespace Burton.Lib.Characters
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private string _Name;
@@ -106,7 +103,7 @@ namespace Burton.Lib.Characters
         public AlignmentAttitude AlignmentAttitude;
 
         // Their current equipment (weapons, armor, etc -- everything)
-        public List<Equipment> Equipment;
+        public List<Item> Equipment;
 
         // Weight in pounds they can carry.
         public int CarryingCapacity
@@ -122,7 +119,7 @@ namespace Burton.Lib.Characters
         public Character(Class CharacterClass)
         {
             Abilities = new List<Ability>(6);
-            Equipment = new List<Equipment>();
+            Equipment = new List<Item>();
 
             Class = CharacterClass;
             Level = 1;
@@ -137,7 +134,7 @@ namespace Burton.Lib.Characters
             }
         }
 
-        public bool CanEquip(Equipment E)
+        public bool CanEquip(Item E)
         {
             bool bCanEquip = true;
             foreach (var Requirement in E.AbilityRequirements)

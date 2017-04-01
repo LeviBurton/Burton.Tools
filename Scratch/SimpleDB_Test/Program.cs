@@ -45,19 +45,19 @@ namespace SimpleDB_Test
             ConsoleKey Key;
 
             // Lots of testing stuff.
-            var Armor = (EquipmentDB.Instance.Get("Chain Mail") as Armor);
+            var Armor = (ItemDB.Instance.Get("Chain Mail") as Armor);
 
-            var Armors = EquipmentDB.Instance.Items.Where(item => item.Type == EEquipmentType.Armor).ToList();
-            var Weapons = EquipmentDB.Instance.Items.Where(item => item.Type == EEquipmentType.Weapon).ToList();
-            var Test = EquipmentDB.Instance.Items.Where(item => item.GetType() == typeof(Armor)).ToList();
+            var Armors = ItemDB.Instance.Items.Where(item => item.Type == EItemType.Armor).ToList();
+            var Weapons = ItemDB.Instance.Items.Where(item => item.Type == EItemType.Weapon).ToList();
+            var Test = ItemDB.Instance.Items.Where(item => item.GetType() == typeof(Armor)).ToList();
             var RangePropertyWeapons = Weapons.Where(weapon => (weapon as Weapon).WeaponProperties.Contains(EWeaponProperty.Range)).ToList();
-            var RangedWeapon = Weapons.Where(weapon => (weapon as Weapon).SubType == EEquipmentSubType.Martial_Ranged ||
-                                                              (weapon as Weapon).SubType == EEquipmentSubType.Simple_Ranged).ToList();
+            var RangedWeapon = Weapons.Where(weapon => (weapon as Weapon).SubType == EItemSubType.Martial_Ranged ||
+                                                              (weapon as Weapon).SubType == EItemSubType.Simple_Ranged).ToList();
 
-            var Bow = (EquipmentDB.Instance.Items.Where(item => item.Name == "Longbow").Single() as Weapon);
+            var Bow = (ItemDB.Instance.Items.Where(item => item.Name == "Longbow").Single() as Weapon);
 
-            var RareWeapons = EquipmentDB.Instance.Items.Where(item => item.Rarity == EEquipmentRarity.Rare && 
-                                                                       item.Type == EEquipmentType.Weapon).ToList();
+            var RareWeapons = ItemDB.Instance.Items.Where(item => item.Rarity == EItemRarity.Rare && 
+                                                                       item.Type == EItemType.Weapon).ToList();
 
             do
             {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Burton.Lib.Characters
 {
-    public enum EEquipmentRarity
+    public enum EItemRarity
     {
         Common,
         Uncommon,
@@ -14,7 +14,7 @@ namespace Burton.Lib.Characters
         Legendary
     }
 
-    public enum EEquipmentType
+    public enum EItemType
     {
         Armor,
         Weapon,
@@ -26,7 +26,7 @@ namespace Burton.Lib.Characters
         Special_Material
     }
 
-    public enum EEquipmentSubType
+    public enum EItemSubType
     {
         Light,
         Medium,
@@ -38,20 +38,45 @@ namespace Burton.Lib.Characters
         Martial_Ranged
     }
 
+    /* 
+        Base equipment class from which all other types of equipment derive.
+        Provides:
+            - Name
+            - Description
+            - Cost
+            - Weight
+            - Type
+            - SubType
+            - Rarity
+            - Ability Modifier to use
+            - Ability requirements to use/equip
+      
+        Need to figure out what else the base equipment class should provide.  
+    */
+
     [Serializable]
-    public class Equipment : DbItem
+    public class Item : DbItem
     {
         public string Description;
         public int Weight;
         public int Cost;
 
-        public EEquipmentType Type;
-        public EEquipmentSubType SubType;
+        public EItemType Type;
+        public string TypeName
+        {
+            get { return Type.ToString().Replace("_", " ");  }
+        }
+
+        public EItemSubType SubType;
+        public string SubTypeName
+        {
+            get { return SubType.ToString().Replace("_", " "); }
+        }
         public List<Ability> AbilityRequirements;
         public EAbility AbilityModifierType;
-        public EEquipmentRarity Rarity;
+        public EItemRarity Rarity;
 
-        public Equipment(EEquipmentType Type, EEquipmentSubType SubType, EEquipmentRarity Rarity, string Name, string Description, int Cost, int Weight, EAbility AbilityModifierType)
+        public Item(EItemType Type, EItemSubType SubType, EItemRarity Rarity, string Name, string Description, int Cost, int Weight, EAbility AbilityModifierType)
         {
             this.Type = Type;
             this.SubType = SubType;

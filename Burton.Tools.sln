@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB_Test", "Scratch\Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Dice", "Burton.Lib.Dice\Burton.Lib.Dice.csproj", "{3267817F-744F-48D1-B0D6-BFDD4DCB68A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Extensions.DeepCopy", "Burton.Extensions.DeepCopy\Burton.Extensions.DeepCopy.csproj", "{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{3267817F-744F-48D1-B0D6-BFDD4DCB68A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3267817F-744F-48D1-B0D6-BFDD4DCB68A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3267817F-744F-48D1-B0D6-BFDD4DCB68A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
