@@ -66,7 +66,6 @@ namespace Burton.Lib
                 var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 NextValidID = (int)BinaryFormatter.Deserialize(InStream);
                 Items = (List<Type>)BinaryFormatter.Deserialize(InStream);
-
             }
         }
 

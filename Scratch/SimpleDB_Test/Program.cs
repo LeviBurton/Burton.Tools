@@ -49,6 +49,13 @@ namespace SimpleDB_Test
             {
                 Key = Console.ReadKey(true).Key;
 
+                if (Key == ConsoleKey.T)
+                {
+                    var Weapon = ItemManager.GetItemCopy<Weapon>(11);
+                    Weapon.Description = "This should get saved to disk";
+                    ItemManager.UpdateItem<Weapon>(Weapon);
+                    ItemManager.SaveChanges();
+                }
                 if (Key == ConsoleKey.R)
                 {
                     Char.RollAbilities();
@@ -56,13 +63,12 @@ namespace SimpleDB_Test
                     int avg = 0;
 
                     var AllItems = ItemManager.GetItemsCopy();
-                
                     Weapon LongBow = ItemManager.GetItemCopy<Weapon>(11);
                     Armor LeatherArmor = ItemManager.GetItemCopy<Armor>(1);
 
                     foreach (var Item in AllItems)
                     {
-                        Console.WriteLine("{0} {1}", Item.ID, Item.Name);
+                        Console.WriteLine("{0} {1}", Item.ID, Item.Description);
                     }
 
                     foreach (var CharAbility in Char.Abilities)

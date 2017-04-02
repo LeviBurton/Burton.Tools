@@ -23,15 +23,30 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
+        public string FileName = "Items.sdb";
+
         // we pretty much just wrap access to the ItemDB/
-        public ItemDB ItemDB;
+        private ItemDB ItemDB;
+        private bool bDoBootstrap = false;
 
         public ItemManager()
         {
             ItemDB = new ItemDB();
 
-            AddBaseArmors();
-            AddBaseWeapons();
+            if (bDoBootstrap)
+                Bootstrap();
+
+            Refresh();
+        }
+
+        public void SaveChanges()
+        {
+            ItemDB.Save(FileName);
+        }
+
+        public void Refresh()
+        {
+            ItemDB.Load(FileName);
         }
 
         // Create a copy of Item and a add it to the ItemDB
@@ -39,6 +54,12 @@ namespace Burton.Lib.Characters
         {
             var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
             ItemDB.Add((Item)NewItem);
+        }
+
+        public void UpdateItem<T>(T Item) where T : DbItem
+        {
+            var Copy = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            ItemDB.Items[Copy.ID - 1] = Copy;
         }
 
         // Get a copy of the Item by ID
@@ -79,6 +100,13 @@ namespace Burton.Lib.Characters
         }
 
         // Some defaults to play with
+        public void Bootstrap()
+        {
+            AddBaseArmors();
+            AddBaseWeapons();
+            SaveChanges();
+        }
+
         public void AddBaseWeapons()
         {
             var Weapon = new Weapon(EItemSubType.Martial_Melee,
@@ -184,7 +212,6 @@ namespace Burton.Lib.Characters
             Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55);
             Armor.AbilityRequirements.Add(new Ability(EAbility.Strength, 1, 0, 13));
             AddItem<Armor>(Armor);
-
         }
     }
 }
