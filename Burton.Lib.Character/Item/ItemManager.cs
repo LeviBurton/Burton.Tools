@@ -25,7 +25,7 @@ namespace Burton.Lib.Characters
 
         public string FileName = "Items.sdb";
 
-        // we pretty much just wrap access to the ItemDB/
+        // we pretty much just wrap access to the ItemDB
         private ItemDB ItemDB;
         private bool bDoBootstrap = false;
 
@@ -34,7 +34,11 @@ namespace Burton.Lib.Characters
             ItemDB = new ItemDB();
 
             if (bDoBootstrap)
+            {
                 Bootstrap();
+                SaveChanges();
+                return;
+            }
 
             Refresh();
         }
@@ -50,16 +54,21 @@ namespace Burton.Lib.Characters
         }
 
         // Create a copy of Item and a add it to the ItemDB
-        public void AddItem<T>(T Item)
+        public int AddItem<T>(T Item)
         {
             var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-            ItemDB.Add((Item)NewItem);
+            return ItemDB.Add((Item)NewItem);
         }
 
         public void UpdateItem<T>(T Item) where T : DbItem
         {
             var Copy = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
             ItemDB.Items[Copy.ID - 1] = Copy;
+        }
+
+        public void DeleteItem(int ID)
+        {
+            ItemDB.Items[ID - 1] = null;
         }
 
         // Get a copy of the Item by ID
@@ -84,8 +93,9 @@ namespace Burton.Lib.Characters
         {
             List<Item> Result = new List<Item>();
 
-            foreach (var Item in ItemDB.Items)
+            foreach (var Item in ItemDB.Items.Where(x => x != null))
             {
+
                 if (Item.Type == EItemType.Weapon)
                 {
                     Result.Add(new Weapon((Weapon)Item));
@@ -109,108 +119,124 @@ namespace Burton.Lib.Characters
 
         public void AddBaseWeapons()
         {
+            List<DamageType> DamageTypes = new List<DamageType>();
+
+            var Damage = new DamageType(EDamageType.Slashing, new int[] { 1, 8, 0 });
+            DamageTypes.Add(Damage);
+
             var Weapon = new Weapon(EItemSubType.Martial_Melee,
                               EItemRarity.Common,
-                              EDamageType.Slashing,
-                              EAbility.Strength,
-                              new int[] { 1, 8 },
+                              DamageTypes,
+                              new int[] { 0, 0 },
                               "Longsword",
                               "Longsword weapon",
                               15,
-                              3);
+                              3,
+                              new List<Ability>());
             Weapon.WeaponProperties.Add(EWeaponProperty.Versatile);
             Weapon.VersatileDamage = new int[2] { 1, 10 };
             AddItem<Weapon>(Weapon);
 
+            DamageTypes.Clear();
+            DamageTypes.Add(new DamageType(EDamageType.Bludgeoning, new int[] { 1, 8, 0 }));
             Weapon = new Weapon(EItemSubType.Martial_Melee,
                                 EItemRarity.Common,
-                                EDamageType.Bludgeoning,
-                                EAbility.Strength,
-                                new int[] { 1, 8 },
+                                DamageTypes,
+                               new int[] { 0, 0 },
                                 "Warhammer",
                                 "Warhammer Weapon",
                                 15,
-                                2);
+                                2,
+                                new List<Ability>());
             Weapon.WeaponProperties.Add(EWeaponProperty.Versatile);
             Weapon.VersatileDamage = new int[2] { 1, 10 };
             AddItem<Weapon>(Weapon);
 
+            DamageTypes.Clear();
+
+            DamageTypes.Add(new DamageType(EDamageType.Slashing, new int[] { 1, 10, 0 }));
             Weapon = new Weapon(EItemSubType.Martial_Melee,
                                 EItemRarity.Rare,
-                                EDamageType.Slashing,
-                                EAbility.Strength,
-                                new int[] { 1, 10 },
+                                DamageTypes,
+                                  new int[] { 0, 0 },
                                 "Halberd",
                                 "Halberd Weapon",
                                 20,
-                                6);
+                                6,
+                                new List<Ability>());
+
             Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
             Weapon.WeaponProperties.Add(EWeaponProperty.Reach);
             Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
             AddItem<Weapon>(Weapon);
 
+            DamageTypes.Clear();
+
+            DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 8, 0 }));
             Weapon = new Weapon(EItemSubType.Martial_Ranged,
                                 EItemRarity.Common,
-                                EDamageType.Piercing,
-                                EAbility.Dexterity,
-                                new int[] { 1, 8 },
+                                DamageTypes,
+                                new int[2] { 150, 600 },
                                 "Longbow",
                                 "Longbow",
                                 50,
-                                2);
+                                2,
+                               new List<Ability>());
 
             Weapon.WeaponProperties.Add(EWeaponProperty.Range);
             Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
             Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
-
-            // FIXME: need to figure out how to specify what
-            // ammo type the weapon requires
             Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
-            Weapon.Range = new int[2] { 150, 600 };
             AddItem<Weapon>(Weapon);
+
+            DamageTypes.Clear();
+
+            DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 10, 0 }));
 
             Weapon = new Weapon(EItemSubType.Martial_Ranged,
                                 EItemRarity.Common,
-                                EDamageType.Piercing,
-                                EAbility.Dexterity,
-                                new int[] { 1, 10 },
+                                DamageTypes,
+                                new int[2] { 100, 400 },
                                 "Crossbow, Heavy",
                                 "Heavy Crossbow",
                                 50,
-                                18);
+                                18,
+                                new List<Ability>());
 
             Weapon.WeaponProperties.Add(EWeaponProperty.Range);
             Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
             Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
             Weapon.WeaponProperties.Add(EWeaponProperty.Loading);
             Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
-            Weapon.Range = new int[2] { 100, 400 };
+      
             AddItem<Weapon>(Weapon);
         }
 
         public void AddBaseArmors()
         {
             //// Just create some base game armor types that will always be around.
-            var Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Padded", "Padded Armor", 5, 8);
+            var Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Padded", "Padded Armor", 5, 8, new List<Ability>());
             AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Leather", "Leather Armor", 11, 10);
+            Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Leather", "Leather Armor", 11, 10, new List<Ability>());
             AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 12, "Studded Leather", "Studded Leather Armor", 45, 13);
+            Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 12, "Studded Leather", "Studded Leather Armor", 45, 13, new List<Ability>());
             AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 12, "Hide", "Hide Armor", 10, 12);
+            Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 12, "Hide", "Hide Armor", 10, 12, new List<Ability>());
             AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 13, "Chain Shirt", "Chain Shirt Armor", 50, 20);
+            Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 13, "Chain Shirt", "Chain Shirt Armor", 50, 20, new List<Ability>());
             AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 14, "Ring Mail", "Ring Mail Armor", 14, 40);
+            Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 14, "Ring Mail", "Ring Mail Armor", 14, 40, new List<Ability>());
             AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55);
-            Armor.AbilityRequirements.Add(new Ability(EAbility.Strength, 1, 0, 13));
+            List<Ability> Requirements = new List<Ability>();
+            Requirements.Add(new Ability(EAbility.Strength, 0, 0, 13));
+            Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55, Requirements);
+  
             AddItem<Armor>(Armor);
         }
     }

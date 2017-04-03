@@ -137,7 +137,7 @@ namespace Burton.Lib.Characters
         public bool CanEquip(Item E)
         {
             bool bCanEquip = true;
-            foreach (var Requirement in E.AbilityRequirements)
+            foreach (var Requirement in E.Require_Abilities)
             {
                 if (GetAbility(Requirement.ID).CurrentValue < Requirement.CurrentValue)
                 {

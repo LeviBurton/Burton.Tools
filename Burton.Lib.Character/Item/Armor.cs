@@ -10,14 +10,22 @@ namespace Burton.Lib.Characters
     {
         public int ArmorClass;
    
-        public Armor(EItemSubType SubType, EItemRarity Rarity, EAbility ModifierType, int ArmorClass, string Name, string Description, int Cost, int Weight)
-            : base(EItemType.Armor, SubType, Rarity, Name, Description, Cost, Weight, ModifierType)
+        public Armor(EItemSubType SubType, 
+                     EItemRarity Rarity, 
+                     EAbility ModifierType, 
+                     int ArmorClass, 
+                     string Name, 
+                     string Description, 
+                     int Cost, 
+                     int Weight,
+                    List<Ability> AbilityRequirements)
+            : base(EItemType.Armor, SubType, Rarity, Name, Description, Cost, Weight, AbilityRequirements)
         {
             this.ArmorClass = ArmorClass;
         }
 
         public Armor(Armor Other)
-            : base(EItemType.Armor, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.Cost, Other.Weight, Other.AbilityModifierType)
+            : base(EItemType.Armor, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.Cost, Other.Weight, Other.Require_Abilities)
         {
             this.ID = Other.ID;
             this.ArmorClass = Other.ArmorClass;

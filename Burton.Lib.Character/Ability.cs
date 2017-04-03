@@ -175,6 +175,14 @@ namespace Burton.Lib.Characters
             //return AbilityModifierTable.GetModifier(CurrentValue);
         }
 
+        public Ability(Ability Other)
+        {
+            this.ID = Other.ID;
+            this.MaxValue = Other.MaxValue;
+            this.MinValue = Other.MinValue;
+            this.CurrentValue = Other.CurrentValue;
+        }
+
         public Ability(EAbility TypeID, int MinValue, int MaxValue, int CurrentValue)
         {
             this.ID = TypeID;

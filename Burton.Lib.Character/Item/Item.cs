@@ -39,6 +39,21 @@ namespace Burton.Lib.Characters
         Martial_Ranged
     }
 
+    public enum EModifierType
+    {
+        Armor_Class,
+        Hit_Points,
+        Attribute,
+        Attack,
+        Damage
+    }
+
+    public class Modifier
+    {
+        public EModifierType Type;
+        public int Value;
+    }
+
     /* 
         Base equipment class from which all other types of equipment derive.
         Provides:
@@ -73,11 +88,20 @@ namespace Burton.Lib.Characters
         {
             get { return SubType.ToString().Replace("_", " "); }
         }
-        public List<Ability> AbilityRequirements;
-        public EAbility AbilityModifierType;
+        public List<Ability> Require_Abilities;
+        public List<Modifier> Modifiers;
+
+        public EAbility PrimaryAbility;
         public EItemRarity Rarity;
 
-        public Item(EItemType Type, EItemSubType SubType, EItemRarity Rarity, string Name, string Description, int Cost, int Weight, EAbility AbilityModifierType)
+        public Item(EItemType Type, 
+                    EItemSubType SubType, 
+                    EItemRarity Rarity, 
+                    string Name, 
+                    string Description, 
+                    int Cost, 
+                    int Weight, 
+                    List<Ability> AbilityRequirements)
         {
             this.Type = Type;
             this.SubType = SubType;
@@ -86,8 +110,12 @@ namespace Burton.Lib.Characters
             this.Description = Description;
             this.Weight = Weight;
             this.Cost = Cost;
-            this.AbilityModifierType = AbilityModifierType;
-            this.AbilityRequirements = new List<Ability>();
+            this.Require_Abilities = new List<Ability>();
+
+            foreach (var Req in this.Require_Abilities)
+            {
+                this.Require_Abilities.Add(new Ability(Req));
+            }
         }
     }
 }
