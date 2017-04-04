@@ -71,7 +71,7 @@ namespace GraphVisualizerTest
 
         // Import a folder into the database -- assigns new IDs to all the 
         // files found using the Filter.  bAddChildren tells it to recurse.
-        public void ImportFolder(string Folder, bool bAddChildren, string Filter)
+        public void ImportFolder(string Folder, string Filter, bool bAddChildren)
         {
             foreach (string File in Directory.GetFiles(Folder, Filter))
             {
@@ -85,7 +85,7 @@ namespace GraphVisualizerTest
             {
                 foreach (string ChildDir in Directory.GetDirectories(Folder))
                 {
-                    ImportFolder(ChildDir, bAddChildren, Filter);
+                    ImportFolder(ChildDir, Filter, bAddChildren);
                 }
             }
         }
