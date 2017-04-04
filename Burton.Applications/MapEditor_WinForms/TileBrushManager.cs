@@ -14,7 +14,8 @@ namespace GraphVisualizerTest
     public class TileBrushManager
     {
         public List<TileBrush> Brushes = new List<TileBrush>();
-        public string BrushesFile;
+
+        public string Path;
         public int NextValidID;
         public string Name;
 
@@ -23,10 +24,10 @@ namespace GraphVisualizerTest
             this.Name = Name;
             NextValidID = 0;
             Brushes.Clear();
-            BrushesFile = string.Empty;
+            Path = string.Empty;
         }
 
-        public void LoadBrushes(string FileName)
+        public void Load(string FileName)
         {
             // Load brushes from their own file
             IFormatter formatter = new BinaryFormatter();
@@ -42,10 +43,10 @@ namespace GraphVisualizerTest
 
             stream.Close();
         
-            BrushesFile = FileName;
+            Path = FileName;
         }
 
-        public void SaveBrushes(string FileName)
+        public void Save(string FileName)
         {
             // Save ourself to our own file.  
             // this means each manager will be its own database 
@@ -57,10 +58,10 @@ namespace GraphVisualizerTest
             formatter.Serialize(stream, this);
             stream.Close();
 
-            BrushesFile = FileName;
+            Path = FileName;
         }
 
-        public int AddBrush(TileBrush NewBrush)
+        public int Add(TileBrush NewBrush)
         {
             NewBrush.BrushID = NextValidID++;
             Brushes.Add(NewBrush);
@@ -68,7 +69,7 @@ namespace GraphVisualizerTest
             return NextValidID;
         }
 
-        public TileBrush GetBrush(int BrushID)
+        public TileBrush Get(int BrushID)
         {
             return Brushes[BrushID];
         }

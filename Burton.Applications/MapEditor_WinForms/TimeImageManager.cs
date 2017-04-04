@@ -42,7 +42,7 @@ namespace GraphVisualizerTest
             TileImages = new List<TileImage>();
         }
 
-        public void RemoveTileImage(int TileImageID)
+        public void Remove(int TileImageID)
         {
             if (TileImages[TileImageID].ID == TileImageID)
             {
@@ -50,7 +50,7 @@ namespace GraphVisualizerTest
             }
         }
 
-        public TileImage GetTileImage(int TileImageID)
+        public TileImage Get(int TileImageID)
         {
             TileImage TheTileImage = null;
 
@@ -62,7 +62,7 @@ namespace GraphVisualizerTest
             return TheTileImage;
         }
 
-        public int AddTileImage(TileImage NewTileImage)
+        public int Add(TileImage NewTileImage)
         {
             NewTileImage.ID = NextValidID++;
             TileImages.Insert(NewTileImage.ID, NewTileImage);
@@ -78,7 +78,7 @@ namespace GraphVisualizerTest
                 var NewTileImage = new TileImage();
                 NewTileImage.Path = File;
                 NewTileImage.Image = Image.FromFile(File);
-                AddTileImage(NewTileImage);
+                Add(NewTileImage);
             }
 
             if (bAddChildren)

@@ -13,16 +13,10 @@ namespace Burton.Lib.Graph
         {
         }
 
-        /// <summary>
-        /// Vector/array nodes that comprise this Graph
-        /// </summary>
         public List<NodeType> Nodes = new List<NodeType>();
 
-        /// <summary>
-        /// A list of adjacency edge lists.
-        /// Each node index keys into the list of edges associated with that node
-        /// </summary>
-        public AdjacencyList Edges = null;
+        // Graph edges -- this is maintained as a list of edges indexed by node id.
+        public List<List<GraphEdge>> Edges = new List<List<GraphEdge>>();
 
         /// <summary>
         /// Is this a directed graoh?
@@ -57,8 +51,17 @@ namespace Burton.Lib.Graph
         /// <returns>The edge connecting From to To</returns>
         public EdgeType GetEdge(int From, int To)
         {
-            var Edge = (EdgeType) Edges.GetEdge(From, To);
-            return Edge;
+            EdgeType EdgeToReturn = null;
+
+            foreach (var Edge in Edges[From])
+            {
+                if (Edge.ToNodeIndex == To)
+                {
+                    EdgeToReturn = (EdgeType) Edge;
+                }
+            }
+
+            return (EdgeType)EdgeToReturn;
         }
 
         /// <summary>
@@ -124,17 +127,48 @@ namespace Burton.Lib.Graph
 
             Nodes[NodeIndex].NodeIndex = (int)ENodeType.InvalidNodeIndex;
 
-            Edges.RemoveNodeEdges(NodeIndex);
+            foreach (var FromEdge in Edges[NodeIndex])
+            {
+                var EdgesToRemove = new List<GraphEdge>();
+                foreach (var ToEdge in Edges[FromEdge.ToNodeIndex])
+                {
+                    if (ToEdge.ToNodeIndex == NodeIndex)
+                    {
+                        EdgesToRemove.Add(ToEdge);
+                    }
+                }
+
+                foreach (var EdgeToRemove in EdgesToRemove)
+                {
+                    Edges[FromEdge.ToNodeIndex].Remove(EdgeToRemove);
+                }
+            }
+
+            Edges[NodeIndex].Clear();
         }
 
         public void AddEdge(EdgeType Edge)
         {
-            Edges.AddEdgeAtEnd(Edge);
+            if (!Edges[Edge.FromNodeIndex].Contains(Edge))
+            {
+                Edges[Edge.FromNodeIndex].Add(Edge);
+            }
         }
 
         public void RemoveEdge(int From, int To)
         {
-            Edges.RemoveEdge(From, To);
+            GraphEdge EdgeToRemove = null;
+
+            foreach (var Edge in Edges[From])
+            {
+                if (Edge.ToNodeIndex == To)
+                {
+                    EdgeToRemove = Edge;
+                    break;
+                }
+            }
+
+            Edges[From].Remove(EdgeToRemove);
         }
 
         public void SetEdgeCost(int From, int To, double Cost)
@@ -146,8 +180,8 @@ namespace Burton.Lib.Graph
                     Edge.EdgeCost = Cost;
                 }
             }
-
         }
+
         /// <summary>
         /// Returns the number of active + inactive enodes present in the graph.
         /// </summary>
@@ -202,6 +236,8 @@ namespace Burton.Lib.Graph
         }
 
         // methods for loading saving graphs from an open file
+        // we may not need to even worry about this -- 
+        // i don't think ill ever need to load/save just the graph.
         public bool Save(string FileName)
         {
 
@@ -210,14 +246,37 @@ namespace Burton.Lib.Graph
 
         public bool Load(string FileName)
         {
-            return false;
+            int NumNodes, NumEdges;
+
+            NumNodes = 100;
+            NumEdges = 100 * 8;
+
+            // Add nodes
+            for (int n = 0; n < NumNodes; n++)
+            {
+                var NewNode = new GraphNode();
+                if (NewNode.NodeIndex != (int)ENodeType.InvalidNodeIndex)
+                {
+                    AddNode((NodeType)NewNode);
+                }
+                else
+                {
+                    Nodes.Add((NodeType)NewNode);
+                    Edges.Add(new List<GraphEdge>());
+                    ++NextNodeIndex;
+                }
+            }
+
+            // Add Edges
+
+            return true;
         }
 
-        public SparseGraph(bool bIsDigraph, int NodeCount)
+        public SparseGraph(bool bIsDigraph)
         {
             this.bIsDigraph = bIsDigraph;
             NextNodeIndex = 0;
-            Edges = new AdjacencyList(NodeCount);
+            Edges = new List<List<GraphEdge>>();
         }
     }
 }

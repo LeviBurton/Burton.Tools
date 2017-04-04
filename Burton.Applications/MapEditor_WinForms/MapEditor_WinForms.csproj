@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -66,10 +70,18 @@
     <Compile Include="Form_Palette_Brush.Designer.cs">
       <DependentUpon>Form_Palette_Brush.cs</DependentUpon>
     </Compile>
+    <Compile Include="Globals.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TileMap.cs" />
     <Compile Include="TimeImageManager.cs" />
     <Compile Include="TileBrushManager.cs" />
+    <Compile Include="UserControl_TileMap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl_TileMap.Designer.cs">
+      <DependentUpon>UserControl_TileMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="Window_TileBrushManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,9 +107,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UserControl_TileMap.resx">
+      <DependentUpon>UserControl_TileMap.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Window_TileBrushManager.resx">
       <DependentUpon>Window_TileBrushManager.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -112,12 +128,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Burton.Lib.GameEntity\Burton.Lib.GameEntity.csproj">
+      <Project>{9beac654-22dd-4b12-aa6e-5e5d9b03923b}</Project>
+      <Name>Burton.Lib.GameEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Burton.Lib.Game\Burton.Lib.Game.csproj">
+      <Project>{3b5b7c3a-ebf4-43ec-9acc-25614c6bdd11}</Project>
+      <Name>Burton.Lib.Game</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Burton.Lib.Graph\Burton.Lib.Graph.csproj">
       <Project>{2afb63fe-05c1-4fe3-abb7-8eb3704ba789}</Project>
       <Name>Burton.Lib.Graph</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Burton.Lib.Math\Burton.Lib.Math.csproj">
+      <Project>{0755320c-7c06-422c-96d4-44aedb0e1b5b}</Project>
+      <Name>Burton.Lib.Math</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>robocopy "$(SolutionDir)Content_NoSC" "$(TargetDir)Content_NoSC" /MIR /njh /ndl</PostBuildEvent>
