@@ -43,21 +43,16 @@
     <Compile Include="Character.cs" />
     <Compile Include="Class.cs" />
     <Compile Include="Item\Armor.cs" />
-    <Compile Include="Item\ArmorDB.cs" />
     <Compile Include="Item\Item.cs" />
-    <Compile Include="Item\ItemDB.cs" />
-    <Compile Include="Item\ItemManager.cs" />
     <Compile Include="Item\Mount_And_Vehicle.cs" />
     <Compile Include="Item\Poison.cs" />
     <Compile Include="Item\Special_Material.cs" />
     <Compile Include="Item\Tool.cs" />
     <Compile Include="Item\Trade_Good.cs" />
     <Compile Include="Item\Weapon.cs" />
-    <Compile Include="Item\WeaponDB.cs" />
+    <Compile Include="Magic.cs" />
     <Compile Include="Quirk.cs" />
-    <Compile Include="QuirksDB.cs" />
     <Compile Include="Race.cs" />
-    <Compile Include="SkillsDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Skill.cs" />
   </ItemGroup>

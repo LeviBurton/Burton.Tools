@@ -7,7 +7,6 @@ using System.Text;
 
 namespace Burton.Lib.Characters
 {
-    [Serializable]
     public enum EAbility
     {
         Strength = 0,

@@ -11,18 +11,31 @@ namespace Burton.Lib
     {
         public int ID { get; set;  }
         public string Name { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+
+        public DbItem(DateTime? DateCreated = null, DateTime? DateModified = null)
+        {
+            this.DateCreated = DateCreated.GetValueOrDefault();
+            this.DateModified = DateModified.GetValueOrDefault();
+        }
     }
 
     [Serializable]
     public class SimpleDB<Type> where Type: DbItem
     {
         [NonSerialized]
-        public static int InvalidItemID = -1;
+        public  int InvalidItemID = -1;
 
-        private static int NextValidID = 0;
-        public static int GetNextValidID()
+        private  int NextValidID = 0;
+        public  int GetNextValidID()
         {
             return ++NextValidID;
+        }
+
+        public void ResetID()
+        {
+            NextValidID = 0;
         }
 
         public List<Type> Items = null;

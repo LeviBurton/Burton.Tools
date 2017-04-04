@@ -7,6 +7,14 @@ using System.Text;
 
 namespace Burton.Lib.Characters
 {
+    public enum EClassType
+    {
+        Cleric,
+        Fighter,
+        Rogue,
+        wizard
+    }
+
     public class Cleric : Class
     {
         public Cleric() : base(8, EAbility.Constitution)

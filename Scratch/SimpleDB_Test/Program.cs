@@ -12,24 +12,6 @@ namespace SimpleDB_Test
 {
     class Program
     {
-        public static SkillsDB Skills = new SkillsDB();
-        public static QuirksDB Quirks = new QuirksDB();
-
-        static void TestOne()
-        {
-            SaveQuirksTest();
-
-            LoadSkills();
-            LoadQuirks();
-
-            foreach (var Skill in Skills.Items)
-            {
-                if (Skill == null)
-                    continue;
-
-                Console.WriteLine(Skill.Name);
-            }
-        }
 
         static void Main(string[] args)
         {
@@ -42,6 +24,26 @@ namespace SimpleDB_Test
 
             var Char = new Character(new Cleric());
             var ItemManager = new ItemManager();
+            var SkillManager = new SkillManager();
+            var SpellManager = new SpellManager();
+
+            var Skills = SkillManager.GetItemsCopy();
+            var Spells = SpellManager.GetItemsCopy();
+
+            foreach (var Spell in Spells)
+            {
+                Console.WriteLine(string.Format("{0} {1}", Spell.MagciSchoolType.ToString(), Spell.Name));
+            }
+            foreach (var Ability in Enum.GetNames(typeof(EAbility)))
+            {
+                Console.WriteLine(Ability);
+                foreach (var Skill in Skills.Where(x => x.Ability == (EAbility)Enum.Parse(typeof(EAbility), Ability)))
+                {
+                    Console.WriteLine("-- {0}", Skill.Name);
+                }
+                Console.WriteLine();
+            }
+
 
             ConsoleKey Key;
 
@@ -59,7 +61,7 @@ namespace SimpleDB_Test
                 if (Key == ConsoleKey.R)
                 {
                     Char.RollAbilities();
-                   
+
                     int avg = 0;
 
                     var AllItems = ItemManager.GetItemsCopy();
@@ -84,34 +86,6 @@ namespace SimpleDB_Test
                     Console.WriteLine();
                 }
             } while (Key != ConsoleKey.Escape);
-        }
-
-        static void LoadQuirks()
-        {
-            Quirks = new QuirksDB();
-            Quirks.Load("Quirks.sdb");
-        }
-
-        static void LoadSkills()
-        {
-            Skills = new SkillsDB();
-            Skills.Load("Skills.sdb");
-        }
-
-        static void SaveSkillsTest()
-        {
-          
-        }
-
-        static void SaveQuirksTest()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                var Foo = new Quirk();
-                Quirks.Add(Foo);
-            }
-
-            Quirks.Save("Quirks.sdb");
         }
     }
 }

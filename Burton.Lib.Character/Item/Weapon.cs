@@ -66,7 +66,7 @@ namespace Burton.Lib.Characters
         public int[] VersatileDamage = new int[2];
 
         public Weapon(EItemSubType SubType, EItemRarity Rarity, List<DamageType> DamageTypes, int[] Range, string Name, string Description, int Cost, int Weight, List<Ability> Requirements)
-            : base(EItemType.Weapon, SubType, Rarity, Name, Description, Cost, Weight, Requirements)
+            : base(EItemType.Weapon, SubType, Rarity, Name, Description, Cost, Weight, Requirements, null, null)
         {
             this.DamageTypes = new List<DamageType>();
             this.Range = Range;
@@ -82,7 +82,7 @@ namespace Burton.Lib.Characters
         // Make a "deep" copy.
         // Probably could be better, but what do I know.
         public Weapon(Weapon Other)
-            : base(EItemType.Weapon, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.Cost, Other.Weight, Other.Require_Abilities)
+            : base(EItemType.Weapon, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.Cost, Other.Weight, Other.Require_Abilities, Other.DateCreated, Other.DateModified)
         {
             this.ID = Other.ID;
             this.Range = Other.Range;
