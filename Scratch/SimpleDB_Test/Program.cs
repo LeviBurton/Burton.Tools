@@ -27,13 +27,26 @@ namespace SimpleDB_Test
             var SkillManager = new SkillManager();
             var SpellManager = new SpellManager();
 
+           // SpellManager.Import("spells.tsv.txt");
+
             var Skills = SkillManager.GetItemsCopy();
-            var Spells = SpellManager.GetItemsCopy();
+
+            Console.WriteLine("Spells");
+            var Spells = SpellManager.GetItemsCopy().AsQueryable();     
+            Spells = Spells.Where(spell => spell.MagicSchool == EMagicSchoolType.Divination);
+            Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Cleric));
+            Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Paladin));
+            Spells = Spells.Where(spell => spell.SpellRange.RangeType == ESpellRangeType.Self);
+            Spells = Spells.OrderBy(spell => spell.Level);
+            var FilteredSpells = Spells.ToList();
 
             foreach (var Spell in Spells)
             {
-                Console.WriteLine(string.Format("{0} {1}", Spell.MagciSchoolType.ToString(), Spell.Name));
+                Console.WriteLine(string.Format("{0,-30} {1,-6} {2,-20} {3,-10}", Spell.Name, Spell.Level, Spell.MagicSchool.ToString(), Spell.SpellRange.RangeType.ToString()));
             }
+            Console.WriteLine();
+
+            Console.WriteLine("Skills");
             foreach (var Ability in Enum.GetNames(typeof(EAbility)))
             {
                 Console.WriteLine(Ability);
@@ -44,6 +57,7 @@ namespace SimpleDB_Test
                 Console.WriteLine();
             }
 
+            Console.WriteLine();
 
             ConsoleKey Key;
 

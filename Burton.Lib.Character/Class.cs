@@ -9,10 +9,16 @@ namespace Burton.Lib.Characters
 {
     public enum EClassType
     {
+        Bard,
+        Paladin,
         Cleric,
         Fighter,
         Rogue,
-        wizard
+        Wizard,
+        Sorcerer,
+        Druid,
+        Ranger,
+        Warlock
     }
 
     public class Cleric : Class
