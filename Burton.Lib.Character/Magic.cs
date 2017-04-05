@@ -125,6 +125,7 @@ namespace Burton.Lib.Characters
             }
         }
         #endregion
+
         public string FileName = "Spells.sdb";
         private SpellDB DB;
         private bool bDoBootstrap = false;
@@ -272,7 +273,7 @@ namespace Burton.Lib.Characters
             NewItem.DateCreated = DateTime.Now;
             NewItem.DateModified = NewItem.DateCreated;
 
-            return DB.Add((Spell)NewItem);
+            return DB.Add(NewItem);
         }
 
         public void UpdateItem<T>(T Item) where T : DbItem

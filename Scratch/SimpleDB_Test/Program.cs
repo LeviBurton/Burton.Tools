@@ -23,16 +23,14 @@ namespace SimpleDB_Test
             // DiceRoller.Instance.SetSeed(100);
 
             var Char = new Character(new Cleric());
-            var ItemManager = new ItemManager();
-            var SkillManager = new SkillManager();
-            var SpellManager = new SpellManager();
 
            // SpellManager.Import("spells.tsv.txt");
 
-            var Skills = SkillManager.GetItemsCopy();
+            var Skills = SkillManager.Instance.GetItemsCopy();
+     
 
             Console.WriteLine("Spells");
-            var Spells = SpellManager.GetItemsCopy().AsQueryable();     
+            var Spells = SpellManager.Instance.GetItemsCopy().AsQueryable();     
             Spells = Spells.Where(spell => spell.MagicSchool == EMagicSchoolType.Divination);
             Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Cleric));
             Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Paladin));
@@ -50,7 +48,7 @@ namespace SimpleDB_Test
             foreach (var Ability in Enum.GetNames(typeof(EAbility)))
             {
                 Console.WriteLine(Ability);
-                foreach (var Skill in Skills.Where(x => x.Ability == (EAbility)Enum.Parse(typeof(EAbility), Ability)))
+                foreach (var Skill in SkillManager.Instance.GetItemsCopy().Where(x => x.Ability == (EAbility)Enum.Parse(typeof(EAbility), Ability)))
                 {
                     Console.WriteLine("-- {0}", Skill.Name);
                 }
@@ -67,10 +65,10 @@ namespace SimpleDB_Test
 
                 if (Key == ConsoleKey.T)
                 {
-                    var Weapon = ItemManager.GetItemCopy<Weapon>(11);
+                    var Weapon = ItemManager.Instance.GetItemCopy<Weapon>(11);
                     Weapon.Description = "This should get saved to disk";
-                    ItemManager.UpdateItem<Weapon>(Weapon);
-                    ItemManager.SaveChanges();
+                    ItemManager.Instance.UpdateItem<Weapon>(Weapon);
+                    ItemManager.Instance.SaveChanges();
                 }
                 if (Key == ConsoleKey.R)
                 {
@@ -78,9 +76,9 @@ namespace SimpleDB_Test
 
                     int avg = 0;
 
-                    var AllItems = ItemManager.GetItemsCopy();
-                    Weapon LongBow = ItemManager.GetItemCopy<Weapon>(11);
-                    Armor LeatherArmor = ItemManager.GetItemCopy<Armor>(1);
+                    var AllItems = ItemManager.Instance.GetItemsCopy();
+                    Weapon LongBow = ItemManager.Instance.GetItemCopy<Weapon>(11);
+                    Armor LeatherArmor = ItemManager.Instance.GetItemCopy<Armor>(1);
 
                     foreach (var Item in AllItems)
                     {

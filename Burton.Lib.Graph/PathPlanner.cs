@@ -12,7 +12,7 @@ namespace Burton.Lib.Graph
         // private Owner
 
         // The NavGraph
-        SparseGraph<UnityGraphNode, GraphEdge> Graph;
+        SparseGraph<GraphNode, GraphEdge> Graph;
 
         // current graph search algorithm
         Graph_SearchTimeSliced<GraphEdge> CurrentSearch;
