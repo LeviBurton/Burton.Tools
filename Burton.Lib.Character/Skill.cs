@@ -51,7 +51,7 @@ namespace Burton.Lib.Characters.Skills
 
         public string FileName = "Skills.sdb";
         private SkillsDB DB;
-        private bool bDoBootstrap = false;
+        private bool bDoBootstrap = true;
 
         public SkillManager()
         {
@@ -109,6 +109,22 @@ namespace Burton.Lib.Characters.Skills
             try
             {
                 Item = DB.Get(ID);
+            }
+            catch (Exception Ex)
+            {
+                return default(T);
+            }
+
+            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+        }
+
+        public T GetItemCopy<T>(string ItemName)
+        {
+            Skill Item = null;
+
+            try
+            {
+                Item = DB.Get(ItemName);
             }
             catch (Exception Ex)
             {

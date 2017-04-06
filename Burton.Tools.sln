@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Dice", "Burton.L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Extensions.DeepCopy", "Burton.Extensions.DeepCopy\Burton.Extensions.DeepCopy.csproj", "{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expression_Test", "Scratch\Expression_Test\Expression_Test.csproj", "{A1FE1758-1E08-4350-AECD-ACAEFDD9AA9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,10 @@ Global
 		{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0998E8E-494F-4CAA-8BD5-692AC69F0B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1FE1758-1E08-4350-AECD-ACAEFDD9AA9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1FE1758-1E08-4350-AECD-ACAEFDD9AA9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1FE1758-1E08-4350-AECD-ACAEFDD9AA9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1FE1758-1E08-4350-AECD-ACAEFDD9AA9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,5 +132,6 @@ Global
 		{990DA749-B203-4C3F-89A4-F22CC26E6657} = {93B75227-7725-4B5E-9E96-33993F8A1A06}
 		{13A66743-E8F5-470F-BC57-E75A0C7DE94F} = {93B75227-7725-4B5E-9E96-33993F8A1A06}
 		{22783365-6E41-4C6D-A8E3-B0548E245FB7} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
+		{A1FE1758-1E08-4350-AECD-ACAEFDD9AA9C} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 	EndGlobalSection
 EndGlobal
