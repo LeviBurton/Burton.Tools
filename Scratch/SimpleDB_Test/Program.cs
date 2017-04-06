@@ -7,13 +7,54 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace SimpleDB_Test
 {
     class Program
     {
+        static void RunTest()
+        {
+            var Iterations = 1000;
 
-        static void Main(string[] args)
+            // Fire up the db.
+            SpellManager.Instance.Refresh();
+
+            Console.WriteLine("Running Timing test...");
+
+            var Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+
+            for (int i = 0; i < Iterations; i++)
+            {
+                //var Test = SpellManager.Instance.Find<Spell>(x => x.MagicSchool == EMagicSchoolType.Abjuration).ToList();
+                // var Test = SpellManager.Instance.Find<Spell>(x => x.Name.Contains("B")).ToList();
+                //   var Test = SpellManager.Instance.Find<Spell>().ToList();
+                var SingleItem = SpellManager.Instance.Find<Spell>(x => x.Name.Contains("Fire")).ToList();
+            }
+
+            Stopwatch.Stop();
+
+            Console.WriteLine(string.Format("{0} {1} {2}", Iterations, Stopwatch.Elapsed.TotalSeconds, Stopwatch.Elapsed.Ticks/Stopwatch.Frequency));
+        }
+
+        static void RunTimingTests()
+        {
+          
+
+            ConsoleKey Key;
+
+            do
+            {
+                Key = Console.ReadKey(true).Key;
+                if (Key == ConsoleKey.R)
+                {
+                    RunTest();
+                }
+            } while (Key != ConsoleKey.Escape);
+        }
+
+        static void Test1()
         {
             //AbilityModifierTable.InitTable();
             DifficultyClassesTable.InitTable();
@@ -24,10 +65,10 @@ namespace SimpleDB_Test
 
             var Char = new Character(new Cleric());
 
-           // SpellManager.Import("spells.tsv.txt");
+            // SpellManager.Import("spells.tsv.txt");
 
             var Skills = SkillManager.Instance.GetItemsCopy();
-     
+
 
             Console.WriteLine("Spells");
             var Spells = SpellManager.Instance.GetItemsCopy().AsQueryable();
@@ -107,5 +148,10 @@ namespace SimpleDB_Test
                 }
             } while (Key != ConsoleKey.Escape);
         }
+
+        static void Main(string[] args)
+        {
+            RunTimingTests();
+        }     
     }
 }
