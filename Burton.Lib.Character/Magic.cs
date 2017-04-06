@@ -18,10 +18,16 @@ namespace Burton.Lib.Characters
         Transmutation
     }
 
-    public class SpellMaterial
+    [Serializable]
+    public class SpellMaterial : Item
     {
-        public string Name;
-        bool bConsumeOnUse;
+        bool bConsumeOnUse = false;
+
+        public SpellMaterial(string Name, string Description, int Cost, bool ConsumeOnUse)
+            :base(EItemType.Special_Material, EItemSubType.Spell_Material, EItemRarity.Common, Name, Description, Cost, 0, null)
+        {
+            this.bConsumeOnUse = ConsumeOnUse;
+        }
     }
 
     public enum ESpellComponentType
@@ -80,6 +86,7 @@ namespace Burton.Lib.Characters
         public SpellRange Clone()
         {
             SpellRange Other = (SpellRange)this.MemberwiseClone();
+        
             return Other;
         }
     }
@@ -90,6 +97,7 @@ namespace Burton.Lib.Characters
         public EMagicSchoolType MagicSchool { get; set; }
         public List<EClassType> Classes;
         public SpellRange SpellRange;
+        public List<SpellMaterial> SpellMaterials;
 
         public int Level;
         public int CastingTime;
@@ -106,6 +114,7 @@ namespace Burton.Lib.Characters
             this.Level = Level;
             this.SpellRange = Range;
             this.Description = Description;
+            this.SpellMaterials = new List<SpellMaterial>();
         }
 
         public Spell(Spell Other)
@@ -117,12 +126,23 @@ namespace Burton.Lib.Characters
             Level = Other.Level;
             Description = Other.Description;
             SpellRange = Other.SpellRange;
+            this.SpellMaterials = Other.SpellMaterials;
         }
 
         public override DbItem Clone()
         {
             var Other = (Spell)this.MemberwiseClone();
             Other.SpellRange = new SpellRange(this.SpellRange);
+
+            if (this.SpellMaterials == null)
+            {
+                Other.SpellMaterials = new List<SpellMaterial>();
+            }
+            else
+            {
+                Other.SpellMaterials = new List<SpellMaterial>(this.SpellMaterials);
+            }
+         
             return (DbItem) Other;
         }
     }

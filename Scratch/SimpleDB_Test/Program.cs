@@ -69,6 +69,8 @@ namespace SimpleDB_Test
 
             var Skills = SkillManager.Instance.Find<Skill>().ToList();
 
+            //ItemManager.Instance.ImportSpellComponents("SpellComponents.tsv");
+            //ItemManager.Instance.SaveChanges();
 
             Console.WriteLine("Spells");
        

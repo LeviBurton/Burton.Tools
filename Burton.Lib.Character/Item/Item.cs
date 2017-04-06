@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -36,7 +37,8 @@ namespace Burton.Lib.Characters
         Simple_Melee,
         Simple_Ranged,
         Martial_Melee,
-        Martial_Ranged
+        Martial_Ranged,
+        Spell_Material
     }
 
     public enum EModifierType
@@ -208,6 +210,53 @@ namespace Burton.Lib.Characters
             AddBaseArmors();
             AddBaseWeapons();
             SaveChanges();
+        }
+
+        public void ImportSpellComponents(string FileName)
+        {
+            var Data = File.ReadAllLines(FileName);
+            Data[0] = null;
+
+            foreach (var Line in Data)
+            {
+                if (string.IsNullOrEmpty(Line))
+                    continue;
+
+                var Fields = Line.Split(new char[] { '\t' });
+                var Data_Name = Fields[0];
+
+                var Data_Value = Fields[1];
+
+                Data_Value = Data_Value.Replace("-", "").Replace(",", "").Replace("gp", "").Trim();
+                int Cost = 0;
+
+                if (!string.IsNullOrEmpty(Data_Value) && !Int32.TryParse(Data_Value, out Cost))
+                {
+                    continue;
+                }
+
+                var Data_Spells = Fields[2].Split(new char[] { ',' });
+
+                var Data_Consumed = Fields[3] == "N" ? false : true;
+                var Data_Notes = Fields[4];
+
+                var SpellMaterial = new SpellMaterial(Data_Name, Data_Notes, Cost, Data_Consumed);
+
+                foreach (var Name in Data_Spells)
+                {
+                    var Spell = SpellManager.Instance.Find<Spell>(x => x.Name == Name).SingleOrDefault();
+
+                    if (Spell == null)
+                        continue;
+
+                    Spell.SpellMaterials.Add(SpellMaterial);
+                    
+                }
+
+                SpellManager.Instance.SaveChanges();
+
+                AddItem<SpellMaterial>(SpellMaterial);
+            }
         }
 
         public void AddBaseWeapons()
