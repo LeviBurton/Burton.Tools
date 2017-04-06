@@ -148,7 +148,7 @@ namespace Burton.Lib.Characters
 
         public ItemManager()
         {
-            ItemDB = new ItemDB();
+            ItemDB = ItemDB.Instance;
 
             if (bDoBootstrap)
             {
@@ -195,6 +195,7 @@ namespace Burton.Lib.Characters
             ItemDB.Items[ID - 1] = null;
         }
 
+    
         // Get a copy of the Item by ID
         public T GetItemCopy<T>(int ID)
         {
@@ -367,8 +368,22 @@ namespace Burton.Lib.Characters
             AddItem<Armor>(Armor);
         }
     }
+
     public class ItemDB : SimpleDB<Item>
     {
+        private static ItemDB _Instance;
+
+        public static ItemDB Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new ItemDB();
+
+                return _Instance;
+            }
+        }
+
         public ItemDB()
         {
             InitBase();

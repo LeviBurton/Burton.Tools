@@ -131,7 +131,7 @@ namespace Burton.Lib.Characters
 
         public SpellManager()
         {
-            DB = new SpellDB();
+            DB = SpellDB.Instance;
 
             if (bDoBootstrap)
             {

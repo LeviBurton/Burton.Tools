@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Burton.Lib
@@ -57,6 +58,7 @@ namespace Burton.Lib
             return (Type)Items.Where(x => x != null).Where(x => x.Name == Name).SingleOrDefault();
         }
 
+      
         public Type Get(int ID)
         {
             if (ID < 0)
@@ -64,12 +66,12 @@ namespace Burton.Lib
                 throw new ArgumentException("ID < 0");
             }
 
-            return Items[ID - 1];
+            return Items.ElementAt(ID - 1);
         }
 
         public void Delete(int ID)
         {
-            Items[ID] = null;
+            Items[ID - 1] = null;
         }
 
         public void Load(string FileName)

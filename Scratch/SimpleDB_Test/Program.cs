@@ -38,7 +38,9 @@ namespace SimpleDB_Test
             Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Paladin));
             Spells = Spells.Where(spell => spell.SpellRange.RangeType == ESpellRangeType.Self);
             Spells = Spells.OrderBy(spell => spell.Level);
+
             var FilteredSpells = Spells.ToList();
+
 
             foreach (var Spell in Spells)
             {

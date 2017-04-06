@@ -55,7 +55,7 @@ namespace Burton.Lib.Characters.Skills
 
         public SkillManager()
         {
-            DB = new SkillsDB();
+            DB = SkillsDB.Instance;
 
             if (bDoBootstrap)
             {
