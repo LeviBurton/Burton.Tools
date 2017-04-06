@@ -21,13 +21,17 @@ namespace Burton.Lib
             this.DateModified = DateModified.GetValueOrDefault();
         }
 
-        public DbItem DeepCopy()
+        // We let any items stored override this to 
+        // create a copy of themselves.
+        public virtual DbItem Clone()
         {
             DbItem Other = (DbItem)this.MemberwiseClone();
             return Other;
         }
 
-        public DbItem ShallowCopy()
+        // We let any items stored override this to 
+        // create a copy of themselves.
+        public virtual DbItem ShallowCopy()
         {
             DbItem Other = (DbItem)this.MemberwiseClone();
             return Other;
@@ -73,12 +77,12 @@ namespace Burton.Lib
             if (Predicate == null)
             {
                 // All
-                Items.OfType<T>().ToList().ForEach(x => Result.Add((T)x.DeepCopy()));
+                Items.OfType<T>().ToList().ForEach(x => Result.Add((T)x.Clone()));
             }
             else
             {
                 // Predicate
-                Items.OfType<T>().Where(Predicate).ToList().ForEach(x => Result.Add((T)x.DeepCopy()));
+                Items.OfType<T>().Where(Predicate).ToList().ForEach(x => Result.Add((T)x.Clone()));
             }
 
             return Result.AsEnumerable();

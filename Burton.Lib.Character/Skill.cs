@@ -79,7 +79,7 @@ namespace Burton.Lib.Characters.Skills
 
         public int AddItem<T>(T Item) where T : DbItem
         {
-            var NewItem = (Skill)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var NewItem = (Skill)Item.Clone();
 
             NewItem.DateCreated = DateTime.Now;
             NewItem.DateModified = NewItem.DateCreated;
@@ -89,7 +89,7 @@ namespace Burton.Lib.Characters.Skills
 
         public void UpdateItem<T>(T Item) where T : DbItem
         {
-            var Copy = (Skill)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var Copy = (Skill)Item.Clone();
 
             Copy.DateModified = DateTime.Now;
 
@@ -101,50 +101,9 @@ namespace Burton.Lib.Characters.Skills
             DB.Items[ID - 1] = null;
         }
 
-        // Get a copy of the Item by ID
-        public T GetItemCopy<T>(int ID)
+        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
         {
-            Skill Item = null;
-
-            try
-            {
-                Item = DB.Get(ID);
-            }
-            catch (Exception Ex)
-            {
-                return default(T);
-            }
-
-            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-        }
-
-        public T GetItemCopy<T>(string ItemName)
-        {
-            Skill Item = null;
-
-            try
-            {
-                Item = DB.Get(ItemName);
-            }
-            catch (Exception Ex)
-            {
-                return default(T);
-            }
-
-            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-        }
-
-        // Returns a list containing copies of the items in the ItemDB
-        public List<Skill> GetItemsCopy()
-        {
-            List<Skill> Result = new List<Skill>();
-
-            foreach (var Item in DB.Items.Where(x => x != null))
-            {
-                Result.Add(new Skill(Item));
-            }
-
-            return Result;
+            return DB.Find(Predicate);
         }
 
         // Some defaults to play with

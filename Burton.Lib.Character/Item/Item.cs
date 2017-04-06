@@ -143,12 +143,12 @@ namespace Burton.Lib.Characters
         public string FileName = "Items.sdb";
 
         // we pretty much just wrap access to the ItemDB
-        private ItemDB ItemDB;
+        private ItemDB DB;
         private bool bDoBootstrap = false;
 
         public ItemManager()
         {
-            ItemDB = ItemDB.Instance;
+            DB = ItemDB.Instance;
 
             if (bDoBootstrap)
             {
@@ -163,79 +163,43 @@ namespace Burton.Lib.Characters
     
         public void SaveChanges()
         {
-            ItemDB.Save(FileName);
+            DB.Save(FileName);
         }
 
         public void Refresh()
         {
-            ItemDB.Load(FileName);
+            DB.Load(FileName);
+        }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
+        {
+            return DB.Find(Predicate);
         }
 
         // Create a copy of Item and a add it to the ItemDB
-        public int AddItem<T>(T Item)
+        public int AddItem<T>(T Item) where T : DbItem
         {
-            var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+           // var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var NewItem = (Item)Item.Clone();
 
             NewItem.DateCreated = DateTime.Now;
             NewItem.DateModified = NewItem.DateCreated;
 
-            return ItemDB.Add((Item)NewItem);
+            return DB.Add((Item)NewItem);
         }
 
         public void UpdateItem<T>(T Item) where T : DbItem
         {
-            var Copy = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var Copy = (Item)Item.Clone();
 
             Copy.DateModified = DateTime.Now;
 
-            ItemDB.Items[Copy.ID - 1] = Copy;
+            DB.Items[Copy.ID - 1] = Copy;
         }
 
         public void DeleteItem(int ID)
         {
-            ItemDB.Items[ID - 1] = null;
-        }
-
-    
-        // Get a copy of the Item by ID
-        public T GetItemCopy<T>(int ID)
-        {
-            Item Item = null;
-
-            try
-            {
-                Item = ItemDB.Get(ID);
-            }
-            catch (Exception Ex)
-            {
-                return default(T);
-            }
-
-            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-        }
-
-        // Returns a list containing copies of the items in the ItemDB
-        public List<Item> GetItemsCopy()
-        {
-            List<Item> Result = new List<Item>();
-
-            foreach (var Item in ItemDB.Items.Where(x => x != null))
-            {
-                // There has to be a generic alternative to doing this.
-                // We basically want to call the class constructor for typeof(Item), passing in the Item so
-                // that it calls the copy constructor.
-
-                if (Item.Type == EItemType.Weapon)
-                {
-                    Result.Add(new Weapon((Weapon)Item));
-                }
-                else if (Item.Type == EItemType.Armor)
-                {
-                    Result.Add(new Armor((Armor)Item));
-                }
-            }
-
-            return Result;
+            DB.Items[ID - 1] = null;
         }
 
         // Some defaults to play with

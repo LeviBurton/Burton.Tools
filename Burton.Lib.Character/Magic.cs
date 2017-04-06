@@ -61,6 +61,8 @@ namespace Burton.Lib.Characters
         public ESpellSelfRangeType SelfRangeType;
         public int Range;
 
+        public SpellRange() {}
+
         public SpellRange(ESpellRangeType RangeType, ESpellSelfRangeType SelfRangeType, int Range)
         {
             this.RangeType = RangeType;
@@ -68,22 +70,18 @@ namespace Burton.Lib.Characters
             this.Range = Range;
         }
 
-        public SpellRange()
-        {
-
-        }
-
         public SpellRange(SpellRange Other)
         {
-
+            this.Range = Other.Range;
+            this.SelfRangeType = Other.SelfRangeType;
+            this.RangeType = Other.RangeType;
         }
 
-        public SpellRange ShallowCopy()
+        public SpellRange Clone()
         {
             SpellRange Other = (SpellRange)this.MemberwiseClone();
             return Other;
         }
-
     }
 
     [Serializable]
@@ -110,7 +108,6 @@ namespace Burton.Lib.Characters
             this.Description = Description;
         }
 
-
         public Spell(Spell Other)
         {
             ID = Other.ID;
@@ -122,17 +119,11 @@ namespace Burton.Lib.Characters
             SpellRange = Other.SpellRange;
         }
 
-        public Spell ShallowCopy()
-        {
-            var Other = (Spell)this.MemberwiseClone();
-            return Other;
-        }
-
-        public Spell DeepCopy()
+        public override DbItem Clone()
         {
             var Other = (Spell)this.MemberwiseClone();
             Other.SpellRange = new SpellRange(this.SpellRange);
-            return Other;
+            return (DbItem) Other;
         }
     }
 
@@ -299,7 +290,7 @@ namespace Burton.Lib.Characters
 
         public int AddItem<T>(T Item) where T : DbItem
         {
-            var NewItem = (Spell)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var NewItem = (Spell)Item.Clone();
 
             NewItem.DateCreated = DateTime.Now;
             NewItem.DateModified = NewItem.DateCreated;
@@ -309,7 +300,7 @@ namespace Burton.Lib.Characters
 
         public void UpdateItem<T>(T Item) where T : DbItem
         {
-            var Copy = (Spell)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var Copy = (Spell)Item.Clone();
 
             Copy.DateModified = DateTime.Now;
 
@@ -319,36 +310,6 @@ namespace Burton.Lib.Characters
         public void DeleteItem(int ID)
         {
             DB.Items[ID - 1] = null;
-        }
-
-        // Get a copy of the Item by ID
-        public T GetItemCopy<T>(int ID)
-        {
-            Spell Item = null;
-
-            try
-            {
-                Item = DB.Get(ID);
-            }
-            catch (Exception Ex)
-            {
-                return default(T);
-            }
-
-            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-        }
-
-        // Returns a list containing copies of the items in the ItemDB
-        public List<Spell> GetItemsCopy()
-        {
-            List<Spell> Result = new List<Spell>();
-
-            foreach (var Item in DB.Items.Where(x => x != null))
-            {
-                Result.Add(new Spell(Item));
-            }
-
-            return Result;
         }
 
         // Some defaults to play with
