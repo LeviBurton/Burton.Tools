@@ -20,10 +20,23 @@ namespace Burton.Lib
             this.DateCreated = DateCreated.GetValueOrDefault();
             this.DateModified = DateModified.GetValueOrDefault();
         }
+
+        public DbItem DeepCopy()
+        {
+            DbItem Other = (DbItem)this.MemberwiseClone();
+            return Other;
+        }
+
+        public DbItem ShallowCopy()
+        {
+            DbItem Other = (DbItem)this.MemberwiseClone();
+            return Other;
+        }
+
     }
 
     [Serializable]
-    public class SimpleDB<Type> where Type: DbItem
+    public class SimpleDB<DbType> where DbType: DbItem
     {
         [NonSerialized]
         public  int InvalidItemID = -1;
@@ -39,27 +52,45 @@ namespace Burton.Lib
             NextValidID = 0;
         }
 
-        public List<Type> Items = null;
+        public List<DbType> Items = null;
 
         public SimpleDB()
         {
-            Items = new List<Type>();
+            Items = new List<DbType>();
         }
 
-        public int Add(Type Item)
+        public int Add(DbType Item)
         {
             Item.ID = GetNextValidID();
             Items.Add(Item);
             return Item.ID;
         }
 
-        public Type Get(string Name)
+        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
         {
-            return (Type)Items.Where(x => x != null).Where(x => x.Name == Name).SingleOrDefault();
+            var Result = new List<T>();
+
+            if (Predicate == null)
+            {
+                // All
+                Items.OfType<T>().ToList().ForEach(x => Result.Add((T)x.DeepCopy()));
+            }
+            else
+            {
+                // Predicate
+                Items.OfType<T>().Where(Predicate).ToList().ForEach(x => Result.Add((T)x.DeepCopy()));
+            }
+
+            return Result.AsEnumerable();
+        }
+
+        public DbType Get(string Name)
+        {
+            return (DbType)Items.Where(x => x != null).Where(x => x.Name == Name).SingleOrDefault();
         }
 
       
-        public Type Get(int ID)
+        public DbType Get(int ID)
         {
             if (ID < 0)
             {
@@ -80,7 +111,7 @@ namespace Burton.Lib
             {
                 var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 NextValidID = (int)BinaryFormatter.Deserialize(InStream);
-                Items = (List<Type>)BinaryFormatter.Deserialize(InStream);
+                Items = (List<DbType>)BinaryFormatter.Deserialize(InStream);
             }
         }
 

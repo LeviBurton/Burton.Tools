@@ -70,7 +70,20 @@ namespace Burton.Lib.Characters
 
         public SpellRange()
         {
+
         }
+
+        public SpellRange(SpellRange Other)
+        {
+
+        }
+
+        public SpellRange ShallowCopy()
+        {
+            SpellRange Other = (SpellRange)this.MemberwiseClone();
+            return Other;
+        }
+
     }
 
     [Serializable]
@@ -107,6 +120,19 @@ namespace Burton.Lib.Characters
             Level = Other.Level;
             Description = Other.Description;
             SpellRange = Other.SpellRange;
+        }
+
+        public Spell ShallowCopy()
+        {
+            var Other = (Spell)this.MemberwiseClone();
+            return Other;
+        }
+
+        public Spell DeepCopy()
+        {
+            var Other = (Spell)this.MemberwiseClone();
+            Other.SpellRange = new SpellRange(this.SpellRange);
+            return Other;
         }
     }
 
@@ -254,6 +280,11 @@ namespace Burton.Lib.Characters
             }
 
             SaveChanges();
+        }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
+        {
+            return DB.Find(Predicate);
         }
 
         public void SaveChanges()

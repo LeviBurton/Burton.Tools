@@ -160,6 +160,7 @@ namespace Burton.Lib.Characters
             Refresh();
         }
 
+    
         public void SaveChanges()
         {
             ItemDB.Save(FileName);

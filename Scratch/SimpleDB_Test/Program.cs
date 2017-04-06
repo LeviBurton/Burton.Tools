@@ -30,7 +30,13 @@ namespace SimpleDB_Test
      
 
             Console.WriteLine("Spells");
-            var Spells = SpellManager.Instance.GetItemsCopy().AsQueryable();     
+            var Spells = SpellManager.Instance.GetItemsCopy().AsQueryable();
+
+            Func<Spell, bool> Where = null;
+            Where = x => x.MagicSchool == EMagicSchoolType.Divination && x.Level == 1;
+            var Test = SpellManager.Instance.Find<Spell>(Where).ToList();
+            var AllSpells = SpellManager.Instance.Find<Spell>().ToList();
+
             Spells = Spells.Where(spell => spell.MagicSchool == EMagicSchoolType.Divination);
             Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Cleric));
             Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Paladin));
