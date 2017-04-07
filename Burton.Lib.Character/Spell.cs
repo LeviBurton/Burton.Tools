@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Burton.Lib.Characters
 {
-    public enum EMagicSchoolType
+    public enum ESpellSchoolType
     {
         Abjuration,
         Conjuration,
@@ -28,20 +28,20 @@ namespace Burton.Lib.Characters
         {
             this.bConsumeOnUse = ConsumeOnUse;
         }
+
+        public override DbItem Clone()
+        {
+            return (DbItem)this.MemberwiseClone();
+        }
     }
 
-    public enum ESpellComponentType
+    public enum ECastingComponentType
     {
         Verbal,
         Somatic,
         Material
     }
-
-    public class SpellComponent
-    {
-        public ESpellComponentType SpellComponentType;
-        public List<SpellMaterial> Materials;
-    }
+  
 
     public enum ESpellRangeType
     {
@@ -85,28 +85,35 @@ namespace Burton.Lib.Characters
 
         public SpellRange Clone()
         {
-            SpellRange Other = (SpellRange)this.MemberwiseClone();
-        
-            return Other;
+            return (SpellRange)this.MemberwiseClone();
         }
     }
 
     [Serializable]
     public class Spell : DbItem
     {
-        public EMagicSchoolType MagicSchool { get; set; }
-        public List<EClassType> Classes;
-        public SpellRange SpellRange;
-        public List<SpellMaterial> SpellMaterials;
-
+        public ESpellSchoolType MagicSchool { get; set; }
         public int Level;
         public int CastingTime;
-    
         public bool bConcentration;
-
         public string Description;
 
-        public Spell(EMagicSchoolType MagicSchool, List<EClassType> ClassTypes, string Name, int Level, SpellRange Range, string Description)
+        public List<EClassType> Classes;
+        public List<ECastingComponentType> CastingComponentTypes;
+        public List<SpellMaterial> SpellMaterials;
+
+        public SpellRange SpellRange;
+
+        public Spell(ESpellSchoolType MagicSchool, 
+                     List<EClassType> ClassTypes, 
+                     string Name, 
+                     int Level, 
+                     SpellRange Range, 
+                     string Description, 
+                     List<ECastingComponentType> SpellCastingComponentType,
+                     List<SpellMaterial> SpellMaterials,
+                     bool bConcentration,
+                     string Duration)
         {
             this.MagicSchool = MagicSchool;
             this.Classes = ClassTypes;
@@ -114,35 +121,29 @@ namespace Burton.Lib.Characters
             this.Level = Level;
             this.SpellRange = Range;
             this.Description = Description;
-            this.SpellMaterials = new List<SpellMaterial>();
-        }
-
-        public Spell(Spell Other)
-        {
-            ID = Other.ID;
-            MagicSchool = Other.MagicSchool;
-            Classes = Other.Classes;
-            Name = Other.Name;
-            Level = Other.Level;
-            Description = Other.Description;
-            SpellRange = Other.SpellRange;
-            this.SpellMaterials = Other.SpellMaterials;
+            this.CastingComponentTypes = SpellCastingComponentType;
+            this.bConcentration = bConcentration;
+            this.SpellMaterials = SpellMaterials;
         }
 
         public override DbItem Clone()
         {
             var Other = (Spell)this.MemberwiseClone();
+            Other.Classes = new List<EClassType>(this.Classes);
             Other.SpellRange = new SpellRange(this.SpellRange);
+            Other.CastingComponentTypes = new List<ECastingComponentType>();
+            Other.SpellMaterials = new List<SpellMaterial>();
+            
+            foreach (var m in this.SpellMaterials)
+            {
+                Other.SpellMaterials.Add(m);
+            }
 
-            if (this.SpellMaterials == null)
+            foreach (var c in this.CastingComponentTypes)
             {
-                Other.SpellMaterials = new List<SpellMaterial>();
+                Other.CastingComponentTypes.Add(c);
             }
-            else
-            {
-                Other.SpellMaterials = new List<SpellMaterial>(this.SpellMaterials);
-            }
-         
+
             return (DbItem) Other;
         }
     }
@@ -195,9 +196,23 @@ namespace Burton.Lib.Characters
                     continue;
 
                 var Fields = Line.Split(new char[] { '\t' });
+             //   continue;
 
                 if (Fields[57] == "")
                     continue;
+
+                // v 47
+                // s 48
+                // m 49
+                // 51 conc
+                // 52 dur
+
+                var Data_V = Fields[47];
+                var Data_S = Fields[48];
+                var Data_M = Fields[49];
+
+                var Data_Conc = Fields[51];
+                var Data_Dur = Fields[52];
 
                 var Data_School = Fields[42];
                 var Data_Name = Fields[39];
@@ -282,9 +297,35 @@ namespace Burton.Lib.Characters
                 if (Data_Wizard != "")
                     ClassTypes.Add(EClassType.Wizard);
 
-                var School = (EMagicSchoolType) Enum.Parse(typeof(EMagicSchoolType), Data_School);
-              
-                var Spell = new Spell(School, ClassTypes, Data_Name, Data_Level, Range, "");
+                var School = (ESpellSchoolType) Enum.Parse(typeof(ESpellSchoolType), Data_School);
+
+                var Conc = Data_Conc == "1";
+
+                ECastingComponentType Component = new ECastingComponentType();
+                List<ECastingComponentType> SpellComponents = new List<ECastingComponentType>();
+
+                if (Data_V == "1")
+                {
+                    SpellComponents.Add(ECastingComponentType.Verbal);
+                }
+
+                if (Data_S == "1")
+                {
+                    SpellComponents.Add(ECastingComponentType.Somatic);
+                }
+
+                var SpellMaterials = new List<SpellMaterial>();
+
+                if (Data_M == "1")
+                {
+                    SpellComponents.Add(ECastingComponentType.Material);
+
+                    SpellMaterials = ItemManager.Instance.Find<SpellMaterial>(x => x.SubType == EItemSubType.Spell_Material && x.Name == Data_Name).ToList();
+                }
+
+
+                var Spell = new Spell(School, ClassTypes, Data_Name, Data_Level, Range, "", SpellComponents, SpellMaterials, Conc, Data_Duration);
+
                 AddItem<Spell>(Spell);
 
                 Console.WriteLine(string.Format("{0,-30} {1,-5} {2,-20}", Fields[39], Fields[41], Fields[42]));

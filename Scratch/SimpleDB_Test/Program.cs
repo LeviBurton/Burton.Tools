@@ -15,27 +15,26 @@ namespace SimpleDB_Test
     {
         static void RunTest()
         {
-            var Iterations = 1000;
+            var Iterations = 1000000;
 
             // Fire up the db.
             ItemManager.Instance.Refresh();
 
-            Console.WriteLine("Running Timing test...");
-
+ 
             var Stopwatch = new Stopwatch();
             Stopwatch.Start();
 
             for (int i = 0; i < Iterations; i++)
             {
-                //var Test = ItemManager.Instance.Find<Spell>(x => x.MagicSchool == EMagicSchoolType.Abjuration).ToList();
+                var Test = SpellManager.Instance.Find<Spell>().ToList();
                 // var Test = ItemManager.Instance.Find<Spell>(x => x.Name.Contains("B")).ToList();
                 //   var Test = ItemManager.Instance.Find<Spell>().ToList();
-                var SingleItem = ItemManager.Instance.Find<Weapon>(x => x.Name.Contains("sword")).ToList();
+                //var SingleItem = SpellManager.Instance.Find<Spell>(x => x.Name.Contains("Bless")).SingleOrDefault();
             }
 
             Stopwatch.Stop();
 
-            Console.WriteLine(string.Format("{0} {1} {2}", Iterations, Stopwatch.Elapsed.TotalSeconds, Stopwatch.Elapsed.Ticks/Stopwatch.Frequency));
+            Console.WriteLine(string.Format("{0,-9} {1}", Iterations, Stopwatch.Elapsed.TotalSeconds));
         }
 
         static void RunTimingTests()
@@ -56,47 +55,13 @@ namespace SimpleDB_Test
 
         static void Test1()
         {
-            //AbilityModifierTable.InitTable();
-            DifficultyClassesTable.InitTable();
-
-            // All dice rolls go through the single roller instance.
-            // We can pass a seed to guaruntee the same results on every roll.
-            // DiceRoller.Instance.SetSeed(100);
-
-            var Char = new Character(new Cleric());
-
-            // SpellManager.Import("spells.tsv.txt");
-
-            var Skills = SkillManager.Instance.Find<Skill>().ToList();
+            //SpellManager.Instance.Import("Spells.tsv.txt");
+            //SpellManager.Instance.SaveChanges();
 
             //ItemManager.Instance.ImportSpellComponents("SpellComponents.tsv");
             //ItemManager.Instance.SaveChanges();
 
-            Console.WriteLine("Spells");
-       
-            Func<Spell, bool> Where = null;
-            Where = x => x.MagicSchool == EMagicSchoolType.Divination && x.Level > 1 && x.SpellRange.RangeType == ESpellRangeType.Touch;
-            var Spells = SpellManager.Instance.Find<Spell>(Where).ToList();
-            var AllSpells = SpellManager.Instance.Find<Spell>().ToList();
-
-            foreach (var Spell in Spells)
-            {
-                Console.WriteLine(string.Format("{0,-30} {1,-6} {2,-20} {3,-10}", Spell.Name, Spell.Level, Spell.MagicSchool.ToString(), Spell.SpellRange.RangeType.ToString()));
-            }
-            Console.WriteLine();
-
-            Console.WriteLine("Skills");
-            foreach (var Ability in Enum.GetNames(typeof(EAbility)))
-            {
-                Console.WriteLine(Ability);
-                foreach (var Skill in SkillManager.Instance.Find<Skill>(x => x.Ability == (EAbility)Enum.Parse(typeof(EAbility), Ability)))
-                {
-                    Console.WriteLine("-- {0}", Skill.Name);
-                }
-                Console.WriteLine();
-            }
-
-            Console.WriteLine();
+            var ChainLightning = SpellManager.Instance.Find<Spell>(x => x.Name == "Chain Lightning").SingleOrDefault();
 
             ConsoleKey Key;
 
@@ -113,20 +78,7 @@ namespace SimpleDB_Test
                 }
                 if (Key == ConsoleKey.R)
                 {
-                    Char.RollAbilities();
-                    int avg = 0;
 
-                    foreach (var CharAbility in Char.Abilities)
-                    {
-                        avg += CharAbility.CurrentValue;
-
-                        Console.WriteLine("{0}: {1} ({2}) ", CharAbility.ShortName, CharAbility.CurrentValue, CharAbility.GetModifier());
-                    }
-
-                    avg /= 6;
-                    Console.WriteLine("AVG: {0}", avg);
-
-                    Console.WriteLine();
                 }
             } while (Key != ConsoleKey.Escape);
         }

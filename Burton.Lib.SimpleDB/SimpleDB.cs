@@ -28,15 +28,6 @@ namespace Burton.Lib
             DbItem Other = (DbItem)this.MemberwiseClone();
             return Other;
         }
-
-        // We let any items stored override this to 
-        // create a copy of themselves.
-        public virtual DbItem ShallowCopy()
-        {
-            DbItem Other = (DbItem)this.MemberwiseClone();
-            return Other;
-        }
-
     }
 
     [Serializable]
@@ -88,22 +79,7 @@ namespace Burton.Lib
             return Result.AsEnumerable();
         }
 
-        public DbType Get(string Name)
-        {
-            return (DbType)Items.Where(x => x != null).Where(x => x.Name == Name).SingleOrDefault();
-        }
-
-      
-        public DbType Get(int ID)
-        {
-            if (ID < 0)
-            {
-                throw new ArgumentException("ID < 0");
-            }
-
-            return Items.ElementAt(ID - 1);
-        }
-
+    
         public void Delete(int ID)
         {
             Items[ID - 1] = null;

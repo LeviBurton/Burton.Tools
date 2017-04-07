@@ -242,6 +242,8 @@ namespace Burton.Lib.Characters
 
                 var SpellMaterial = new SpellMaterial(Data_Name, Data_Notes, Cost, Data_Consumed);
 
+                SpellMaterial.ID = AddItem<SpellMaterial>(SpellMaterial);
+
                 foreach (var Name in Data_Spells)
                 {
                     var Spell = SpellManager.Instance.Find<Spell>(x => x.Name == Name).SingleOrDefault();
@@ -250,12 +252,10 @@ namespace Burton.Lib.Characters
                         continue;
 
                     Spell.SpellMaterials.Add(SpellMaterial);
-                    
+                    SpellManager.Instance.UpdateItem<Spell>(Spell);
                 }
 
                 SpellManager.Instance.SaveChanges();
-
-                AddItem<SpellMaterial>(SpellMaterial);
             }
         }
 

@@ -50,7 +50,7 @@
     <Compile Include="Item\Tool.cs" />
     <Compile Include="Item\Trade_Good.cs" />
     <Compile Include="Item\Weapon.cs" />
-    <Compile Include="Magic.cs" />
+    <Compile Include="Spell.cs" />
     <Compile Include="Quirk.cs" />
     <Compile Include="Race.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

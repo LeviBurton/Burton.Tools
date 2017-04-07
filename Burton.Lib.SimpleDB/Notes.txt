@@ -1,0 +1,25 @@
+﻿Timing tests -- object cloning
+
+Release mode NClone
+Iterations	Time
+1000000		35.9519416
+1000000		36.7119419
+1000000		11.6582374
+1000000		11.2802587
+1000000		11.3219843
+
+My way
+Find single spell
+1000000   28.0325791
+1000000   26.4719903
+
+All Spells
+1000000   36.394124
+1000000   35.8212978
+
+v 47
+s 48
+m 49
+51 conc
+52 dur
+45 casting time
