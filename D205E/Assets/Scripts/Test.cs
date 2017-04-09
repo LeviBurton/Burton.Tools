@@ -18,9 +18,9 @@ public class Test : MonoBehaviour
         EvilCleric.PropertyChanged += OnCharacterPropertyChanged;
         EvilCleric.Level = 1;
 
-        // Lawful Evil cleric.
-        EvilCleric.AlignmentAttitude.Type = EAlignmentAttitude.Lawful;
-        EvilCleric.AlignmentMorality.Type = EAlignmentMorality.Evil;
+        //// Lawful Evil cleric.
+        //EvilCleric.AlignmentAttitude.Type = EAlignmentAttitude.Lawful;
+        //EvilCleric.AlignmentMorality.Type = EAlignmentMorality.Evil;
      
         // listen for update to our abilities.
         EvilCleric.Abilities.ForEach(x => { x.PropertyChanged += OnAbilityScoreChanged; });
@@ -28,7 +28,7 @@ public class Test : MonoBehaviour
         // Roll the characters abilities
         EvilCleric.RollAbilities();
 
-        Debug.LogFormat("Alignment: {0}{1} ({2} {3})", EvilCleric.AlignmentAttitude.ShortName, EvilCleric.AlignmentMorality.ShortName, EvilCleric.AlignmentAttitude.Name, EvilCleric.AlignmentMorality.Name);
+        //Debug.LogFormat("Alignment: {0}{1} ({2} {3})", EvilCleric.AlignmentAttitude.ShortName, EvilCleric.AlignmentMorality.ShortName, EvilCleric.AlignmentAttitude.Name, EvilCleric.AlignmentMorality.Name);
 
         EvilCleric.Equipment.Add(ItemManager.Instance.Find<Weapon>(x => x.Name == "Warhammer").SingleOrDefault());
 

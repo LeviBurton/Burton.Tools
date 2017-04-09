@@ -94,8 +94,19 @@ public class SpellListWindow : EditorWindow
         EditorWindow.GetWindow(typeof(SpellListWindow));
     }
 
+    //[MenuItem("D20/Import Spells")]
+    //public static void ShowWindow()
+    //{
+       
+    //        //SpellManager.Instance.Import("Spells.tsv.txt");
+    //        //SpellManager.Instance.SaveChanges();
+
+     
+    //}
     void OnGUI()
     {
+
+      
         var Items = SpellManager.Instance.Find<Spell>().OrderBy(x => x.MagicSchool).ToList();
 
         GUILayout.BeginHorizontal();

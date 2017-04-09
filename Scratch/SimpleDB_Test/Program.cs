@@ -54,11 +54,11 @@ namespace SimpleDB_Test
 
         static void Test1()
         {
-            //SpellManager.Instance.Import("Spells.tsv.txt");
-            //SpellManager.Instance.SaveChanges();
+            SpellManager.Instance.Import("Spells.tsv.txt");
+            SpellManager.Instance.SaveChanges();
 
-            //ItemManager.Instance.ImportSpellComponents("SpellComponents.tsv");
-            //ItemManager.Instance.SaveChanges();
+            ItemManager.Instance.ImportSpellComponents("SpellComponents.tsv");
+            ItemManager.Instance.SaveChanges();
 
             var ChainLightning = SpellManager.Instance.Find<Spell>(x => x.Name == "Chain Lightning").SingleOrDefault();
 
@@ -84,8 +84,8 @@ namespace SimpleDB_Test
 
         static void Main(string[] args)
         {
-            RunTimingTests();
-            //Test1();
+            //RunTimingTests();
+            Test1();
         }     
     }
 }
