@@ -15,18 +15,19 @@ namespace SimpleDB_Test
     {
         static void RunTest()
         {
-            var Iterations = 1000000;
+            var Iterations = 1000000/20;
 
             // Fire up the db.
             ItemManager.Instance.Refresh();
 
- 
             var Stopwatch = new Stopwatch();
             Stopwatch.Start();
 
+            List<Spell> Items = null;
+
             for (int i = 0; i < Iterations; i++)
             {
-                var Test = SpellManager.Instance.Find<Spell>().ToList();
+                Items = SpellManager.Instance.Find<Spell>().ToList();
                 // var Test = ItemManager.Instance.Find<Spell>(x => x.Name.Contains("B")).ToList();
                 //   var Test = ItemManager.Instance.Find<Spell>().ToList();
                 //var SingleItem = SpellManager.Instance.Find<Spell>(x => x.Name.Contains("Bless")).SingleOrDefault();
@@ -34,13 +35,11 @@ namespace SimpleDB_Test
 
             Stopwatch.Stop();
 
-            Console.WriteLine(string.Format("{0,-9} {1}", Iterations, Stopwatch.Elapsed.TotalSeconds));
+            Console.WriteLine(string.Format("{0,-9} {1,-12} {2,-4}", Iterations, Stopwatch.Elapsed.TotalSeconds, Items.Count ));
         }
 
         static void RunTimingTests()
         {
-          
-
             ConsoleKey Key;
 
             do
@@ -85,8 +84,8 @@ namespace SimpleDB_Test
 
         static void Main(string[] args)
         {
-            //RunTimingTests();
-            Test1();
+            RunTimingTests();
+            //Test1();
         }     
     }
 }

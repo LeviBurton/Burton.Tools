@@ -92,7 +92,7 @@ namespace Burton.Lib.Characters
     [Serializable]
     public class Spell : DbItem
     {
-        public ESpellSchoolType MagicSchool { get; set; }
+        public ESpellSchoolType MagicSchool;
         public int Level;
         public int CastingTime;
         public bool bConcentration;
@@ -301,30 +301,29 @@ namespace Burton.Lib.Characters
 
                 var Conc = Data_Conc == "1";
 
-                ECastingComponentType Component = new ECastingComponentType();
-                List<ECastingComponentType> SpellComponents = new List<ECastingComponentType>();
+                List<ECastingComponentType> CastingComps = new List<ECastingComponentType>();
 
                 if (Data_V == "1")
                 {
-                    SpellComponents.Add(ECastingComponentType.Verbal);
+                    CastingComps.Add(ECastingComponentType.Verbal);
                 }
 
                 if (Data_S == "1")
                 {
-                    SpellComponents.Add(ECastingComponentType.Somatic);
+                    CastingComps.Add(ECastingComponentType.Somatic);
                 }
 
                 var SpellMaterials = new List<SpellMaterial>();
 
                 if (Data_M == "1")
                 {
-                    SpellComponents.Add(ECastingComponentType.Material);
+                    CastingComps.Add(ECastingComponentType.Material);
 
                     SpellMaterials = ItemManager.Instance.Find<SpellMaterial>(x => x.SubType == EItemSubType.Spell_Material && x.Name == Data_Name).ToList();
                 }
 
 
-                var Spell = new Spell(School, ClassTypes, Data_Name, Data_Level, Range, "", SpellComponents, SpellMaterials, Conc, Data_Duration);
+                var Spell = new Spell(School, ClassTypes, Data_Name, Data_Level, Range, "", CastingComps, SpellMaterials, Conc, Data_Duration);
 
                 AddItem<Spell>(Spell);
 
@@ -368,6 +367,7 @@ namespace Burton.Lib.Characters
             DB.Items[Copy.ID - 1] = Copy;
         }
 
+        // Fixme: fix this.
         public void DeleteItem(int ID)
         {
             DB.Items[ID - 1] = null;

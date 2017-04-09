@@ -15,7 +15,6 @@ namespace Burton.Lib.Characters
         Legendary
     }
 
-    // We need a SimpleDB and Type for each of these.
     public enum EItemType
     {
         Armor,
@@ -90,6 +89,7 @@ namespace Burton.Lib.Characters
         {
             get { return SubType.ToString().Replace("_", " "); }
         }
+
         public List<Ability> Require_Abilities;
         public List<Modifier> Modifiers;
 

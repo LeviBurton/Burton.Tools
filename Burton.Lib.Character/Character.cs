@@ -8,58 +8,52 @@ using Burton.Lib.Dice;
 
 namespace Burton.Lib.Characters
 {
-    public enum EAlignmentMorality
+    public enum ECreatureSizeType
+    {
+        Tiny,
+        Small,
+        Medium,
+        Large,
+        Huge,
+        Gargantuan
+    }
+    public static class CreatureSize
+    {
+        public static float GetSpace(ECreatureSizeType Type)
+        {
+            float Size = 0.0f;
+
+            if (Type == ECreatureSizeType.Tiny)
+                return 2.5f;
+            else if (Type == ECreatureSizeType.Small)
+                return 5;
+            else if (Type == ECreatureSizeType.Medium)
+                return 5;
+            else if (Type == ECreatureSizeType.Large)
+                return 10;
+            else if (Type == ECreatureSizeType.Huge)
+                return 15;
+            else if (Type == ECreatureSizeType.Gargantuan)
+                return 20;
+
+            return Size;
+        }
+    }
+
+    public enum EAlignmentMoralityType
     {
         Good,
         Neutral,
         Evil
     }
-    public class AlignmentMorality
-    {
-        public EAlignmentMorality Type;
-        public string Name
-        {
-            get
-            {
-                return Type.ToString();
-            }
-        }
-
-        public string ShortName
-        {
-            get
-            {
-                return Type.ToString().Substring(0, 1).ToUpper();
-            }
-        }
-    }
-
-    public enum EAlignmentAttitude
+  
+    public enum EAlignmentAttitudeType
     {
         Lawful,
         Neutral,
         Chaotic
     }
-    public class AlignmentAttitude
-    {
-        public EAlignmentAttitude Type;
-        public string Name
-        {
-            get
-            {
-                return Type.ToString();
-            }
-        }
-
-        public string ShortName
-        {
-            get
-            {
-                return Type.ToString().Substring(0, 1).ToUpper();
-            }
-        }
-    }
-
+  
     [Serializable]
     public class Character : INotifyPropertyChanged
     {
@@ -99,8 +93,8 @@ namespace Burton.Lib.Characters
 
         public Class Class { get; set; }
         public List<Ability> Abilities;
-        public AlignmentMorality AlignmentMorality;
-        public AlignmentAttitude AlignmentAttitude;
+        public EAlignmentMoralityType AlignmentMoralityType;
+        public EAlignmentAttitudeType AlignmentAttitudeType;
 
         // Their current equipment (weapons, armor, etc -- everything)
         public List<Item> Equipment;
@@ -114,6 +108,13 @@ namespace Burton.Lib.Characters
             }
         }
 
+        public int Speed
+        {
+            get
+            {
+                return 0;
+            }
+        }
         public Armor EquippedArmor;
 
         public Character(Class CharacterClass)
@@ -123,8 +124,8 @@ namespace Burton.Lib.Characters
 
             Class = CharacterClass;
             Level = 1;
-            AlignmentAttitude = new AlignmentAttitude();
-            AlignmentMorality = new AlignmentMorality();
+            AlignmentAttitudeType = EAlignmentAttitudeType.Lawful;
+            AlignmentMoralityType = EAlignmentMoralityType.Good;
 
             var AbilityTypes = Enum.GetValues(typeof(EAbility));
             foreach (int AbilityType in AbilityTypes)
@@ -167,6 +168,8 @@ namespace Burton.Lib.Characters
             }
         }
 
+        // consider turning this into an interface called IAbility.
+        // things that need abilities then implement that interface
         public Ability GetAbility(EAbility AbilityType)
         {
             return Abilities[(int)AbilityType];
