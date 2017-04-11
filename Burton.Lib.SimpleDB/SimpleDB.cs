@@ -85,24 +85,35 @@ namespace Burton.Lib
             Items[ID - 1] = null;
         }
 
+
         public void Load(string FileName)
         {
             using (Stream InStream = File.Open(FileName, FileMode.Open))
             {
-                var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                NextValidID = (int)BinaryFormatter.Deserialize(InStream);
-                Items = (List<DbType>)BinaryFormatter.Deserialize(InStream);
+                Load(InStream);
             }
+        }
+
+        public void Load(Stream InStream)
+        {
+            var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            NextValidID = (int)BinaryFormatter.Deserialize(InStream);
+            Items = (List<DbType>)BinaryFormatter.Deserialize(InStream);
         }
 
         public void Save(string FileName)
         {
             using (Stream OutStream = File.Open(FileName, FileMode.Create))
             {
-                var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                BinaryFormatter.Serialize(OutStream, NextValidID);
-                BinaryFormatter.Serialize(OutStream, Items);
+                Save(OutStream);
             }
+        }
+
+        public void Save(Stream OutStream)
+        {
+            var BinaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            BinaryFormatter.Serialize(OutStream, NextValidID);
+            BinaryFormatter.Serialize(OutStream, Items);
         }
     }
 }

@@ -8,6 +8,5 @@ namespace Burton.Lib.Characters.Interfaces
     interface IMoveable
     {
         int Speed { get; set; }
-
     }
 }

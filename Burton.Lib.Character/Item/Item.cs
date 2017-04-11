@@ -142,7 +142,7 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
-        public string FileName = "Items.sdb";
+        public string FileName = "Items.bytes";
 
         // we pretty much just wrap access to the ItemDB
         private ItemDB DB;
@@ -155,17 +155,43 @@ namespace Burton.Lib.Characters
             if (bDoBootstrap)
             {
                 Bootstrap();
-                SaveChanges();
                 return;
             }
-
-            Refresh();
         }
 
-    
         public void SaveChanges()
         {
             DB.Save(FileName);
+        }
+
+        public void SaveChanges(string FilePath)
+        {
+            DB.Save(FilePath);
+        }
+
+        public void SaveChanges(Stream OutStream)
+        {
+            DB.Save(OutStream);
+        }
+
+        public void Load(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(Stream InStream)
+        {
+            DB.Load(InStream);
+        }
+
+        public void Load()
+        {
+            DB.Load(FileName);
         }
 
         public void Refresh()
@@ -209,7 +235,6 @@ namespace Burton.Lib.Characters
         {
             AddBaseArmors();
             AddBaseWeapons();
-            SaveChanges();
         }
 
         public void ImportSpellComponents(string FileName)

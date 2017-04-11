@@ -164,7 +164,7 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
-        public string FileName = "Spells.sdb";
+        public string FileName = "Spells.bytes";
         private SpellDB DB;
         private bool bDoBootstrap = false;
 
@@ -178,8 +178,6 @@ namespace Burton.Lib.Characters
                 SaveChanges();
                 return;
             }
-
-            Refresh();
         }
 
         public void Import(string FileName)
@@ -341,6 +339,36 @@ namespace Burton.Lib.Characters
         public void SaveChanges()
         {
             DB.Save(FileName);
+        }
+
+        public void SaveChanges(string FilePath)
+        {
+            DB.Save(FilePath);
+        }
+
+        public void SaveChanges(Stream OutStream)
+        {
+            DB.Save(OutStream);
+        }
+
+        public void Load(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(Stream InStream)
+        {
+            DB.Load(InStream);
+        }
+
+        public void Load()
+        {
+            DB.Load(FileName);
         }
 
         public void Refresh()

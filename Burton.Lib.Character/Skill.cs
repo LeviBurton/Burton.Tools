@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -29,7 +30,7 @@ namespace Burton.Lib.Characters.Skills
         {
             this.Name = Name;
             this.Description = Description;
-            this.Ability = AbilityModifier;
+            this.Ability = AbilityModifier; 
         }
     }
 
@@ -60,22 +61,52 @@ namespace Burton.Lib.Characters.Skills
             if (bDoBootstrap)
             {
                 Bootstrap();
-                SaveChanges();
+                //SaveChanges(); 
                 return;
             }
 
-            Refresh();
+            //Refresh();
         }
-
         public void SaveChanges()
         {
             DB.Save(FileName);
+        }
+
+        public void SaveChanges(string FilePath)
+        {
+            DB.Save(FilePath);
+        }
+
+        public void SaveChanges(Stream OutStream)
+        {
+            DB.Save(OutStream);
+        }
+
+        public void Load(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(Stream InStream)
+        {
+            DB.Load(InStream);
+        }
+
+        public void Load()
+        {
+            DB.Load(FileName);
         }
 
         public void Refresh()
         {
             DB.Load(FileName);
         }
+
 
         public int AddItem<T>(T Item) where T : DbItem
         {
