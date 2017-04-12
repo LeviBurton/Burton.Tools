@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -14,7 +15,6 @@ namespace Burton.Lib.Characters
         Legendary
     }
 
-    // We need a SimpleDB and Type for each of these.
     public enum EItemType
     {
         Armor,
@@ -36,7 +36,8 @@ namespace Burton.Lib.Characters
         Simple_Melee,
         Simple_Ranged,
         Martial_Melee,
-        Martial_Ranged
+        Martial_Ranged,
+        Spell_Material
     }
 
     public enum EModifierType
@@ -88,6 +89,7 @@ namespace Burton.Lib.Characters
         {
             get { return SubType.ToString().Replace("_", " "); }
         }
+
         public List<Ability> Require_Abilities;
         public List<Modifier> Modifiers;
 
@@ -140,100 +142,92 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
-        public string FileName = "Items.sdb";
+        public string FileName = "Items.bytes";
 
         // we pretty much just wrap access to the ItemDB
-        private ItemDB ItemDB;
+        private ItemDB DB;
         private bool bDoBootstrap = false;
 
         public ItemManager()
         {
-            ItemDB = new ItemDB();
+            DB = ItemDB.Instance;
 
             if (bDoBootstrap)
             {
                 Bootstrap();
-                SaveChanges();
                 return;
             }
-
-            Refresh();
         }
 
         public void SaveChanges()
         {
-            ItemDB.Save(FileName);
+            DB.Save(FileName);
+        }
+
+        public void SaveChanges(string FilePath)
+        {
+            DB.Save(FilePath);
+        }
+
+        public void SaveChanges(Stream OutStream)
+        {
+            DB.Save(OutStream);
+        }
+
+        public void Load(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(Stream InStream)
+        {
+            DB.Load(InStream);
+        }
+
+        public void Load()
+        {
+            DB.Load(FileName);
         }
 
         public void Refresh()
         {
-            ItemDB.Load(FileName);
+            DB.Load(FileName);
+        }
+
+        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
+        {
+            return DB.Find(Predicate);
         }
 
         // Create a copy of Item and a add it to the ItemDB
-        public int AddItem<T>(T Item)
+        public int AddItem<T>(T Item) where T : DbItem
         {
-            var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+           // var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var NewItem = (Item)Item.Clone();
 
             NewItem.DateCreated = DateTime.Now;
             NewItem.DateModified = NewItem.DateCreated;
 
-            return ItemDB.Add((Item)NewItem);
+            return DB.Add((Item)NewItem);
         }
 
         public void UpdateItem<T>(T Item) where T : DbItem
         {
-            var Copy = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var Copy = (Item)Item.Clone();
 
             Copy.DateModified = DateTime.Now;
 
-            ItemDB.Items[Copy.ID - 1] = Copy;
+            DB.Items[Copy.ID - 1] = Copy;
         }
 
         public void DeleteItem(int ID)
         {
-            ItemDB.Items[ID - 1] = null;
-        }
-
-        // Get a copy of the Item by ID
-        public T GetItemCopy<T>(int ID)
-        {
-            Item Item = null;
-
-            try
-            {
-                Item = ItemDB.Get(ID);
-            }
-            catch (Exception Ex)
-            {
-                return default(T);
-            }
-
-            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-        }
-
-        // Returns a list containing copies of the items in the ItemDB
-        public List<Item> GetItemsCopy()
-        {
-            List<Item> Result = new List<Item>();
-
-            foreach (var Item in ItemDB.Items.Where(x => x != null))
-            {
-                // There has to be a generic alternative to doing this.
-                // We basically want to call the class constructor for typeof(Item), passing in the Item so
-                // that it calls the copy constructor.
-
-                if (Item.Type == EItemType.Weapon)
-                {
-                    Result.Add(new Weapon((Weapon)Item));
-                }
-                else if (Item.Type == EItemType.Armor)
-                {
-                    Result.Add(new Armor((Armor)Item));
-                }
-            }
-
-            return Result;
+            DB.Items[ID - 1] = null;
         }
 
         // Some defaults to play with
@@ -241,7 +235,53 @@ namespace Burton.Lib.Characters
         {
             AddBaseArmors();
             AddBaseWeapons();
-            SaveChanges();
+        }
+
+        public void ImportSpellComponents(string FileName)
+        {
+            var Data = File.ReadAllLines(FileName);
+            Data[0] = null;
+
+            foreach (var Line in Data)
+            {
+                if (string.IsNullOrEmpty(Line))
+                    continue;
+
+                var Fields = Line.Split(new char[] { '\t' });
+                var Data_Name = Fields[0];
+
+                var Data_Value = Fields[1];
+
+                Data_Value = Data_Value.Replace("-", "").Replace(",", "").Replace("gp", "").Trim();
+                int Cost = 0;
+
+                if (!string.IsNullOrEmpty(Data_Value) && !Int32.TryParse(Data_Value, out Cost))
+                {
+                    continue;
+                }
+
+                var Data_Spells = Fields[2].Split(new char[] { ',' });
+
+                var Data_Consumed = Fields[3] == "N" ? false : true;
+                var Data_Notes = Fields[4];
+
+                var SpellMaterial = new SpellMaterial(Data_Name, Data_Notes, Cost, Data_Consumed);
+
+                SpellMaterial.ID = AddItem<SpellMaterial>(SpellMaterial);
+
+                foreach (var Name in Data_Spells)
+                {
+                    var Spell = SpellManager.Instance.Find<Spell>(x => x.Name == Name).SingleOrDefault();
+
+                    if (Spell == null)
+                        continue;
+
+                    Spell.SpellMaterials.Add(SpellMaterial);
+                    SpellManager.Instance.UpdateItem<Spell>(Spell);
+                }
+
+                SpellManager.Instance.SaveChanges();
+            }
         }
 
         public void AddBaseWeapons()
@@ -367,8 +407,22 @@ namespace Burton.Lib.Characters
             AddItem<Armor>(Armor);
         }
     }
+
     public class ItemDB : SimpleDB<Item>
     {
+        private static ItemDB _Instance;
+
+        public static ItemDB Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new ItemDB();
+
+                return _Instance;
+            }
+        }
+
         public ItemDB()
         {
             InitBase();

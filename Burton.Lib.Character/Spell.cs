@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Burton.Lib.Characters
 {
-    public enum EMagicSchoolType
+    public enum ESpellSchoolType
     {
         Abjuration,
         Conjuration,
@@ -18,24 +18,30 @@ namespace Burton.Lib.Characters
         Transmutation
     }
 
-    public class SpellMaterial
+    [Serializable]
+    public class SpellMaterial : Item
     {
-        public string Name;
-        bool bConsumeOnUse;
+        bool bConsumeOnUse = false;
+
+        public SpellMaterial(string Name, string Description, int Cost, bool ConsumeOnUse)
+            :base(EItemType.Special_Material, EItemSubType.Spell_Material, EItemRarity.Common, Name, Description, Cost, 0, null)
+        {
+            this.bConsumeOnUse = ConsumeOnUse;
+        }
+
+        public override DbItem Clone()
+        {
+            return (DbItem)this.MemberwiseClone();
+        }
     }
 
-    public enum ESpellComponentType
+    public enum ECastingComponentType
     {
         Verbal,
         Somatic,
         Material
     }
-
-    public class SpellComponent
-    {
-        public ESpellComponentType SpellComponentType;
-        public List<SpellMaterial> Materials;
-    }
+  
 
     public enum ESpellRangeType
     {
@@ -61,6 +67,8 @@ namespace Burton.Lib.Characters
         public ESpellSelfRangeType SelfRangeType;
         public int Range;
 
+        public SpellRange() {}
+
         public SpellRange(ESpellRangeType RangeType, ESpellSelfRangeType SelfRangeType, int Range)
         {
             this.RangeType = RangeType;
@@ -68,26 +76,44 @@ namespace Burton.Lib.Characters
             this.Range = Range;
         }
 
-        public SpellRange()
+        public SpellRange(SpellRange Other)
         {
+            this.Range = Other.Range;
+            this.SelfRangeType = Other.SelfRangeType;
+            this.RangeType = Other.RangeType;
+        }
+
+        public SpellRange Clone()
+        {
+            return (SpellRange)this.MemberwiseClone();
         }
     }
 
     [Serializable]
     public class Spell : DbItem
     {
-        public EMagicSchoolType MagicSchool { get; set; }
-        public List<EClassType> Classes;
-        public SpellRange SpellRange;
-
+        public ESpellSchoolType MagicSchool;
         public int Level;
         public int CastingTime;
-    
         public bool bConcentration;
-
         public string Description;
 
-        public Spell(EMagicSchoolType MagicSchool, List<EClassType> ClassTypes, string Name, int Level, SpellRange Range, string Description)
+        public List<EClassType> Classes;
+        public List<ECastingComponentType> CastingComponentTypes;
+        public List<SpellMaterial> SpellMaterials;
+
+        public SpellRange SpellRange;
+
+        public Spell(ESpellSchoolType MagicSchool, 
+                     List<EClassType> ClassTypes, 
+                     string Name, 
+                     int Level, 
+                     SpellRange Range, 
+                     string Description, 
+                     List<ECastingComponentType> SpellCastingComponentType,
+                     List<SpellMaterial> SpellMaterials,
+                     bool bConcentration,
+                     string Duration)
         {
             this.MagicSchool = MagicSchool;
             this.Classes = ClassTypes;
@@ -95,18 +121,30 @@ namespace Burton.Lib.Characters
             this.Level = Level;
             this.SpellRange = Range;
             this.Description = Description;
+            this.CastingComponentTypes = SpellCastingComponentType;
+            this.bConcentration = bConcentration;
+            this.SpellMaterials = SpellMaterials;
         }
 
-
-        public Spell(Spell Other)
+        public override DbItem Clone()
         {
-            ID = Other.ID;
-            MagicSchool = Other.MagicSchool;
-            Classes = Other.Classes;
-            Name = Other.Name;
-            Level = Other.Level;
-            Description = Other.Description;
-            SpellRange = Other.SpellRange;
+            var Other = (Spell)this.MemberwiseClone();
+            Other.Classes = new List<EClassType>(this.Classes);
+            Other.SpellRange = new SpellRange(this.SpellRange);
+            Other.CastingComponentTypes = new List<ECastingComponentType>();
+            Other.SpellMaterials = new List<SpellMaterial>();
+            
+            foreach (var m in this.SpellMaterials)
+            {
+                Other.SpellMaterials.Add(m);
+            }
+
+            foreach (var c in this.CastingComponentTypes)
+            {
+                Other.CastingComponentTypes.Add(c);
+            }
+
+            return (DbItem) Other;
         }
     }
 
@@ -126,13 +164,13 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
-        public string FileName = "Spells.sdb";
+        public string FileName = "Spells.bytes";
         private SpellDB DB;
         private bool bDoBootstrap = false;
 
         public SpellManager()
         {
-            DB = new SpellDB();
+            DB = SpellDB.Instance;
 
             if (bDoBootstrap)
             {
@@ -140,8 +178,6 @@ namespace Burton.Lib.Characters
                 SaveChanges();
                 return;
             }
-
-            Refresh();
         }
 
         public void Import(string FileName)
@@ -158,9 +194,23 @@ namespace Burton.Lib.Characters
                     continue;
 
                 var Fields = Line.Split(new char[] { '\t' });
+             //   continue;
 
                 if (Fields[57] == "")
                     continue;
+
+                // v 47
+                // s 48
+                // m 49
+                // 51 conc
+                // 52 dur
+
+                var Data_V = Fields[47];
+                var Data_S = Fields[48];
+                var Data_M = Fields[49];
+
+                var Data_Conc = Fields[51];
+                var Data_Dur = Fields[52];
 
                 var Data_School = Fields[42];
                 var Data_Name = Fields[39];
@@ -245,9 +295,34 @@ namespace Burton.Lib.Characters
                 if (Data_Wizard != "")
                     ClassTypes.Add(EClassType.Wizard);
 
-                var School = (EMagicSchoolType) Enum.Parse(typeof(EMagicSchoolType), Data_School);
-              
-                var Spell = new Spell(School, ClassTypes, Data_Name, Data_Level, Range, "");
+                var School = (ESpellSchoolType) Enum.Parse(typeof(ESpellSchoolType), Data_School);
+
+                var Conc = Data_Conc == "1";
+
+                List<ECastingComponentType> CastingComps = new List<ECastingComponentType>();
+
+                if (Data_V == "1")
+                {
+                    CastingComps.Add(ECastingComponentType.Verbal);
+                }
+
+                if (Data_S == "1")
+                {
+                    CastingComps.Add(ECastingComponentType.Somatic);
+                }
+
+                var SpellMaterials = new List<SpellMaterial>();
+
+                if (Data_M == "1")
+                {
+                    CastingComps.Add(ECastingComponentType.Material);
+
+                    SpellMaterials = ItemManager.Instance.Find<SpellMaterial>(x => x.SubType == EItemSubType.Spell_Material && x.Name == Data_Name).ToList();
+                }
+
+
+                var Spell = new Spell(School, ClassTypes, Data_Name, Data_Level, Range, "", CastingComps, SpellMaterials, Conc, Data_Duration);
+
                 AddItem<Spell>(Spell);
 
                 Console.WriteLine(string.Format("{0,-30} {1,-5} {2,-20}", Fields[39], Fields[41], Fields[42]));
@@ -256,9 +331,44 @@ namespace Burton.Lib.Characters
             SaveChanges();
         }
 
+        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
+        {
+            return DB.Find(Predicate);
+        }
+
         public void SaveChanges()
         {
             DB.Save(FileName);
+        }
+
+        public void SaveChanges(string FilePath)
+        {
+            DB.Save(FilePath);
+        }
+
+        public void SaveChanges(Stream OutStream)
+        {
+            DB.Save(OutStream);
+        }
+
+        public void Load(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(Stream InStream)
+        {
+            DB.Load(InStream);
+        }
+
+        public void Load()
+        {
+            DB.Load(FileName);
         }
 
         public void Refresh()
@@ -268,7 +378,7 @@ namespace Burton.Lib.Characters
 
         public int AddItem<T>(T Item) where T : DbItem
         {
-            var NewItem = (Spell)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var NewItem = (Spell)Item.Clone();
 
             NewItem.DateCreated = DateTime.Now;
             NewItem.DateModified = NewItem.DateCreated;
@@ -278,46 +388,17 @@ namespace Burton.Lib.Characters
 
         public void UpdateItem<T>(T Item) where T : DbItem
         {
-            var Copy = (Spell)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var Copy = (Spell)Item.Clone();
 
             Copy.DateModified = DateTime.Now;
 
             DB.Items[Copy.ID - 1] = Copy;
         }
 
+        // Fixme: fix this.
         public void DeleteItem(int ID)
         {
             DB.Items[ID - 1] = null;
-        }
-
-        // Get a copy of the Item by ID
-        public T GetItemCopy<T>(int ID)
-        {
-            Spell Item = null;
-
-            try
-            {
-                Item = DB.Get(ID);
-            }
-            catch (Exception Ex)
-            {
-                return default(T);
-            }
-
-            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-        }
-
-        // Returns a list containing copies of the items in the ItemDB
-        public List<Spell> GetItemsCopy()
-        {
-            List<Spell> Result = new List<Spell>();
-
-            foreach (var Item in DB.Items.Where(x => x != null))
-            {
-                Result.Add(new Spell(Item));
-            }
-
-            return Result;
         }
 
         // Some defaults to play with

@@ -7,55 +7,60 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace SimpleDB_Test
 {
     class Program
     {
-
-        static void Main(string[] args)
+        static void RunTest()
         {
-            //AbilityModifierTable.InitTable();
-            DifficultyClassesTable.InitTable();
+            var Iterations = 1000000/20;
 
-            // All dice rolls go through the single roller instance.
-            // We can pass a seed to guaruntee the same results on every roll.
-            // DiceRoller.Instance.SetSeed(100);
+            // Fire up the db.
+            ItemManager.Instance.Refresh();
 
-            var Char = new Character(new Cleric());
+            var Stopwatch = new Stopwatch();
+            Stopwatch.Start();
 
-           // SpellManager.Import("spells.tsv.txt");
+            List<Spell> Items = null;
 
-            var Skills = SkillManager.Instance.GetItemsCopy();
-     
-
-            Console.WriteLine("Spells");
-            var Spells = SpellManager.Instance.GetItemsCopy().AsQueryable();     
-            Spells = Spells.Where(spell => spell.MagicSchool == EMagicSchoolType.Divination);
-            Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Cleric));
-            Spells = Spells.Where(spell => spell.Classes.Contains(EClassType.Paladin));
-            Spells = Spells.Where(spell => spell.SpellRange.RangeType == ESpellRangeType.Self);
-            Spells = Spells.OrderBy(spell => spell.Level);
-            var FilteredSpells = Spells.ToList();
-
-            foreach (var Spell in Spells)
+            for (int i = 0; i < Iterations; i++)
             {
-                Console.WriteLine(string.Format("{0,-30} {1,-6} {2,-20} {3,-10}", Spell.Name, Spell.Level, Spell.MagicSchool.ToString(), Spell.SpellRange.RangeType.ToString()));
+                Items = SpellManager.Instance.Find<Spell>().ToList();
+                // var Test = ItemManager.Instance.Find<Spell>(x => x.Name.Contains("B")).ToList();
+                //   var Test = ItemManager.Instance.Find<Spell>().ToList();
+                //var SingleItem = SpellManager.Instance.Find<Spell>(x => x.Name.Contains("Bless")).SingleOrDefault();
             }
-            Console.WriteLine();
 
-            Console.WriteLine("Skills");
-            foreach (var Ability in Enum.GetNames(typeof(EAbility)))
+            Stopwatch.Stop();
+
+            Console.WriteLine(string.Format("{0,-9} {1,-12} {2,-4}", Iterations, Stopwatch.Elapsed.TotalSeconds, Items.Count ));
+        }
+
+        static void RunTimingTests()
+        {
+            ConsoleKey Key;
+
+            do
             {
-                Console.WriteLine(Ability);
-                foreach (var Skill in SkillManager.Instance.GetItemsCopy().Where(x => x.Ability == (EAbility)Enum.Parse(typeof(EAbility), Ability)))
+                Key = Console.ReadKey(true).Key;
+                if (Key == ConsoleKey.R)
                 {
-                    Console.WriteLine("-- {0}", Skill.Name);
+                    RunTest();
                 }
-                Console.WriteLine();
-            }
+            } while (Key != ConsoleKey.Escape);
+        }
 
-            Console.WriteLine();
+        static void Test1()
+        {
+            SpellManager.Instance.Import("Spells.tsv.txt");
+            SpellManager.Instance.SaveChanges();
+
+            ItemManager.Instance.ImportSpellComponents("SpellComponents.tsv");
+            ItemManager.Instance.SaveChanges();
+
+            var ChainLightning = SpellManager.Instance.Find<Spell>(x => x.Name == "Chain Lightning").SingleOrDefault();
 
             ConsoleKey Key;
 
@@ -65,39 +70,22 @@ namespace SimpleDB_Test
 
                 if (Key == ConsoleKey.T)
                 {
-                    var Weapon = ItemManager.Instance.GetItemCopy<Weapon>(11);
+                    var Weapon = ItemManager.Instance.Find<Weapon>(x => x.ID == 11).SingleOrDefault();
                     Weapon.Description = "This should get saved to disk";
                     ItemManager.Instance.UpdateItem<Weapon>(Weapon);
                     ItemManager.Instance.SaveChanges();
                 }
                 if (Key == ConsoleKey.R)
                 {
-                    Char.RollAbilities();
 
-                    int avg = 0;
-
-                    var AllItems = ItemManager.Instance.GetItemsCopy();
-                    Weapon LongBow = ItemManager.Instance.GetItemCopy<Weapon>(11);
-                    Armor LeatherArmor = ItemManager.Instance.GetItemCopy<Armor>(1);
-
-                    foreach (var Item in AllItems)
-                    {
-                        Console.WriteLine("{0} {1}", Item.ID, Item.Description);
-                    }
-
-                    foreach (var CharAbility in Char.Abilities)
-                    {
-                        avg += CharAbility.CurrentValue;
-
-                        Console.WriteLine("{0}: {1} ({2}) ", CharAbility.ShortName, CharAbility.CurrentValue, CharAbility.GetModifier());
-                    }
-
-                    avg /= 6;
-                    Console.WriteLine("AVG: {0}", avg);
-
-                    Console.WriteLine();
                 }
             } while (Key != ConsoleKey.Escape);
         }
+
+        static void Main(string[] args)
+        {
+            //RunTimingTests();
+            Test1();
+        }     
     }
 }

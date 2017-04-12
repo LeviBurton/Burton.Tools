@@ -95,5 +95,20 @@ namespace Burton.Lib.Characters
 
             this.WeaponProperties = new List<EWeaponProperty>(Other.WeaponProperties);
         }
+
+        public override DbItem Clone()
+        {
+            Weapon Other = (Weapon)this.MemberwiseClone();
+            Other.DamageTypes = new List<DamageType>();
+
+            foreach (var Type in this.DamageTypes)
+            {
+                Other.DamageTypes.Add(new DamageType(Type));
+            }
+
+            Other.WeaponProperties = new List<EWeaponProperty>(this.WeaponProperties);
+
+            return (DbItem) Other;
+        }
     }
 }

@@ -139,15 +139,18 @@ namespace Expression_Test
         {
             var Result = new List<T>();
 
+           
             if (Predicate == null)
             {
+                // All
                 Items.OfType<T>().ToList().ForEach(x => Result.Add((T)x.DeepCopy()));
-
-                return Result.AsEnumerable();
             }
-
-            // Copy the items.
-            Items.OfType<T>().Where(Predicate).ToList().ForEach(x => Result.Add((T)x.DeepCopy()));
+            else
+            {
+                // Predicate
+                Items.OfType<T>().Where(Predicate).ToList().ForEach(x => Result.Add((T)x.DeepCopy()));
+            }
+    
         
             return Result.AsEnumerable();
         }
@@ -168,12 +171,13 @@ namespace Expression_Test
             // Find all items that are at least BaseItem (but if it's a subclass, that is preserved)
             var AllItems = db.Find<BaseItem>();
 
+            // Test to make sure they are copies.
             AllItems.ElementAt(0).Name = "Foobar";
             AllItems.ElementAt(0).RefType.Name = "NO";
 
+            // Query tests.
             var SuperItems = db.Find<SuperItem>(x => x.ItemSuperType == EItemSuperType.SuperType1).SingleOrDefault();
             var BaseItem = db.Find<BaseItem>(x => x.ID == 1).SingleOrDefault();
-
             var AllSuperItems = db.Find<SuperItem>().ToList();
             var AllBaseItems = db.Find<BaseItem>().ToList();
         }

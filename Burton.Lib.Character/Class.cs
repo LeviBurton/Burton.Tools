@@ -31,12 +31,12 @@ namespace Burton.Lib.Characters
 
             MaxSkillChoices = 2;
 
-            SkillChoices.Add(SkillManager.Instance.GetItemCopy<Skill>("History"));
-            SkillChoices.Add(SkillManager.Instance.GetItemCopy<Skill>("Insight"));
-            SkillChoices.Add(SkillManager.Instance.GetItemCopy<Skill>("Medicine"));
-            SkillChoices.Add(SkillManager.Instance.GetItemCopy<Skill>("Persuasion"));
-            SkillChoices.Add(SkillManager.Instance.GetItemCopy<Skill>("Religion"));
-
+            SkillChoices.Add(SkillManager.Instance.Find<Skill>(x => x.Name == "History").SingleOrDefault());
+            SkillChoices.Add(SkillManager.Instance.Find<Skill>(x => x.Name == "Insight").SingleOrDefault());
+            SkillChoices.Add(SkillManager.Instance.Find<Skill>(x => x.Name == "Medicine").SingleOrDefault());
+            SkillChoices.Add(SkillManager.Instance.Find<Skill>(x => x.Name == "Persuasion").SingleOrDefault());
+            SkillChoices.Add(SkillManager.Instance.Find<Skill>(x => x.Name == "Religion").SingleOrDefault());
+ 
             SavingThrows.Add(EAbility.Wisdom);
             SavingThrows.Add(EAbility.Charisma);
         }

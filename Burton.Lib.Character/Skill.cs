@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -29,7 +30,7 @@ namespace Burton.Lib.Characters.Skills
         {
             this.Name = Name;
             this.Description = Description;
-            this.Ability = AbilityModifier;
+            this.Ability = AbilityModifier; 
         }
     }
 
@@ -55,21 +56,50 @@ namespace Burton.Lib.Characters.Skills
 
         public SkillManager()
         {
-            DB = new SkillsDB();
+            DB = SkillsDB.Instance;
 
             if (bDoBootstrap)
             {
                 Bootstrap();
-                SaveChanges();
+                //SaveChanges(); 
                 return;
             }
 
-            Refresh();
+            //Refresh();
         }
-
         public void SaveChanges()
         {
             DB.Save(FileName);
+        }
+
+        public void SaveChanges(string FilePath)
+        {
+            DB.Save(FilePath);
+        }
+
+        public void SaveChanges(Stream OutStream)
+        {
+            DB.Save(OutStream);
+        }
+
+        public void Load(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(string FilePath)
+        {
+            DB.Load(FilePath);
+        }
+
+        public void Refresh(Stream InStream)
+        {
+            DB.Load(InStream);
+        }
+
+        public void Load()
+        {
+            DB.Load(FileName);
         }
 
         public void Refresh()
@@ -77,9 +107,10 @@ namespace Burton.Lib.Characters.Skills
             DB.Load(FileName);
         }
 
+
         public int AddItem<T>(T Item) where T : DbItem
         {
-            var NewItem = (Skill)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var NewItem = (Skill)Item.Clone();
 
             NewItem.DateCreated = DateTime.Now;
             NewItem.DateModified = NewItem.DateCreated;
@@ -89,7 +120,7 @@ namespace Burton.Lib.Characters.Skills
 
         public void UpdateItem<T>(T Item) where T : DbItem
         {
-            var Copy = (Skill)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+            var Copy = (Skill)Item.Clone();
 
             Copy.DateModified = DateTime.Now;
 
@@ -101,50 +132,9 @@ namespace Burton.Lib.Characters.Skills
             DB.Items[ID - 1] = null;
         }
 
-        // Get a copy of the Item by ID
-        public T GetItemCopy<T>(int ID)
+        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
         {
-            Skill Item = null;
-
-            try
-            {
-                Item = DB.Get(ID);
-            }
-            catch (Exception Ex)
-            {
-                return default(T);
-            }
-
-            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-        }
-
-        public T GetItemCopy<T>(string ItemName)
-        {
-            Skill Item = null;
-
-            try
-            {
-                Item = DB.Get(ItemName);
-            }
-            catch (Exception Ex)
-            {
-                return default(T);
-            }
-
-            return (T)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-        }
-
-        // Returns a list containing copies of the items in the ItemDB
-        public List<Skill> GetItemsCopy()
-        {
-            List<Skill> Result = new List<Skill>();
-
-            foreach (var Item in DB.Items.Where(x => x != null))
-            {
-                Result.Add(new Skill(Item));
-            }
-
-            return Result;
+            return DB.Find(Predicate);
         }
 
         // Some defaults to play with
