@@ -56,9 +56,21 @@ namespace Expression_Test
             this.ItemSuperType = Other.ItemSuperType;
         }
 
-        public SuperItem ShallowCopy()
+        public override BaseItem ShallowCopy()
         {
             SuperItem Other = (SuperItem)MemberwiseClone();
+            return Other;
+        }
+
+        public override BaseItem DeepCopy()
+        {
+            BaseItem Other = (BaseItem)this.MemberwiseClone();
+
+            if (RefType != null)
+            {
+                Other.RefType = new TestType(RefType);
+            }
+
             return Other;
         }
     }
@@ -84,7 +96,7 @@ namespace Expression_Test
             this.Name = Other.Name;
         }
 
-        public BaseItem DeepCopy()
+        public virtual BaseItem DeepCopy()
         {
             BaseItem Other = (BaseItem)this.MemberwiseClone();
 
@@ -96,7 +108,7 @@ namespace Expression_Test
             return Other;
         }
 
-        public BaseItem ShallowCopy() 
+        public virtual BaseItem ShallowCopy() 
         {
             BaseItem Other = (BaseItem)this.MemberwiseClone();
             return Other;
