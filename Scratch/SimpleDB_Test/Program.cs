@@ -111,9 +111,9 @@ namespace SimpleDB_Test
             var Burning_Hands = SpellManager.Instance.Find<Spell>(x => x.Name == "Burning Hands").SingleOrDefault();
             var Fireball = SpellManager.Instance.Find<Spell>(x => x.Name == "Fireball").SingleOrDefault();
 
-            Bless.SetSpellMethod("Bless");
-            Burning_Hands.SetSpellMethod("Burning_Hands");
-            Fireball.SetSpellMethod("Fireball");
+            Bless.SetSpellMethod<SpellMethods>("Bless");
+            Burning_Hands.SetSpellMethod<SpellMethods>("Burning_Hands");
+            Fireball.SetSpellMethod<SpellMethods>("Fireball");
 
             Bless.Cast(c1);
             Bless.Cast(c2);
@@ -143,8 +143,8 @@ namespace SimpleDB_Test
             //Test1();
             TestSpellMethods();
 
-           // RebuilDBs();
-            Console.ReadKey();
+            RebuilDBs();
+        //    Console.ReadKey();
         }     
     }
 }

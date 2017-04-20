@@ -115,61 +115,33 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="Burton.ExtensionMethods.Float">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.ExtensionMethods.Float.dll</HintPath>
-    </Reference>
-    <Reference Include="Burton.Extensions.DeepCopy">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Extensions.DeepCopy.dll</HintPath>
+    <Reference Include="Burton.Lib.Dice">
+      <HintPath>Assets\Burton.Lib.Dice.dll</HintPath>
     </Reference>
     <Reference Include="Burton.Lib.Characters">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.Characters.dll</HintPath>
-    </Reference>
-    <Reference Include="Burton.Lib.Dice">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.Dice.dll</HintPath>
-    </Reference>
-    <Reference Include="Burton.Lib.Game">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.Game.dll</HintPath>
-    </Reference>
-    <Reference Include="Burton.Lib.GameEntity">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.GameEntity.dll</HintPath>
-    </Reference>
-    <Reference Include="Burton.Lib.Graph">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.Graph.dll</HintPath>
-    </Reference>
-    <Reference Include="Burton.Lib.Math">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.Math.dll</HintPath>
+      <HintPath>Assets\Burton.Lib.Characters.dll</HintPath>
     </Reference>
     <Reference Include="Burton.Lib.SimpleDB">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.SimpleDB.dll</HintPath>
+      <HintPath>Assets\Burton.Lib.SimpleDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Burton.Lib.GameEntity">
+      <HintPath>Assets\Burton.Lib.GameEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="Burton.Lib.Math">
+      <HintPath>Assets\Burton.Lib.Math.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D205E.Plugins.csproj">
-      <Project>{F5121ECC-AC46-88B9-2249-A77A6AC67C1C}</Project>
-      <Name>D205E.Plugins</Name>
-    </ProjectReference>
     <ProjectReference Include="D205E.csproj">
       <Project>{EC3EF487-513D-1376-077E-7FBC85E6EFF6}</Project>
       <Name>D205E</Name>
     </ProjectReference>
-    <ProjectReference Include="D205E.Editor.Plugins.csproj">
-      <Project>{09A595B4-AD0D-4D0C-ECA3-98C0B9383B2E}</Project>
-      <Name>D205E.Editor.Plugins</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Editor\Connection.cs" />
-    <Compile Include="Assets\Editor\ConnectionPoint.cs" />
     <Compile Include="Assets\Editor\ItemEditor.cs" />
-    <Compile Include="Assets\Editor\Node.cs" />
-    <Compile Include="Assets\Editor\NodeEditor.cs" />
     <Compile Include="Assets\Editor\SkillEditor.cs" />
     <Compile Include="Assets\Editor\SpellEditor.cs" />
     <Compile Include="Assets\Editor\WeaponEditor.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Plugins\Node_Editor\Resources\LineShader.shader" />
-    <None Include="Assets\Plugins\Node_Editor\Utilities\link.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

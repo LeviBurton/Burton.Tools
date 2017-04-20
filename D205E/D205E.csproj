@@ -77,15 +77,21 @@
       <HintPath>Assets\Burton.Lib.Dice.dll</HintPath>
     </Reference>
     <Reference Include="Burton.Lib.Characters">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.Characters.dll</HintPath>
+      <HintPath>Assets\Burton.Lib.Characters.dll</HintPath>
     </Reference>
     <Reference Include="Burton.Lib.SimpleDB">
-      <HintPath>Assets\Plugins\Burton.Lib\Burton.Lib.SimpleDB.dll</HintPath>
+      <HintPath>Assets\Burton.Lib.SimpleDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Burton.Lib.GameEntity">
+      <HintPath>Assets\Burton.Lib.GameEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="Burton.Lib.Math">
+      <HintPath>Assets\Burton.Lib.Math.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Character\UnityCharacter.cs" />
-    <Compile Include="Assets\Scripts\Test.cs" />
+    <Compile Include="Assets\Scripts\Character\UnitySpellMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

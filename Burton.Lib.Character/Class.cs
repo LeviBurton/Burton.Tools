@@ -21,9 +21,22 @@ namespace Burton.Lib.Characters
         Warlock
     }
 
+    public class Wizard : Class
+    {
+        public Wizard() : base(EClassType.Wizard, 6, EAbility.Intelligence)
+        {
+            // HitDice: 0 -> NumDice, 1 -> NumSides
+            // Cleric gets 1D8 Hit Dice.
+            HitDice.Add(1); HitDice.Add(6);
+
+            MaxSkillChoices = 2;
+            SavingThrows.Add(EAbility.Intelligence);
+        }
+    }
+
     public class Cleric : Class
     {
-        public Cleric() : base(8, EAbility.Constitution)
+        public Cleric() : base(EClassType.Cleric, 8, EAbility.Constitution)
         {
             // HitDice: 0 -> NumDice, 1 -> NumSides
             // Cleric gets 1D8 Hit Dice.
@@ -44,7 +57,8 @@ namespace Burton.Lib.Characters
 
     public class Class 
     {
-        public string Name { get; set; }
+        public string Name;
+        public EClassType ClassType;
 
         // HitDice: 0 -> NumDice, 1 -> NumSides
         public List<int> HitDice = new List<int>(2);
@@ -65,8 +79,9 @@ namespace Burton.Lib.Characters
         // Max number of skills we can pick from Skill Choices)
         public int MaxSkillChoices;
          
-        public Class(int StartingHitPoints, EAbility StartingHitPointsModifier)
+        public Class(EClassType ClassType, int StartingHitPoints, EAbility StartingHitPointsModifier)
         {
+            this.ClassType = ClassType;
             this.StartingHitPoints = StartingHitPoints;
             this.StartingHitPointsModifier = StartingHitPointsModifier;
         }

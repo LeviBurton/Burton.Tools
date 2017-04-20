@@ -96,6 +96,8 @@ namespace Burton.Lib.Characters
     [Serializable]
     public class Spell : DbItem
     {
+        [NonSerialized]
+        private Action<Spell, object> CastDelegate = null;
 
         public ESpellSchoolType MagicSchool;
         public int Level;
@@ -154,24 +156,30 @@ namespace Burton.Lib.Characters
             return (DbItem) Other;
         }
 
-        public void SetSpellMethod(string MethodName)
+        // Note that at run-time we need call this for every spell
+        // in the database when initializing everything...
+        public void SetSpellMethod<T>(string MethodName)
         {
             SpellMethodName = MethodName;
 
-            SpellMethodInfo = typeof(SpellMethods).Assembly
-            .GetTypes()
-            .SelectMany(x => x.GetMethods())
-            .Where(x => x.GetCustomAttributes(true).OfType<SpellMethodAttribute>().Any())
-            .Where(x => x.Name == MethodName).SingleOrDefault();
-        }
+            SpellMethodInfo = typeof(T).Assembly
+                .GetTypes()
+                .SelectMany(x => x.GetMethods())
+                .Where(x => x.GetCustomAttributes(true).OfType<SpellMethodAttribute>().Any())
+                .Where(x => x.Name == MethodName).SingleOrDefault();
 
-        public void Cast(Character Caster)
-        {
             if (SpellMethodInfo == null)
                 return;
 
-            // Lookup our selected spell method and call it.
-            SpellMethodInfo.Invoke(null, new object[] { this, Caster });
+            CastDelegate = (Action<Spell,object>)Delegate.CreateDelegate(typeof(Action<Spell, object>), SpellMethodInfo);
+        }
+
+        public void Cast(object Caster)
+        {
+            if (CastDelegate == null)
+                return;
+
+            CastDelegate(this, Caster);
         }
     }
 
