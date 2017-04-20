@@ -50,7 +50,7 @@ namespace Burton.Lib.Characters.Skills
         }
         #endregion
 
-        public string FileName = "Skills.sdb";
+        public string FileName = "Skills.bytes";
         private SkillsDB DB;
         private bool bDoBootstrap = true;
 

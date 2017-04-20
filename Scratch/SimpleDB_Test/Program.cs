@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using System.Reflection;
+using System.IO;
 
 namespace SimpleDB_Test
 {
@@ -82,10 +84,67 @@ namespace SimpleDB_Test
             } while (Key != ConsoleKey.Escape);
         }
 
+        static void TestSpellMethods()
+        {
+            var assembly = typeof(SpellMethods).Assembly;
+
+
+            Dictionary<string, MethodInfo> methods = assembly
+                        .GetTypes()
+                        .SelectMany(x => x.GetMethods())
+                        .Where(y => y.GetCustomAttributes(true).OfType<SpellMethodAttribute>().Any())
+                        .ToDictionary(z => z.Name);
+
+            var Class = new Class(8, EAbility.Intelligence);
+            var c1 = new Character(Class);
+            var c2 = new Character(Class);
+            c1.Name = "Sally";
+            c2.Name = "Jimmy";
+
+            c1.RollAbilities();
+            c2.RollAbilities();
+
+        
+            SpellManager.Instance.Load();
+
+            var Bless = SpellManager.Instance.Find<Spell>(x => x.Name == "Bless").SingleOrDefault();
+            var Burning_Hands = SpellManager.Instance.Find<Spell>(x => x.Name == "Burning Hands").SingleOrDefault();
+            var Fireball = SpellManager.Instance.Find<Spell>(x => x.Name == "Fireball").SingleOrDefault();
+
+            Bless.SetSpellMethod("Bless");
+            Burning_Hands.SetSpellMethod("Burning_Hands");
+            Fireball.SetSpellMethod("Fireball");
+
+            Bless.Cast(c1);
+            Bless.Cast(c2);
+
+            Burning_Hands.Cast(c1);
+            Fireball.Cast(c2);
+        }
+
+        static void RebuilDBs()
+        {
+            SpellManager.Instance.Bootstrap();
+            SpellManager.Instance.Import("Spells.tsv.txt");
+            SpellManager.Instance.SaveChanges();
+
+
+            ItemManager.Instance.Bootstrap();
+            ItemManager.Instance.ImportSpellComponents("SpellComponents.tsv");
+            ItemManager.Instance.SaveChanges();
+
+            SkillManager.Instance.Bootstrap();
+            SkillManager.Instance.SaveChanges();
+        }
+
         static void Main(string[] args)
         {
             //RunTimingTests();
-            Test1();
+            //Test1();
+            TestSpellMethods();
+
+           // RebuilDBs();
+            Console.ReadKey();
         }     
     }
 }

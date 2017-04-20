@@ -51,11 +51,12 @@
     <Compile Include="Item\Tool.cs" />
     <Compile Include="Item\Trade_Good.cs" />
     <Compile Include="Item\Weapon.cs" />
-    <Compile Include="Spell.cs" />
+    <Compile Include="Spell\Spell.cs" />
     <Compile Include="Quirk.cs" />
     <Compile Include="Race.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Skill.cs" />
+    <Compile Include="Spell\SpellMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Burton.Lib.Dice\Burton.Lib.Dice.csproj">
