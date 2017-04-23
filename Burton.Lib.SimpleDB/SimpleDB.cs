@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using UnityEngine;
 
 namespace Burton.Lib
 {
     [Serializable]
-    public class DbItem
+    public class DbItem : ScriptableObject
     {
         public int ID;
         public string Name;

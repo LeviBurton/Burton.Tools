@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using UnityEngine;
 
 namespace Burton.Lib.Characters
 {
@@ -94,6 +95,7 @@ namespace Burton.Lib.Characters
     }
 
     [Serializable]
+    [CreateAssetMenu(fileName = "Spell", menuName = "Spells", order = 1)]
     public class Spell : DbItem
     {
         [NonSerialized]
@@ -110,9 +112,10 @@ namespace Burton.Lib.Characters
         public List<SpellMaterial> SpellMaterials;
 
         public SpellRange SpellRange;
-        public string SpellMethodName;
-        public MethodInfo SpellMethodInfo;
+        public string SpellMethodName = string.Empty;
+        public MethodInfo SpellMethodInfo = null;
 
+      
         public Spell(ESpellSchoolType MagicSchool, 
                      List<EClassType> ClassTypes, 
                      string Name, 
@@ -134,6 +137,23 @@ namespace Burton.Lib.Characters
             this.bConcentration = bConcentration;
             this.SpellMaterials = SpellMaterials;
         }
+
+        #region Unity ScriptableObject
+        public void OnEnable()
+        {
+
+        }
+
+        public void OnDestroy()
+        {
+
+        }
+
+        public void OnDisable()
+        {
+
+        }
+        #endregion region
 
         public override DbItem Clone()
         {

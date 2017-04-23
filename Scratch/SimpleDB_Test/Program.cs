@@ -86,40 +86,40 @@ namespace SimpleDB_Test
 
         static void TestSpellMethods()
         {
-            var assembly = typeof(SpellMethods).Assembly;
+            //var assembly = typeof(SpellMethods).Assembly;
 
 
-            Dictionary<string, MethodInfo> methods = assembly
-                        .GetTypes()
-                        .SelectMany(x => x.GetMethods())
-                        .Where(y => y.GetCustomAttributes(true).OfType<SpellMethodAttribute>().Any())
-                        .ToDictionary(z => z.Name);
+            //Dictionary<string, MethodInfo> methods = assembly
+            //            .GetTypes()
+            //            .SelectMany(x => x.GetMethods())
+            //            .Where(y => y.GetCustomAttributes(true).OfType<SpellMethodAttribute>().Any())
+            //            .ToDictionary(z => z.Name);
 
-            var Class = new Class(8, EAbility.Intelligence);
-            var c1 = new Character(Class);
-            var c2 = new Character(Class);
-            c1.Name = "Sally";
-            c2.Name = "Jimmy";
+            //var Class = new Class(8, EAbility.Intelligence);
+            //var c1 = new Character(Class);
+            //var c2 = new Character(Class);
+            //c1.Name = "Sally";
+            //c2.Name = "Jimmy";
 
-            c1.RollAbilities();
-            c2.RollAbilities();
+            //c1.RollAbilities();
+            //c2.RollAbilities();
 
         
-            SpellManager.Instance.Load();
+            //SpellManager.Instance.Load();
 
-            var Bless = SpellManager.Instance.Find<Spell>(x => x.Name == "Bless").SingleOrDefault();
-            var Burning_Hands = SpellManager.Instance.Find<Spell>(x => x.Name == "Burning Hands").SingleOrDefault();
-            var Fireball = SpellManager.Instance.Find<Spell>(x => x.Name == "Fireball").SingleOrDefault();
+            //var Bless = SpellManager.Instance.Find<Spell>(x => x.Name == "Bless").SingleOrDefault();
+            //var Burning_Hands = SpellManager.Instance.Find<Spell>(x => x.Name == "Burning Hands").SingleOrDefault();
+            //var Fireball = SpellManager.Instance.Find<Spell>(x => x.Name == "Fireball").SingleOrDefault();
 
-            Bless.SetSpellMethod<SpellMethods>("Bless");
-            Burning_Hands.SetSpellMethod<SpellMethods>("Burning_Hands");
-            Fireball.SetSpellMethod<SpellMethods>("Fireball");
+            //Bless.SetSpellMethod<SpellMethods>("Bless");
+            //Burning_Hands.SetSpellMethod<SpellMethods>("Burning_Hands");
+            //Fireball.SetSpellMethod<SpellMethods>("Fireball");
 
-            Bless.Cast(c1);
-            Bless.Cast(c2);
+            //Bless.Cast(c1);
+            //Bless.Cast(c2);
 
-            Burning_Hands.Cast(c1);
-            Fireball.Cast(c2);
+            //Burning_Hands.Cast(c1);
+            //Fireball.Cast(c2);
         }
 
         static void RebuilDBs()

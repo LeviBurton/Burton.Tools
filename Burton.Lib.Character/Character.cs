@@ -55,41 +55,10 @@ namespace Burton.Lib.Characters
     }
   
     [Serializable]
-    public class Character : INotifyPropertyChanged
+    public class Character 
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private string _Name;
-        public string Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                _Name = value;
-                OnPropertyChanged("Name");
-            }
-        }
-
-        private int _Level;
-        public int Level
-        {
-            get
-            {
-                return _Level;
-            }
-            set
-            {
-                _Level = value;
-                OnPropertyChanged("Level");
-            }
-        }
+        public string Name;
+        public int Level;
 
         public Class Class { get; set; }
         public List<Ability> Abilities;

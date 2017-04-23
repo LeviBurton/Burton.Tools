@@ -24,6 +24,8 @@ namespace Burton.Lib.GameEntity
             {
                 mInstance = value;
             }
+
+
         }
 
         public SortedDictionary<int, BaseGameEntity> EntityMap = new SortedDictionary<int, BaseGameEntity>();

@@ -8,6 +8,8 @@ using System.Linq;
 public class UnityCharacter : MonoBehaviour
 {
     public Character Character = null;
+    public GameObject Target = null;
+
     public List<Spell> Spells;
 
     // Use this for initialization

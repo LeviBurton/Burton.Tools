@@ -52,6 +52,9 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -67,31 +70,41 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Purchasing">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Burton.Lib.Dice">
-      <HintPath>Assets\Burton.Lib.Dice.dll</HintPath>
-    </Reference>
     <Reference Include="Burton.Lib.Characters">
       <HintPath>Assets\Burton.Lib.Characters.dll</HintPath>
     </Reference>
-    <Reference Include="Burton.Lib.SimpleDB">
-      <HintPath>Assets\Burton.Lib.SimpleDB.dll</HintPath>
+    <Reference Include="Burton.Lib.Dice">
+      <HintPath>Assets\Burton.Lib.Dice.dll</HintPath>
+    </Reference>
+    <Reference Include="Burton.Lib.Game">
+      <HintPath>Assets\Burton.Lib.Game.dll</HintPath>
     </Reference>
     <Reference Include="Burton.Lib.GameEntity">
       <HintPath>Assets\Burton.Lib.GameEntity.dll</HintPath>
     </Reference>
+    <Reference Include="Burton.Lib.Graph">
+      <HintPath>Assets\Burton.Lib.Graph.dll</HintPath>
+    </Reference>
     <Reference Include="Burton.Lib.Math">
       <HintPath>Assets\Burton.Lib.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Burton.Lib.SimpleDB">
+      <HintPath>Assets\Burton.Lib.SimpleDB.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Character\UnityCharacter.cs" />
     <Compile Include="Assets\Scripts\Character\UnitySpellMethods.cs" />
+    <Compile Include="Assets\Scripts\GameEntities\UnityGameEntity.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
