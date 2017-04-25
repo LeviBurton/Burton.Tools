@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using UnityEditor;
+using UnityEngine;
 
 namespace Burton.Lib.Characters
 {
@@ -77,11 +79,12 @@ namespace Burton.Lib.Characters
         public string Description;
         public int Weight;
         public int Cost;
+        public Texture2D Icon;
 
         public EItemType Type;
         public string TypeName
         {
-            get { return Type.ToString().Replace("_", " ");  }
+            get { return Type.ToString().Replace("_", " "); }
         }
 
         public EItemSubType SubType;
@@ -96,17 +99,36 @@ namespace Burton.Lib.Characters
         public EAbility PrimaryAbility;
         public EItemRarity Rarity;
 
-        public Item(EItemType Type, 
-                    EItemSubType SubType, 
-                    EItemRarity Rarity, 
-                    string Name, 
-                    string Description, 
-                    int Cost, 
-                    int Weight, 
+        public Item(EItemType Type,
+                    EItemSubType SubType,
+                    EItemRarity Rarity,
+                    string Name,
+                    string Description,
+                    int Cost,
+                    int Weight,
                     List<Ability> AbilityRequirements,
                     DateTime? DateCreated = null,
                     DateTime? DateModified = null)
             : base(DateCreated, DateModified)
+        {
+            Init(Type, SubType, Rarity, Name, Description, Cost, Weight, AbilityRequirements);
+        }
+
+        public void Init(Item Other)
+        {
+            Init(Other.Type, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.Cost, Other.Weight, Other.Require_Abilities);
+        }
+
+        public void Init(EItemType Type,
+                    EItemSubType SubType,
+                    EItemRarity Rarity,
+                    string Name,
+                    string Description,
+                    int Cost,
+                    int Weight,
+                    List<Ability> AbilityRequirements,
+                    DateTime? DateCreated = null,
+                    DateTime? DateModified = null)
         {
             this.Type = Type;
             this.SubType = SubType;
@@ -124,8 +146,6 @@ namespace Burton.Lib.Characters
         }
     }
 
-    // Manager that wraps the ItemDB.  Knows about all the different Item Types
-    // and can get/insert/update items in the ItemDB.
     public class ItemManager
     {
         #region Singleton
@@ -142,295 +162,504 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
-        public string FileName = "Items.bytes";
-
-        // we pretty much just wrap access to the ItemDB
-        private ItemDB DB;
-        private bool bDoBootstrap = false;
+        static string AssetsBasePath = @"Assets/Data/Items";
+        public List<Item> Items;
 
         public ItemManager()
         {
-            DB = ItemDB.Instance;
+            Items = new List<Item>();
 
-            if (bDoBootstrap)
-            {
-                Bootstrap();
-                return;
-            }
-        }
-
-        public void SaveChanges()
-        {
-            DB.Save(FileName);
-        }
-
-        public void SaveChanges(string FilePath)
-        {
-            DB.Save(FilePath);
-        }
-
-        public void SaveChanges(Stream OutStream)
-        {
-            DB.Save(OutStream);
-        }
-
-        public void Load(string FilePath)
-        {
-            DB.Load(FilePath);
-        }
-
-        public void Refresh(string FilePath)
-        {
-            DB.Load(FilePath);
-        }
-
-        public void Refresh(Stream InStream)
-        {
-            DB.Load(InStream);
-        }
-
-        public void Load()
-        {
-            DB.Load(FileName);
-        }
-
-        public void Refresh()
-        {
-            DB.Load(FileName);
         }
 
         public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
         {
-            return DB.Find(Predicate);
-        }
-
-        // Create a copy of Item and a add it to the ItemDB
-        public int AddItem<T>(T Item) where T : DbItem
-        {
-           // var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
-            var NewItem = (Item)Item.Clone();
-
-            NewItem.DateCreated = DateTime.Now;
-            NewItem.DateModified = NewItem.DateCreated;
-
-            return DB.Add((Item)NewItem);
-        }
-
-        public void UpdateItem<T>(T Item) where T : DbItem
-        {
-            var Copy = (Item)Item.Clone();
-
-            Copy.DateModified = DateTime.Now;
-
-            DB.Items[Copy.ID - 1] = Copy;
-        }
-
-        public void DeleteItem(int ID)
-        {
-            DB.Items[ID - 1] = null;
-        }
-
-        // Some defaults to play with
-        public void Bootstrap()
-        {
-            AddBaseArmors();
-            AddBaseWeapons();
-        }
-
-        public void ImportSpellComponents(string FileName)
-        {
-            var Data = File.ReadAllLines(FileName);
-            Data[0] = null;
-
-            foreach (var Line in Data)
+            if (Predicate == null)
             {
-                if (string.IsNullOrEmpty(Line))
-                    continue;
-
-                var Fields = Line.Split(new char[] { '\t' });
-                var Data_Name = Fields[0];
-
-                var Data_Value = Fields[1];
-
-                Data_Value = Data_Value.Replace("-", "").Replace(",", "").Replace("gp", "").Trim();
-                int Cost = 0;
-
-                if (!string.IsNullOrEmpty(Data_Value) && !Int32.TryParse(Data_Value, out Cost))
-                {
-                    continue;
-                }
-
-                var Data_Spells = Fields[2].Split(new char[] { ',' });
-
-                var Data_Consumed = Fields[3] == "N" ? false : true;
-                var Data_Notes = Fields[4];
-
-                var SpellMaterial = new SpellMaterial(Data_Name, Data_Notes, Cost, Data_Consumed);
-
-                SpellMaterial.ID = AddItem<SpellMaterial>(SpellMaterial);
-
-                foreach (var Name in Data_Spells)
-                {
-                    var Spell = SpellManager.Instance.Find<Spell>(x => x.Name == Name).SingleOrDefault();
-
-                    if (Spell == null)
-                        continue;
-
-                    Spell.SpellMaterials.Add(SpellMaterial);
-                    SpellManager.Instance.UpdateItem<Spell>(Spell);
-                }
-
-                SpellManager.Instance.SaveChanges();
+                return Items.OfType<T>().AsEnumerable();
             }
+            else
+            {
+                return Items.OfType<T>().Where(Predicate).AsEnumerable();
+            }
+        }
+
+        public void RefreshAssets()
+        {
+            Items = new List<Item>();
+
+            var SpellGUIDs = AssetDatabase.FindAssets("t:Item", new string[] { AssetsBasePath });
+
+            foreach (string SpellGuid in SpellGUIDs)
+            {
+                var AssetPath = AssetDatabase.GUIDToAssetPath(SpellGuid);
+                var Asset = AssetDatabase.LoadAssetAtPath<Item>(AssetPath);
+                Items.Add(Asset);
+            }
+        }
+
+        public void DeleteAll()
+        {
+            // Delete all assets
+            var ItemGuids = AssetDatabase.FindAssets("t:Item", new string[] { AssetsBasePath });
+            foreach (string ItemGuid in ItemGuids)
+            {
+                var AssetPath = AssetDatabase.GUIDToAssetPath(ItemGuid);
+                AssetDatabase.DeleteAsset(AssetPath);
+            }
+        }
+
+        // Should handle all item types
+        public T CreateAsset<T>(string Name) where T: Item
+        {
+            var AssetPath = AssetsBasePath + string.Format(@"/{0}.asset", Name.Replace(" ", "_"));
+            T ItemAsset = ScriptableObject.CreateInstance<T>();
+            AssetDatabase.CreateAsset(ItemAsset, AssetPath);
+            return ItemAsset;
+        }
+
+        public void Import(string FileName)
+        {
+
         }
 
         public void AddBaseWeapons()
         {
-            List<DamageType> DamageTypes = new List<DamageType>();
-
-            var Damage = new DamageType(EDamageType.Slashing, new int[] { 1, 8, 0 });
-            DamageTypes.Add(Damage);
-
-            var Weapon = new Weapon(EItemSubType.Martial_Melee,
-                              EItemRarity.Common,
-                              DamageTypes,
-                              new int[] { 0, 0 },
-                              "Longsword",
-                              "Longsword weapon",
-                              15,
-                              3,
-                              new List<Ability>());
-            Weapon.WeaponProperties.Add(EWeaponProperty.Versatile);
+            var Weapon = CreateAsset<Weapon>("Longsword"); 
+            Weapon.Init(EItemSubType.Martial_Melee,
+                        EItemRarity.Common,
+                        new List<DamageType>()
+                        {
+                            new DamageType(EDamageType.Slashing, new int[] { 1, 8, 0 })
+                        },
+                        new List<EWeaponProperty>()
+                        {
+                            EWeaponProperty.Versatile
+                        },
+                        new int[] { 0, 0 },
+                        "Longsword",
+                        "Longsword weapon",
+                        15,
+                        3,
+                        new List<Ability>());
             Weapon.VersatileDamage = new int[2] { 1, 10 };
-            AddItem<Weapon>(Weapon);
 
-            DamageTypes.Clear();
-            DamageTypes.Add(new DamageType(EDamageType.Bludgeoning, new int[] { 1, 8, 0 }));
-            Weapon = new Weapon(EItemSubType.Martial_Melee,
-                                EItemRarity.Common,
-                                DamageTypes,
-                               new int[] { 0, 0 },
-                                "Warhammer",
-                                "Warhammer Weapon",
-                                15,
-                                2,
-                                new List<Ability>());
-            Weapon.WeaponProperties.Add(EWeaponProperty.Versatile);
+            Weapon = CreateAsset<Weapon>("Warhammer");
+            Weapon.Init(EItemSubType.Martial_Melee,
+                        EItemRarity.Common,
+                        new List<DamageType>()
+                        {
+                            new DamageType(EDamageType.Bludgeoning, new int[] { 1, 8, 0 })
+                        },
+                        new List<EWeaponProperty>()
+                        {
+                            EWeaponProperty.Versatile
+                        },
+                        new int[] { 0, 0 },
+                        "Warhammer",
+                        "Warhammer weapon",
+                        15,
+                        2,
+                        new List<Ability>());
             Weapon.VersatileDamage = new int[2] { 1, 10 };
-            AddItem<Weapon>(Weapon);
 
-            DamageTypes.Clear();
+            Weapon = CreateAsset<Weapon>("Longbow");
+            Weapon.Init(EItemSubType.Martial_Ranged,
+                        EItemRarity.Common,
+                        new List<DamageType>()
+                        {
+                            new DamageType(EDamageType.Piercing, new int[] { 1, 8, 0 })
+                        },
+                        new List<EWeaponProperty>()
+                        {
+                            EWeaponProperty.Range,
+                            EWeaponProperty.Heavy,
+                            EWeaponProperty.Two_Handed,
+                            EWeaponProperty.Ammunition
+                        },
+                        new int[] { 150, 600 },
+                        "Longbow",
+                        "Longbow Weapom",
+                        11,
+                        2,
+                        new List<Ability>());
+            AssetDatabase.SaveAssets();
 
-            DamageTypes.Add(new DamageType(EDamageType.Slashing, new int[] { 1, 10, 0 }));
-            Weapon = new Weapon(EItemSubType.Martial_Melee,
-                                EItemRarity.Rare,
-                                DamageTypes,
-                                  new int[] { 0, 0 },
-                                "Halberd",
-                                "Halberd Weapon",
-                                20,
-                                6,
-                                new List<Ability>());
+            //DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 8, 0 }));
+            //Weapon = new Weapon(EItemSubType.Martial_Ranged,
+            //                    EItemRarity.Common,
+            //                    DamageTypes,
+            //                    new int[2] { 150, 600 },
+            //                    "Longbow",
+            //                    "Longbow",
+            //                    50,
+            //                    2,
+            //                   new List<Ability>());
 
-            Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Reach);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
-            AddItem<Weapon>(Weapon);
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Range);
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
+            //AddItem<Weapon>(Weapon);
 
-            DamageTypes.Clear();
+            //DamageTypes.Clear();
 
-            DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 8, 0 }));
-            Weapon = new Weapon(EItemSubType.Martial_Ranged,
-                                EItemRarity.Common,
-                                DamageTypes,
-                                new int[2] { 150, 600 },
-                                "Longbow",
-                                "Longbow",
-                                50,
-                                2,
-                               new List<Ability>());
+            //DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 10, 0 }));
 
-            Weapon.WeaponProperties.Add(EWeaponProperty.Range);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
-            AddItem<Weapon>(Weapon);
+            //Weapon = new Weapon(EItemSubType.Martial_Ranged,
+            //                    EItemRarity.Common,
+            //                    DamageTypes,
+            //                    new int[2] { 100, 400 },
+            //                    "Crossbow, Heavy",
+            //                    "Heavy Crossbow",
+            //                    50,
+            //                    18,
+            //                    new List<Ability>());
 
-            DamageTypes.Clear();
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Range);
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Loading);
+            //Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
 
-            DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 10, 0 }));
-
-            Weapon = new Weapon(EItemSubType.Martial_Ranged,
-                                EItemRarity.Common,
-                                DamageTypes,
-                                new int[2] { 100, 400 },
-                                "Crossbow, Heavy",
-                                "Heavy Crossbow",
-                                50,
-                                18,
-                                new List<Ability>());
-
-            Weapon.WeaponProperties.Add(EWeaponProperty.Range);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Loading);
-            Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
-
-            AddItem<Weapon>(Weapon);
+            //AddItem<Weapon>(Weapon);
         }
 
         public void AddBaseArmors()
         {
             //// Just create some base game armor types that will always be around.
-            var Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Padded", "Padded Armor", 5, 8, new List<Ability>());
-            AddItem<Armor>(Armor);
+            //var Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Padded", "Padded Armor", 5, 8, new List<Ability>());
+            //AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Leather", "Leather Armor", 11, 10, new List<Ability>());
-            AddItem<Armor>(Armor);
+            //Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Leather", "Leather Armor", 11, 10, new List<Ability>());
+            //AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 12, "Studded Leather", "Studded Leather Armor", 45, 13, new List<Ability>());
-            AddItem<Armor>(Armor);
+            //Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 12, "Studded Leather", "Studded Leather Armor", 45, 13, new List<Ability>());
+            //AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 12, "Hide", "Hide Armor", 10, 12, new List<Ability>());
-            AddItem<Armor>(Armor);
+            //Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 12, "Hide", "Hide Armor", 10, 12, new List<Ability>());
+            //AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 13, "Chain Shirt", "Chain Shirt Armor", 50, 20, new List<Ability>());
-            AddItem<Armor>(Armor);
+            //Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 13, "Chain Shirt", "Chain Shirt Armor", 50, 20, new List<Ability>());
+            //AddItem<Armor>(Armor);
 
-            Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 14, "Ring Mail", "Ring Mail Armor", 14, 40, new List<Ability>());
-            AddItem<Armor>(Armor);
+            //Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 14, "Ring Mail", "Ring Mail Armor", 14, 40, new List<Ability>());
+            //AddItem<Armor>(Armor);
 
-            List<Ability> Requirements = new List<Ability>();
-            Requirements.Add(new Ability(EAbility.Strength, 0, 0, 13));
-            Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55, Requirements);
+            //List<Ability> Requirements = new List<Ability>();
+            //Requirements.Add(new Ability(EAbility.Strength, 0, 0, 13));
+            //Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55, Requirements);
 
-            AddItem<Armor>(Armor);
+            //AddItem<Armor>(Armor);
         }
     }
 
-    public class ItemDB : SimpleDB<Item>
-    {
-        private static ItemDB _Instance;
+    //// Manager that wraps the ItemDB.  Knows about all the different Item Types
+    //// and can get/insert/update items in the ItemDB.
+    //public class ItemManager
+    //{
+    //    #region Singleton
+    //    private static ItemManager _Instance;
+    //    public static ItemManager Instance
+    //    {
+    //        get
+    //        {
+    //            if (_Instance == null)
+    //                _Instance = new ItemManager();
 
-        public static ItemDB Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new ItemDB();
+    //            return _Instance;
+    //        }
+    //    }
+    //    #endregion
 
-                return _Instance;
-            }
-        }
+    //    public string FileName = "Items.bytes";
 
-        public ItemDB()
-        {
-            InitBase();
-        }
+    //    // we pretty much just wrap access to the ItemDB
+    //    private ItemDB DB;
+    //    private bool bDoBootstrap = false;
 
-        public void InitBase()
-        {
-            Items.Clear();
-        }
-    }
+    //    public ItemManager()
+    //    {
+    //        DB = ItemDB.Instance;
+
+    //        if (bDoBootstrap)
+    //        {
+    //            Bootstrap();
+    //            return;
+    //        }
+    //    }
+
+    //    public void SaveChanges()
+    //    {
+    //        DB.Save(FileName);
+    //    }
+
+    //    public void SaveChanges(string FilePath)
+    //    {
+    //        DB.Save(FilePath);
+    //    }
+
+    //    public void SaveChanges(Stream OutStream)
+    //    {
+    //        DB.Save(OutStream);
+    //    }
+
+    //    public void Load(string FilePath)
+    //    {
+    //        DB.Load(FilePath);
+    //    }
+
+    //    public void Refresh(string FilePath)
+    //    {
+    //        DB.Load(FilePath);
+    //    }
+
+    //    public void Refresh(Stream InStream)
+    //    {
+    //        DB.Load(InStream);
+    //    }
+
+    //    public void Load()
+    //    {
+    //        DB.Load(FileName);
+    //    }
+
+    //    public void Refresh()
+    //    {
+    //        DB.Load(FileName);
+    //    }
+
+    //    public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
+    //    {
+    //        return DB.Find(Predicate);
+    //    }
+
+    //    // Create a copy of Item and a add it to the ItemDB
+    //    public int AddItem<T>(T Item) where T : DbItem
+    //    {
+    //        // var NewItem = (Item)Activator.CreateInstance(typeof(T), Convert.ChangeType(Item, typeof(T)));
+    //        var NewItem = (Item)Item.Clone();
+
+    //        NewItem.DateCreated = DateTime.Now;
+    //        NewItem.DateModified = NewItem.DateCreated;
+
+    //        return DB.Add((Item)NewItem);
+    //    }
+
+    //    public void UpdateItem<T>(T Item) where T : DbItem
+    //    {
+    //        var Copy = (Item)Item.Clone();
+
+    //        Copy.DateModified = DateTime.Now;
+
+    //        DB.Items[Copy.ID - 1] = Copy;
+    //    }
+
+    //    public void DeleteItem(int ID)
+    //    {
+    //        DB.Items[ID - 1] = null;
+    //    }
+
+    //    // Some defaults to play with
+    //    public void Bootstrap()
+    //    {
+    //        AddBaseArmors();
+    //        AddBaseWeapons();
+    //    }
+
+    //    public void ImportSpellComponents(string FileName)
+    //    {
+    //        var Data = File.ReadAllLines(FileName);
+    //        Data[0] = null;
+
+    //        foreach (var Line in Data)
+    //        {
+    //            if (string.IsNullOrEmpty(Line))
+    //                continue;
+
+    //            var Fields = Line.Split(new char[] { '\t' });
+    //            var Data_Name = Fields[0];
+
+    //            var Data_Value = Fields[1];
+
+    //            Data_Value = Data_Value.Replace("-", "").Replace(",", "").Replace("gp", "").Trim();
+    //            int Cost = 0;
+
+    //            if (!string.IsNullOrEmpty(Data_Value) && !Int32.TryParse(Data_Value, out Cost))
+    //            {
+    //                continue;
+    //            }
+
+    //            var Data_Spells = Fields[2].Split(new char[] { ',' });
+
+    //            var Data_Consumed = Fields[3] == "N" ? false : true;
+    //            var Data_Notes = Fields[4];
+
+    //            var SpellMaterial = new SpellMaterial(Data_Name, Data_Notes, Cost, Data_Consumed);
+
+    //            SpellMaterial.ID = AddItem<SpellMaterial>(SpellMaterial);
+
+    //            foreach (var Name in Data_Spells)
+    //            {
+    //         //       var Spell = SpellManager.Instance.Find<Spell>(x => x.Name == Name).SingleOrDefault();
+
+    //                //if (Spell == null)
+    //                //    continue;
+
+    //            //    Spell.SpellMaterials.Add(SpellMaterial);
+    //            //    SpellManager.Instance.UpdateItem<Spell>(Spell);
+    //            }
+
+    //       //     SpellManager.Instance.SaveChanges();
+    //        }
+    //    }
+
+    //    public void AddBaseWeapons()
+    //    {
+    //        List<DamageType> DamageTypes = new List<DamageType>();
+
+    //        var Damage = new DamageType(EDamageType.Slashing, new int[] { 1, 8, 0 });
+    //        DamageTypes.Add(Damage);
+
+    //        var Weapon = new Weapon(EItemSubType.Martial_Melee,
+    //                          EItemRarity.Common,
+    //                          DamageTypes,
+    //                          new int[] { 0, 0 },
+    //                          "Longsword",
+    //                          "Longsword weapon",
+    //                          15,
+    //                          3,
+    //                          new List<Ability>());
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Versatile);
+    //        Weapon.VersatileDamage = new int[2] { 1, 10 };
+    //        AddItem<Weapon>(Weapon);
+
+    //        DamageTypes.Clear();
+    //        DamageTypes.Add(new DamageType(EDamageType.Bludgeoning, new int[] { 1, 8, 0 }));
+    //        Weapon = new Weapon(EItemSubType.Martial_Melee,
+    //                            EItemRarity.Common,
+    //                            DamageTypes,
+    //                           new int[] { 0, 0 },
+    //                            "Warhammer",
+    //                            "Warhammer Weapon",
+    //                            15,
+    //                            2,
+    //                            new List<Ability>());
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Versatile);
+    //        Weapon.VersatileDamage = new int[2] { 1, 10 };
+    //        AddItem<Weapon>(Weapon);
+
+    //        DamageTypes.Clear();
+
+    //        DamageTypes.Add(new DamageType(EDamageType.Slashing, new int[] { 1, 10, 0 }));
+    //        Weapon = new Weapon(EItemSubType.Martial_Melee,
+    //                            EItemRarity.Rare,
+    //                            DamageTypes,
+    //                              new int[] { 0, 0 },
+    //                            "Halberd",
+    //                            "Halberd Weapon",
+    //                            20,
+    //                            6,
+    //                            new List<Ability>());
+
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Reach);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
+    //        AddItem<Weapon>(Weapon);
+
+    //        DamageTypes.Clear();
+
+    //        DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 8, 0 }));
+    //        Weapon = new Weapon(EItemSubType.Martial_Ranged,
+    //                            EItemRarity.Common,
+    //                            DamageTypes,
+    //                            new int[2] { 150, 600 },
+    //                            "Longbow",
+    //                            "Longbow",
+    //                            50,
+    //                            2,
+    //                           new List<Ability>());
+
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Range);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
+    //        AddItem<Weapon>(Weapon);
+
+    //        DamageTypes.Clear();
+
+    //        DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 10, 0 }));
+
+    //        Weapon = new Weapon(EItemSubType.Martial_Ranged,
+    //                            EItemRarity.Common,
+    //                            DamageTypes,
+    //                            new int[2] { 100, 400 },
+    //                            "Crossbow, Heavy",
+    //                            "Heavy Crossbow",
+    //                            50,
+    //                            18,
+    //                            new List<Ability>());
+
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Range);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Loading);
+    //        Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
+
+    //        AddItem<Weapon>(Weapon);
+    //    }
+
+    //    public void AddBaseArmors()
+    //    {
+    //        //// Just create some base game armor types that will always be around.
+    //        var Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Padded", "Padded Armor", 5, 8, new List<Ability>());
+    //        AddItem<Armor>(Armor);
+
+    //        Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 11, "Leather", "Leather Armor", 11, 10, new List<Ability>());
+    //        AddItem<Armor>(Armor);
+
+    //        Armor = new Armor(EItemSubType.Light, EItemRarity.Common, EAbility.Dexterity, 12, "Studded Leather", "Studded Leather Armor", 45, 13, new List<Ability>());
+    //        AddItem<Armor>(Armor);
+
+    //        Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 12, "Hide", "Hide Armor", 10, 12, new List<Ability>());
+    //        AddItem<Armor>(Armor);
+
+    //        Armor = new Armor(EItemSubType.Medium, EItemRarity.Uncommon, EAbility.Dexterity, 13, "Chain Shirt", "Chain Shirt Armor", 50, 20, new List<Ability>());
+    //        AddItem<Armor>(Armor);
+
+    //        Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 14, "Ring Mail", "Ring Mail Armor", 14, 40, new List<Ability>());
+    //        AddItem<Armor>(Armor);
+
+    //        List<Ability> Requirements = new List<Ability>();
+    //        Requirements.Add(new Ability(EAbility.Strength, 0, 0, 13));
+    //        Armor = new Armor(EItemSubType.Heavy, EItemRarity.Rare, 0, 16, "Chain Mail", "Chain Mail Armor", 75, 55, Requirements);
+
+    //        AddItem<Armor>(Armor);
+    //    }
+    //}
+
+    //public class ItemDB : SimpleDB<Item>
+    //{
+    //    private static ItemDB _Instance;
+
+    //    public static ItemDB Instance
+    //    {
+    //        get
+    //        {
+    //            if (_Instance == null)
+    //                _Instance = new ItemDB();
+
+    //            return _Instance;
+    //        }
+    //    }
+
+    //    public ItemDB()
+    //    {
+    //        InitBase();
+    //    }
+
+    //    public void InitBase()
+    //    {
+    //        Items.Clear();
+    //    }
+    //}
 }

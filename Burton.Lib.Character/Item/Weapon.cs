@@ -79,6 +79,21 @@ namespace Burton.Lib.Characters
             this.WeaponProperties = new List<EWeaponProperty>();
         }
 
+        public void Init(EItemSubType SubType, EItemRarity Rarity, List<DamageType> DamageTypes, List<EWeaponProperty> Properties, int[] Range, string Name, string Description, int Cost, int Weight, List<Ability> Requirements)
+        {
+            this.Type = EItemType.Weapon;
+            this.SubType = SubType;
+            this.Rarity = Rarity;
+            this.Name = Name;
+            this.Description = Description;
+            this.Cost = Cost;
+            this.Weight = Weight;
+            this.Require_Abilities = Requirements;
+            this.DamageTypes = DamageTypes;
+            this.Range = Range;
+            this.WeaponProperties = Properties;
+        }
+
         // Make a "deep" copy.
         // Probably could be better, but what do I know.
         public Weapon(Weapon Other)

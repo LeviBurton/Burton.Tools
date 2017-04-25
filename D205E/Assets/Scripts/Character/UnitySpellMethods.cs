@@ -29,10 +29,11 @@ public class UnitySpellMethods
     public static void Bless(Spell Spell, object Caster)
     {
         var Character = Caster as UnityCharacter;
+        Debug.LogFormat("{0} casted {1}", Character.Character.Name, Spell.Name);
 
         if (Character.Target != null && Character is UnityCharacter)
         {
-            Debug.LogFormat("Target Position: {0}", Character.Target.transform.position.ToString());
+            //Debug.LogFormat("Target Position: {0}", Character.Target.transform.position.ToString());
 
             // Just kind of fooling around with things we can do.
             UnityCharacter Target = Character.Target.GetComponent<UnityCharacter>();

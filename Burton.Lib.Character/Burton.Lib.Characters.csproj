@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ability.cs" />
+    <Compile Include="Combat\Actions.cs" />
     <Compile Include="Interfaces\IMovement.cs" />
     <Compile Include="Item\Adventuring_Gear.cs" />
     <Compile Include="Character.cs" />

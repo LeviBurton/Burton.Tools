@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using UnityEditor;
 using UnityEngine;
 
 namespace Burton.Lib.Characters
@@ -94,11 +94,10 @@ namespace Burton.Lib.Characters
         }
     }
 
-    [Serializable]
+
     [CreateAssetMenu(fileName = "Spell", menuName = "Spells", order = 1)]
     public class Spell : DbItem
     {
-        [NonSerialized]
         private Action<Spell, object> CastDelegate = null;
 
         public ESpellSchoolType MagicSchool;
@@ -115,7 +114,7 @@ namespace Burton.Lib.Characters
         public string SpellMethodName = string.Empty;
         public MethodInfo SpellMethodInfo = null;
 
-      
+ 
         public Spell(ESpellSchoolType MagicSchool, 
                      List<EClassType> ClassTypes, 
                      string Name, 
@@ -141,7 +140,6 @@ namespace Burton.Lib.Characters
         #region Unity ScriptableObject
         public void OnEnable()
         {
-
         }
 
         public void OnDestroy()
@@ -176,9 +174,10 @@ namespace Burton.Lib.Characters
             return (DbItem) Other;
         }
 
-        // Note that at run-time we need call this for every spell
-        // in the database when initializing everything...
-        public void SetSpellMethod<T>(string MethodName)
+        // Unity scriptable object seems to take care of 
+        // serializing our delegate!  This means 
+        // we can bind, then save.
+        public void BindSpellMethod<T>(string MethodName)
         {
             SpellMethodName = MethodName;
 
@@ -203,7 +202,6 @@ namespace Burton.Lib.Characters
         }
     }
 
-
     public class SpellManager
     {
         #region Singleton
@@ -220,26 +218,57 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
-        public string FileName = "Spells.bytes";
-        private SpellDB DB;
-        private bool bDoBootstrap = false;
+        static string SpellAssetsBasePath = @"Assets/Data/Spells";
+        public List<Spell> Spells;
 
         public SpellManager()
         {
-            DB = SpellDB.Instance;
+            Spells = new List<Spell>();
+            RefreshAssets();
+        }
 
-            if (bDoBootstrap)
+        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
+        {
+            if (Predicate == null)
             {
-                Bootstrap();
-                SaveChanges();
-                return;
+                return Spells.OfType<T>().AsEnumerable();
+            }
+            else
+            {
+                return Spells.OfType<T>().Where(Predicate).AsEnumerable();
+            }
+        }
+
+        public void RefreshAssets()
+        {
+            Spells = new List<Spell>();
+
+            var SpellGUIDs = AssetDatabase.FindAssets("t:Spell", new string[] { SpellAssetsBasePath });
+
+            foreach (string SpellGuid in SpellGUIDs)
+            {
+                var SpellAssetPath = AssetDatabase.GUIDToAssetPath(SpellGuid);
+                var Spell = AssetDatabase.LoadAssetAtPath<Spell>(SpellAssetPath);
+                Spell.BindSpellMethod<Spell>(Spell.SpellMethodName);
+
+                Spells.Add(Spell);
+            }
+        }
+
+        public void DeleteAll()
+        {
+            // Delete all assets
+            var SpellGUIDs = AssetDatabase.FindAssets("t:Spell", new string[] { SpellAssetsBasePath });
+            foreach (string SpellGuid in SpellGUIDs)
+            {
+                var SpellAssetPath = AssetDatabase.GUIDToAssetPath(SpellGuid);
+                AssetDatabase.DeleteAsset(SpellAssetPath);
             }
         }
 
         public void Import(string FileName)
         {
-            DB.Items.Clear();
-            DB.ResetID();
+            DeleteAll();
 
             var Data = File.ReadAllLines(FileName);
             Data[0] = null;
@@ -250,7 +279,7 @@ namespace Burton.Lib.Characters
                     continue;
 
                 var Fields = Line.Split(new char[] { '\t' });
-             //   continue;
+                //   continue;
 
                 if (Fields[57] == "")
                     continue;
@@ -293,7 +322,7 @@ namespace Burton.Lib.Characters
                     Data_Range = Data_Range.Replace("self", "");
 
                     Range.RangeType = ESpellRangeType.Self;
-                    
+
                     foreach (var RangeType in Enum.GetValues(typeof(ESpellSelfRangeType)))
                     {
                         if (Data_Range.Contains(RangeType.ToString().ToLower()))
@@ -321,7 +350,7 @@ namespace Burton.Lib.Characters
                     Range.SelfRangeType = ESpellSelfRangeType.None;
                     Range.RangeType = ESpellRangeType.None;
                 }
-                else 
+                else
                 {
                     Range.RangeType = ESpellRangeType.Distance;
                     Range.Range = Convert.ToInt32(Data_Range);
@@ -351,7 +380,7 @@ namespace Burton.Lib.Characters
                 if (Data_Wizard != "")
                     ClassTypes.Add(EClassType.Wizard);
 
-                var School = (ESpellSchoolType) Enum.Parse(typeof(ESpellSchoolType), Data_School);
+                var School = (ESpellSchoolType)Enum.Parse(typeof(ESpellSchoolType), Data_School);
 
                 var Conc = Data_Conc == "1";
 
@@ -373,119 +402,41 @@ namespace Burton.Lib.Characters
                 {
                     CastingComps.Add(ECastingComponentType.Material);
 
-                    SpellMaterials = ItemManager.Instance.Find<SpellMaterial>(x => x.SubType == EItemSubType.Spell_Material && x.Name == Data_Name).ToList();
+                    //SpellMaterials = ItemManager.Instance.Find<SpellMaterial>(x => x.SubType == EItemSubType.Spell_Material && x.Name == Data_Name).ToList();
                 }
 
 
-                var Spell = new Spell(School, ClassTypes, Data_Name, Data_Level, Range, "", CastingComps, SpellMaterials, Conc, Data_Duration);
+                var s = new Spell(School, ClassTypes, Data_Name, Data_Level, Range, "", CastingComps, SpellMaterials, Conc, Data_Duration);
 
-                AddItem<Spell>(Spell);
+                Add(s);
 
                 Console.WriteLine(string.Format("{0,-30} {1,-5} {2,-20}", Fields[39], Fields[41], Fields[42]));
             }
 
-            SaveChanges();
+            AssetDatabase.SaveAssets();
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> Predicate = null) where T : DbItem
+        void Add(Spell Spell)
         {
-            return DB.Find(Predicate);
-        }
+            var AssetPath = SpellAssetsBasePath + string.Format(@"/{0}.asset", Spell.Name.Replace(" ", "_"));
 
-        public void SaveChanges()
-        {
-            DB.Save(FileName);
-        }
+            Spell SpellAsset = ScriptableObject.CreateInstance<Spell>();
+            SpellAsset.Name = Spell.Name;
+            SpellAsset.MagicSchool = Spell.MagicSchool;
+            SpellAsset.Level = Spell.Level;
+            SpellAsset.ID = Spell.ID;
+            SpellAsset.Classes = Spell.Classes;
+            SpellAsset.CastingTime = Spell.CastingTime;
+            SpellAsset.CastingComponentTypes = Spell.CastingComponentTypes;
+            SpellAsset.bConcentration = Spell.bConcentration;
+            SpellAsset.SpellMaterials = Spell.SpellMaterials;
+            SpellAsset.SpellMethodInfo = Spell.SpellMethodInfo;
+            SpellAsset.SpellMethodName = Spell.SpellMethodName;
+            SpellAsset.SpellRange = Spell.SpellRange;
 
-        public void SaveChanges(string FilePath)
-        {
-            DB.Save(FilePath);
-        }
-
-        public void SaveChanges(Stream OutStream)
-        {
-            DB.Save(OutStream);
-        }
-
-        public void Load(string FilePath)
-        {
-            DB.Load(FilePath);
-        }
-
-        public void Refresh(string FilePath)
-        {
-            DB.Load(FilePath);
-        }
-
-        public void Refresh(Stream InStream)
-        {
-            DB.Load(InStream);
-        }
-
-        public void Load()
-        {
-            DB.Load(FileName);
-        }
-
-        public void Refresh()
-        {
-            DB.Load(FileName);
-        }
-
-        public int AddItem<T>(T Item) where T : DbItem
-        {
-            var NewItem = (Spell)Item.Clone();
-
-            NewItem.DateCreated = DateTime.Now;
-            NewItem.DateModified = NewItem.DateCreated;
-
-            return DB.Add(NewItem);
-        }
-
-        public void UpdateItem<T>(T Item) where T : DbItem
-        {
-            var Copy = (Spell)Item.Clone();
-
-            Copy.DateModified = DateTime.Now;
-
-            DB.Items[Copy.ID - 1] = Copy;
-        }
-
-        // Fixme: fix this.
-        public void DeleteItem(int ID)
-        {
-            DB.Items[ID - 1] = null;
-        }
-
-        // Some defaults to play with
-        public void Bootstrap()
-        {
-            DB.Items.Clear();
-            DB.ResetID();
-            AddBase();
-   
-            SaveChanges();
-        }
-
-        public void AddBase()
-        {
-           // AddItem<Spell>(new Spell(EMagicSchoolType.Necromancy, new List<EClassType>() { EClassType.Cleric, EClassType.Wizard }, "Raise Dead", 1, "Raising the dead!"));
+            AssetDatabase.CreateAsset(SpellAsset, AssetPath);
+            AssetDatabase.SaveAssets();
         }
     }
 
-    public class SpellDB : SimpleDB<Spell>
-    {
-        private static SpellDB _Instance;
-
-        public static SpellDB Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new SpellDB();
-
-                return _Instance;
-            }
-        }
-    }
 }

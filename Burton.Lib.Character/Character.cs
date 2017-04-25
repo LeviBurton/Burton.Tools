@@ -5,6 +5,7 @@ using Burton.Lib.Characters.Skills;
 using System;
 using System.ComponentModel;
 using Burton.Lib.Dice;
+using Burton.Lib.Characters.Combat;
 
 namespace Burton.Lib.Characters
 {
@@ -68,6 +69,8 @@ namespace Burton.Lib.Characters
         // Their current equipment (weapons, armor, etc -- everything)
         public List<Item> Equipment;
 
+        public List<CombatAction> CombatActions = new List<CombatAction>();
+
         // Weight in pounds they can carry.
         public int CarryingCapacity
         {
@@ -102,6 +105,8 @@ namespace Burton.Lib.Characters
                 var ToAdd = new Ability((EAbility)AbilityType, 1, 30, 0);
                 Abilities.Insert(AbilityType, ToAdd);
             }
+
+           // CombatActions = CombatActionManager.Instance.Actions;
         }
 
         public bool CanEquip(Item E)

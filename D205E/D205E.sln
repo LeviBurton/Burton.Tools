@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D205E", "D205E.csproj", "{E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D205E.Editor", "D205E.Editor.csproj", "{40D5F9FE-00A8-DB0F-BC42-EBAA1C25C05D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Characters", "..\Burton.Lib.Character\Burton.Lib.Characters.csproj", "{F6700042-C536-46AC-AC71-6AD2555032FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB_Test", "..\Scratch\SimpleDB_Test\SimpleDB_Test.csproj", "{22783365-6E41-4C6D-A8E3-B0548E245FB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{40D5F9FE-00A8-DB0F-BC42-EBAA1C25C05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40D5F9FE-00A8-DB0F-BC42-EBAA1C25C05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40D5F9FE-00A8-DB0F-BC42-EBAA1C25C05D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6700042-C536-46AC-AC71-6AD2555032FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6700042-C536-46AC-AC71-6AD2555032FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6700042-C536-46AC-AC71-6AD2555032FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6700042-C536-46AC-AC71-6AD2555032FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22783365-6E41-4C6D-A8E3-B0548E245FB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22783365-6E41-4C6D-A8E3-B0548E245FB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22783365-6E41-4C6D-A8E3-B0548E245FB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22783365-6E41-4C6D-A8E3-B0548E245FB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
