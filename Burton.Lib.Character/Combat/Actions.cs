@@ -100,6 +100,7 @@ namespace Burton.Lib.Characters.Combat
         public void RefreshList()
         {
             Actions = new List<CombatAction>();
+
             Actions.Add(new CombatAction("Attack", "Attack"));
             Actions.Add(new CombatAction("Cast a Spell", "CastSpell"));
             Actions.Add(new CombatAction("Dash", "Dash"));
@@ -147,7 +148,6 @@ namespace Burton.Lib.Characters.Combat
         {
             this.Name = Name;
             this.ExecuteDelegateName = MethodName;
-
             BindCombatActionMethod<CombatActionDelegates>(this.ExecuteDelegateName);
         }
 

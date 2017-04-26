@@ -19,7 +19,8 @@ namespace Burton.Lib.Characters
         Pyschic,
         Radiant,
         Slashing,
-        Thunder
+        Thunder,
+        Versatile
     }
 
     public enum EWeaponProperty

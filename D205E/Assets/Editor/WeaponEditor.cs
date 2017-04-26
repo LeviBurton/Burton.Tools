@@ -163,14 +163,13 @@ public class WeaponEditorWindow : EditorWindow
                     EItemRarity.Common,
                     new List<DamageType>()
                     {
-                        new DamageType(EDamageType.Slashing, new int[] { 1, 8, 0 })
+                        new DamageType(EDamageType.Slashing, new int[] { 1, 6, 0 })
                     },
                     new List<EWeaponProperty>()
                     {
-                        EWeaponProperty.Versatile
                     },
                     new int[] { 0, 0 },
-                    DefaultWeaponName,
+                    "",
                     "",
                     15,
                     3,
@@ -227,12 +226,7 @@ public class WeaponEditorWindow : EditorWindow
         GUILayout.EndHorizontal();
 
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Range:", GUILayout.Width(MaxLabelWidth));
-        CurrentWeapon.Range[0] = EditorGUILayout.IntField(CurrentWeapon.Range[0], GUILayout.Width(SingleDigitWidth * 4));
-        GUILayout.Label("/", GUILayout.Width(MaxLabelWidth), GUILayout.Width(SingleDigitWidth));
-        CurrentWeapon.Range[1] = EditorGUILayout.IntField(CurrentWeapon.Range[1], GUILayout.Width(SingleDigitWidth * 4));
-        GUILayout.EndHorizontal();
+     
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Damage Types:",GUILayout.Width(MaxLabelWidth));
@@ -278,18 +272,25 @@ public class WeaponEditorWindow : EditorWindow
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
+        GUILayout.Label("Range:", GUILayout.Width(MaxLabelWidth));
+        CurrentWeapon.Range[0] = EditorGUILayout.IntField(CurrentWeapon.Range[0], GUILayout.Width(SingleDigitWidth * 4));
+        GUILayout.Label("/", GUILayout.Width(MaxLabelWidth), GUILayout.Width(SingleDigitWidth));
+        CurrentWeapon.Range[1] = EditorGUILayout.IntField(CurrentWeapon.Range[1], GUILayout.Width(SingleDigitWidth * 4));
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
         GUILayout.Label("Rarity: ",GUILayout.Width(MaxLabelWidth));
         CurrentWeapon.Rarity = (EItemRarity)EditorGUILayout.Popup((int)CurrentWeapon.Rarity, Enum.GetNames(typeof(EItemRarity)));
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Weight: ",  GUILayout.Width(MaxLabelWidth));
-        CurrentWeapon.Weight = EditorGUILayout.IntField(CurrentWeapon.Weight);
+        GUILayout.Label("Cost: ",GUILayout.Width(MaxLabelWidth));
+        CurrentWeapon.Cost = EditorGUILayout.IntField(CurrentWeapon.Cost);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Cost: ",GUILayout.Width(MaxLabelWidth));
-        CurrentWeapon.Cost = EditorGUILayout.IntField(CurrentWeapon.Cost);
+        GUILayout.Label("Weight: ", GUILayout.Width(MaxLabelWidth));
+        CurrentWeapon.Weight = EditorGUILayout.IntField(CurrentWeapon.Weight);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();

@@ -11,6 +11,7 @@ public class UnityCharacter : MonoBehaviour
     public GameObject Target = null;
 
     public List<Spell> Spells;
+    public List<Item> Items;
 
     public List<CombatAction> DefaultCombatActions = new List<CombatAction>();
 
