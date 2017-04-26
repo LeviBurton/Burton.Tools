@@ -208,12 +208,35 @@ namespace Burton.Lib.Characters
             }
         }
 
+        public void SaveAsset<T>(T Asset) where T: Item
+        {
+            var AssetPath = AssetDatabase.GetAssetPath(Asset);
+            if (string.IsNullOrEmpty(AssetPath))
+            {
+                AssetPath = AssetsBasePath + string.Format(@"/{0}.asset", Asset.Name.Replace(" ", "_"));
+                AssetDatabase.CreateAsset(Asset, AssetPath);
+            }
+    
+            var AssetFileName = Path.GetFileNameWithoutExtension(AssetPath);
+
+            if (Asset.Name != AssetFileName.Replace("_", " "))
+            {
+                var NewFileName = "/" + Asset.Name.Replace(" ", "_");
+                AssetDatabase.RenameAsset(AssetPath, NewFileName);
+            }
+
+            AssetDatabase.SaveAssets();
+        }
+
         // Should handle all item types
-        public T CreateAsset<T>(string Name) where T: Item
+        public T CreateAsset<T>(string Name, bool bOnlyCreateInstance = false) where T: Item
         {
             var AssetPath = AssetsBasePath + string.Format(@"/{0}.asset", Name.Replace(" ", "_"));
             T ItemAsset = ScriptableObject.CreateInstance<T>();
-            AssetDatabase.CreateAsset(ItemAsset, AssetPath);
+            if (!bOnlyCreateInstance)
+            {
+                AssetDatabase.CreateAsset(ItemAsset, AssetPath);
+            }
             return ItemAsset;
         }
 

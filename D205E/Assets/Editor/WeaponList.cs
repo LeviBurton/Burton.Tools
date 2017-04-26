@@ -29,7 +29,7 @@ public class WeaponListWindow : EditorWindow
     public void RefreshList()
     {
         ItemManager.Instance.RefreshAssets();
-        Items = ItemManager.Instance.Find<Weapon>(x => x.Type == EItemType.Weapon).ToList();
+        Items = ItemManager.Instance.Find<Weapon>().ToList();
         FilteredItems = Items;
     }
 
@@ -95,8 +95,9 @@ public class WeaponListWindow : EditorWindow
             {
                 if (EditorUtility.DisplayDialog("Confirm delete", "Delete " + Weapon.Name, "OK", "Cancel"))
                 {
-                    //ItemManager.Instance.DeleteItem(Weapon.ID);
-                    //ItemManager.Instance.SaveChanges();
+                    var AssetPath = AssetDatabase.GetAssetPath(Weapon);
+                    AssetDatabase.DeleteAsset(AssetPath);
+                    RefreshList();
                 }
             }
 
