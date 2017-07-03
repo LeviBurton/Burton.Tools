@@ -18,7 +18,8 @@ public class UnityCharacter : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Character = new Character(new Wizard());
+        Character = ScriptableObject.CreateInstance<Character>();
+        Character.Class = new Wizard();
         Character.RollAbilities();
         Character.Name = "Wizard of Oz";
 

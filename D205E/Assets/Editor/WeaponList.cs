@@ -45,9 +45,7 @@ public class WeaponListWindow : EditorWindow
     void OnGUI()
     {
         Items = ItemManager.Instance.Find<Weapon>().ToList();
-
-        var GroupedItems = ItemManager.Instance.Find<Weapon>().GroupBy(x => x.SubType, x => x, (key, g) => new { SubGroupName = key, Items = g.ToList() }).ToList();
-
+        var GroupedItems = ItemManager.Instance.Find<Weapon>().GroupBy(x => x.SubType, (key, g) => new { SubGroupName = key, Items = g.ToList() }).ToList();
 
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("New Weapon", GUILayout.Width(DefaultWidth)))

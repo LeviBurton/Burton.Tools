@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel;
 using Burton.Lib.Dice;
 using Burton.Lib.Characters.Combat;
+using UnityEngine;
 
 namespace Burton.Lib.Characters
 {
@@ -56,7 +57,8 @@ namespace Burton.Lib.Characters
     }
   
     [Serializable]
-    public class Character 
+    [CreateAssetMenu(fileName = "Character", menuName = "Character", order = 1)]
+    public class Character : ScriptableObject
     {
         public string Name;
         public int Level;
