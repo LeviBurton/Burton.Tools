@@ -110,7 +110,7 @@ public class WeaponImporter : DataImporter, IDataImporter
 public class DataImporterMainWindow : EditorWindow
 {
     private Vector2 ScrollVector;
-    private List<IDataImporter> Importers = new List<IDataImporter>();
+    private List<DataImporter> Importers = new List<DataImporter>();
 
     [MenuItem("D20/Data/Importer")]
     public static void ShowWindow()
