@@ -47,7 +47,7 @@
     <Compile Include="Ability.cs" />
     <Compile Include="Combat\Actions.cs" />
     <Compile Include="Interfaces\IMovement.cs" />
-    <Compile Include="Item\Adventuring_Gear.cs" />
+    <Compile Include="Item\Gear.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Class.cs" />
     <Compile Include="Item\Armor.cs" />

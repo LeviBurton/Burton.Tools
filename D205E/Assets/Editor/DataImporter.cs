@@ -19,8 +19,8 @@ public interface IDataImporter
 
 public class DataImporter : IDataImporter
 {
-    public List<DbItem> Items = new List<DbItem>();
     public string ImporterName;
+    public int ItemCount;
 
     public virtual void Import()
     {
@@ -49,9 +49,8 @@ public class SpellImporter : DataImporter
     {
         ImporterName = "Spells";
 
-        // Load up current spells in system.
-        for (int i = 0; i < 10; i++)
-            Items.Add(ScriptableObject.CreateInstance<Spell>());
+        SpellManager.Instance.RefreshAssets();
+        ItemCount = SpellManager.Instance.Spells.Count();
     }
 
     public override void Import(string FileName)
@@ -77,22 +76,23 @@ public class SpellImporter : DataImporter
 
 public class WeaponImporter : DataImporter, IDataImporter
 {
+    public string PrefabPath = @"";
+
     public WeaponImporter()
     {
         ImporterName = "Weapons";
-        // Load up current spells in system.
-        for (int i = 0; i < 50; i++)
-            Items.Add(ScriptableObject.CreateInstance<Weapon>());
+        ItemManager.Instance.RefreshAssets();
+        ItemCount = ItemManager.Instance.Items.Where(x => x.Type == EItemType.Weapon).Count();
     }
 
     public override void Import(string FileName)
     {
-        throw new NotImplementedException();
+        WeaponManager.Instance.Import(FileName);
     }
 
     public override void Import()
     {
-        Debug.Log(string.Format("{0} Import", ImporterName));
+        throw new NotImplementedException();
     }
 
     public override void ReImport()
@@ -143,12 +143,16 @@ public class DataImporterMainWindow : EditorWindow
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(Importer.ImporterName, GUILayout.Width(UI_Constants.DefaultWidth));
-            GUILayout.Label(Importer.Items.Count().ToString(), GUILayout.Width(UI_Constants.DefaultWidth));
+            GUILayout.Label(Importer.ItemCount.ToString(), GUILayout.Width(UI_Constants.DefaultWidth));
             GUILayout.Space(25);
 
             if (GUILayout.Button("Import", GUILayout.Width(UI_Constants.DefaultWidth + 10)))
             {
-                Importer.Import();
+                string ImportFile = EditorUtility.OpenFilePanel("Choose data file...", "", "*.*");
+                if (ImportFile.Length != 0)
+                {
+                    Importer.Import(ImportFile);
+                }
             }
 
             GUILayout.EndHorizontal();

@@ -21,7 +21,7 @@ namespace Burton.Lib.Characters
     {
         Armor,
         Weapon,
-        Adventuring_Gear,
+        Gear,
         Tool,
         Mount_And_Vehicle,
         Trade_Good,
@@ -31,6 +31,7 @@ namespace Burton.Lib.Characters
 
     public enum EItemSubType
     {
+        None,
         Light,
         Medium,
         Heavy,
@@ -39,7 +40,14 @@ namespace Burton.Lib.Characters
         Simple_Ranged,
         Martial_Melee,
         Martial_Ranged,
-        Spell_Material
+        Spell_Material,
+        One_Handed_Small_Arms,
+        Two_Handed_Small_Arms,
+        Super_Heavy,
+        Combat_Accessories,
+        Detonators,
+        Tool_Kits,
+        Utilities
     }
 
     public enum EModifierType
@@ -79,6 +87,7 @@ namespace Burton.Lib.Characters
         public string Description;
         public int Weight;
         public int Cost;
+        public int TL;
         public Texture2D Icon;
 
         public EItemType Type;
@@ -104,6 +113,7 @@ namespace Burton.Lib.Characters
                     EItemRarity Rarity,
                     string Name,
                     string Description,
+                    int TL,
                     int Cost,
                     int Weight,
                     List<Ability> AbilityRequirements,
@@ -111,12 +121,12 @@ namespace Burton.Lib.Characters
                     DateTime? DateModified = null)
             : base(DateCreated, DateModified)
         {
-            Init(Type, SubType, Rarity, Name, Description, Cost, Weight, AbilityRequirements);
+            Init(Type, SubType, Rarity, Name, Description, TL, Cost, Weight, AbilityRequirements);
         }
 
         public void Init(Item Other)
         {
-            Init(Other.Type, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.Cost, Other.Weight, Other.Require_Abilities);
+            Init(Other.Type, Other.SubType, Other.Rarity, Other.Name, Other.Description, Other.TL, Other.Cost, Other.Weight, Other.Require_Abilities);
         }
 
         public void Init(EItemType Type,
@@ -124,6 +134,7 @@ namespace Burton.Lib.Characters
                     EItemRarity Rarity,
                     string Name,
                     string Description,
+                    int TL,
                     int Cost,
                     int Weight,
                     List<Ability> AbilityRequirements,
@@ -135,6 +146,7 @@ namespace Burton.Lib.Characters
             this.Rarity = Rarity;
             this.Name = Name;
             this.Description = Description;
+            this.TL = TL;
             this.Weight = Weight;
             this.Cost = Cost;
             this.Require_Abilities = new List<Ability>();
@@ -163,6 +175,8 @@ namespace Burton.Lib.Characters
         #endregion
 
         static string AssetsBasePath = @"Assets/Data/Items";
+
+
         public List<Item> Items;
 
         public ItemManager()
@@ -187,13 +201,23 @@ namespace Burton.Lib.Characters
         {
             Items = new List<Item>();
 
-            var SpellGUIDs = AssetDatabase.FindAssets("t:Item", new string[] { AssetsBasePath });
+            var ItemGuids = AssetDatabase.FindAssets("t:Item", new string[] { AssetsBasePath });
 
-            foreach (string SpellGuid in SpellGUIDs)
+            foreach (string ItemGuid in ItemGuids)
             {
-                var AssetPath = AssetDatabase.GUIDToAssetPath(SpellGuid);
+                var AssetPath = AssetDatabase.GUIDToAssetPath(ItemGuid);
                 var Asset = AssetDatabase.LoadAssetAtPath<Item>(AssetPath);
                 Items.Add(Asset);
+            }
+        }
+
+        public void Delete(string ItemType)
+        {
+            var ItemGuids = AssetDatabase.FindAssets(string.Format("t:{0}", ItemType), new string[] { AssetsBasePath });
+            foreach (string ItemGuid in ItemGuids)
+            {
+                var AssetPath = AssetDatabase.GUIDToAssetPath(ItemGuid);
+                AssetDatabase.DeleteAsset(AssetPath);
             }
         }
 
@@ -245,107 +269,6 @@ namespace Burton.Lib.Characters
 
         }
 
-        public void AddBaseWeapons()
-        {
-            var Weapon = CreateAsset<Weapon>("Longsword"); 
-            Weapon.Init(EItemSubType.Martial_Melee,
-                        EItemRarity.Common,
-                        new List<DamageType>()
-                        {
-                            new DamageType(EDamageType.Slashing, new int[] { 1, 8, 0 })
-                        },
-                        new List<EWeaponProperty>()
-                        {
-                            EWeaponProperty.Versatile
-                        },
-                        new int[] { 0, 0 },
-                        "Longsword",
-                        "Longsword weapon",
-                        15,
-                        3,
-                        new List<Ability>());
-            Weapon.VersatileDamage = new int[2] { 1, 10 };
-
-            Weapon = CreateAsset<Weapon>("Warhammer");
-            Weapon.Init(EItemSubType.Martial_Melee,
-                        EItemRarity.Common,
-                        new List<DamageType>()
-                        {
-                            new DamageType(EDamageType.Bludgeoning, new int[] { 1, 8, 0 })
-                        },
-                        new List<EWeaponProperty>()
-                        {
-                            EWeaponProperty.Versatile
-                        },
-                        new int[] { 0, 0 },
-                        "Warhammer",
-                        "Warhammer weapon",
-                        15,
-                        2,
-                        new List<Ability>());
-            Weapon.VersatileDamage = new int[2] { 1, 10 };
-
-            Weapon = CreateAsset<Weapon>("Longbow");
-            Weapon.Init(EItemSubType.Martial_Ranged,
-                        EItemRarity.Common,
-                        new List<DamageType>()
-                        {
-                            new DamageType(EDamageType.Piercing, new int[] { 1, 8, 0 })
-                        },
-                        new List<EWeaponProperty>()
-                        {
-                            EWeaponProperty.Range,
-                            EWeaponProperty.Heavy,
-                            EWeaponProperty.Two_Handed,
-                            EWeaponProperty.Ammunition
-                        },
-                        new int[] { 150, 600 },
-                        "Longbow",
-                        "Longbow Weapom",
-                        11,
-                        2,
-                        new List<Ability>());
-            AssetDatabase.SaveAssets();
-
-            //DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 8, 0 }));
-            //Weapon = new Weapon(EItemSubType.Martial_Ranged,
-            //                    EItemRarity.Common,
-            //                    DamageTypes,
-            //                    new int[2] { 150, 600 },
-            //                    "Longbow",
-            //                    "Longbow",
-            //                    50,
-            //                    2,
-            //                   new List<Ability>());
-
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Range);
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
-            //AddItem<Weapon>(Weapon);
-
-            //DamageTypes.Clear();
-
-            //DamageTypes.Add(new DamageType(EDamageType.Piercing, new int[] { 1, 10, 0 }));
-
-            //Weapon = new Weapon(EItemSubType.Martial_Ranged,
-            //                    EItemRarity.Common,
-            //                    DamageTypes,
-            //                    new int[2] { 100, 400 },
-            //                    "Crossbow, Heavy",
-            //                    "Heavy Crossbow",
-            //                    50,
-            //                    18,
-            //                    new List<Ability>());
-
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Range);
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Heavy);
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Two_Handed);
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Loading);
-            //Weapon.WeaponProperties.Add(EWeaponProperty.Ammunition);
-
-            //AddItem<Weapon>(Weapon);
-        }
 
         public void AddBaseArmors()
         {

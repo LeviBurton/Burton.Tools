@@ -57,7 +57,7 @@ public class ItemListWindow : EditorWindow
         {
             ItemManager.Instance.DeleteAll();
             //ItemManager2.Instance.AddBaseArmors();
-            ItemManager.Instance.AddBaseWeapons();
+          //  ItemManager.Instance.AddBaseWeapons();
             RefreshList();
         }
 

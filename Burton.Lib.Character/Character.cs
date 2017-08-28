@@ -70,7 +70,6 @@ namespace Burton.Lib.Characters
 
         // Their current equipment (weapons, armor, etc -- everything)
         public List<Item> Equipment;
-
         public List<CombatAction> CombatActions = new List<CombatAction>();
 
         // Weight in pounds they can carry.
@@ -95,7 +94,7 @@ namespace Burton.Lib.Characters
         {
             Abilities = new List<Ability>(6);
             Equipment = new List<Item>();
-
+ 
             Class = CharacterClass;
             Level = 1;
             AlignmentAttitudeType = EAlignmentAttitudeType.Lawful;

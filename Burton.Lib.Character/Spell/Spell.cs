@@ -26,7 +26,7 @@ namespace Burton.Lib.Characters
         bool bConsumeOnUse = false;
 
         public SpellMaterial(string Name, string Description, int Cost, bool ConsumeOnUse)
-            :base(EItemType.Special_Material, EItemSubType.Spell_Material, EItemRarity.Common, Name, Description, Cost, 0, null)
+            :base(EItemType.Special_Material, EItemSubType.Spell_Material, EItemRarity.Common, Name, Description, 0, Cost, 0, null)
         {
             this.bConsumeOnUse = ConsumeOnUse;
         }
@@ -135,6 +135,25 @@ namespace Burton.Lib.Characters
             this.CastingComponentTypes = SpellCastingComponentType;
             this.bConcentration = bConcentration;
             this.SpellMaterials = SpellMaterials;
+        }
+
+        public Spell(Spell Other)
+        {
+            this.bConcentration = Other.bConcentration;
+            this.CastDelegate = Other.CastDelegate;
+            this.CastingComponentTypes = Other.CastingComponentTypes;
+            this.CastingTime = Other.CastingTime;
+            this.Classes = Other.Classes;
+            this.DateCreated = Other.DateCreated;
+            this.DateModified = Other.DateModified;
+            this.ID = Other.ID;
+            this.Level = Other.Level;
+            this.MagicSchool = Other.MagicSchool;
+            this.Name = Other.Name;
+            this.SpellMaterials = Other.SpellMaterials;
+            this.SpellMethodInfo = Other.SpellMethodInfo;
+            this.SpellMethodName = Other.SpellMethodName;
+            this.SpellRange = Other.SpellRange;
         }
 
         #region Unity ScriptableObject
