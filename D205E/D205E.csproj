@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\Graph\UnityEdge.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityGraph.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityGraphEditor.cs" />
+    <Compile Include="Assets\Scripts\Graph\UnityGraphManager.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityNode.cs" />
     <Compile Include="Assets\Scripts\PanelManager.cs" />
     <Compile Include="Assets\Scripts\ResizePanel.cs" />

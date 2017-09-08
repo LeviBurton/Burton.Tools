@@ -36,8 +36,10 @@ namespace Burton.Lib.Graph
         /// <returns>Node at nodeIndex</returns>
         public NodeType GetNode(int NodeIndex)
         {
-            if (NodeIndex > Nodes.Count)
+            if (NodeIndex >= Nodes.Count || NodeIndex == -1)
+            {
                 return null;
+            }
 
             NodeType Node = Nodes[NodeIndex];
             return Node;

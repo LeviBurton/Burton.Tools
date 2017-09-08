@@ -1,24 +1,20 @@
 ﻿using Burton.Lib.Graph;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class UnityGraph : MonoBehaviour
+[Serializable]
+public class UnityGraph : ScriptableObject
 {
+    public string Name = "UnityGraph";
     public SparseGraph<UnityNode, UnityEdge> Graph;
 
     public int NumTilesX = 25;
     public int NumTilesY = 25;
     public int TileWidth = 10;      // TODO: What units do these represent?
     public int TileHeight = 10;     // TODO: What units do these represent?
-
-    public float TilePadding = .25f;
-    public Color DefaultTileColor = Color.white;
-
-    public bool DrawEdges = true;
-    public bool DrawTiles = true;
-
-    public Color DefaultEdgeLineColor = Color.gray;
 
     public List<UnityNode> Nodes
     {
@@ -29,52 +25,20 @@ public class UnityGraph : MonoBehaviour
     int Width = 0;
     int Height = 0;
 
-    void Awake () {
-        DontDestroyOnLoad(this.gameObject);
-        LoadGraph();    
+    public void RemoveNode(int NodeIndex)
+    {
+        if (Graph == null)
+            return;
+
+        Graph.RemoveNode(NodeIndex);
     }
 
-    private void OnDrawGizmos()
+    public void BuildDefaultGraph()
     {
-        if (Graph != null)
-        {
-            foreach (var Node in Graph.Nodes)
-            {
-                var GraphNode = (GraphNode)Graph.GetNode(Node.NodeIndex);
+        Debug.Log("Building: " + Name);
 
-                if (DrawTiles)
-                {
-                    Gizmos.color = DefaultTileColor;
-                    Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y - 1f, transform.position.z + Node.Position.z);
-                    Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
-                    Gizmos.DrawCube(CubePosition, CubeSize);
-                }
-
-                if (DrawEdges)
-                {
-                    foreach (var Edge in Graph.Edges[Node.NodeIndex])
-                    {
-                        var FromNode = Graph.GetNode(Edge.FromNodeIndex) as UnityNode;
-                        var ToNode = Graph.GetNode(Edge.ToNodeIndex) as UnityNode;
-                        var FromPosition = new Vector3(FromNode.Position.x, 0, FromNode.Position.z);
-                        var ToPosition = new Vector3(ToNode.Position.x, 0, ToNode.Position.z);
-
-                        Gizmos.color = DefaultEdgeLineColor;
-                        Gizmos.DrawLine(FromPosition, ToPosition);
-                    }
-                }
-            }
-        }
-    }
-
-    public void LoadGraph()
-    {
-        LoadDefaultGraph();
-    }
-
-    void LoadDefaultGraph()
-    {
         Graph = new SparseGraph<UnityNode, UnityEdge>(false);
+
         Width = TileWidth * NumTilesX;
         Height = TileHeight * NumTilesY;
 
@@ -98,12 +62,10 @@ public class UnityGraph : MonoBehaviour
             }
         }
     }
-
     public static bool ValidNeighbor(int x, int y, int NumCellsX, int NumCellsY)
     {
         return !((x < 0) || (x >= NumCellsX) || (y < 0) || (y >= NumCellsY));
     }
-
     public void AddAllNeighborsToGridNode(int Row, int Col, int CellsX, int CellsY)
     {
         for (int i = -1; i < 2; ++i)
@@ -131,7 +93,7 @@ public class UnityGraph : MonoBehaviour
                     var PosNode = new Vector3(Node.X, 1, Node.Y);
                     var PosNeighborNode = new Vector3(NeighborNode.X, 1, NeighborNode.Y);
 
-                    double Distance = Vector3.Distance(PosNode,PosNeighborNode);
+                    double Distance = Vector3.Distance(PosNode, PosNeighborNode);
                     var NewEdge = new UnityEdge(Node.NodeIndex, NeighborNode.NodeIndex, Distance);
 
                     Graph.AddEdge(NewEdge);
