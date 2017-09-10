@@ -8,7 +8,7 @@ using System.Reflection;
 
 public class ItemListWindow : EditorWindow
 {
-    static string SpellAssetsBasePath = @"Assets/Data/Items";
+    static string SpellAssetsBasePath = @"Assets/Resources/Data/Items";
     private Assembly SpellMethodsAssembly = typeof(UnitySpellMethods).Assembly;
     private Vector2 ScrollVector;
     private List<Item> Items;

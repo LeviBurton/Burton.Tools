@@ -2,19 +2,29 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 using UnityEngine;
 
 [Serializable]
-public class UnityGraph : ScriptableObject
+public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 {
     public string Name = "UnityGraph";
+
     public SparseGraph<UnityNode, UnityEdge> Graph;
+
+    private byte[] GraphByteArray;
+    private string GraphXml;
 
     public int NumTilesX = 25;
     public int NumTilesY = 25;
     public int TileWidth = 10;      // TODO: What units do these represent?
     public int TileHeight = 10;     // TODO: What units do these represent?
+    public float TilePadding = .01f;
+
+    public Color DefaultTileColor;
+    public Color DefaultEdgeColor;
 
     public List<UnityNode> Nodes
     {
@@ -25,12 +35,22 @@ public class UnityGraph : ScriptableObject
     int Width = 0;
     int Height = 0;
 
+    public UnityGraph()
+    {
+      
+    }
+
     public void RemoveNode(int NodeIndex)
     {
         if (Graph == null)
             return;
 
         Graph.RemoveNode(NodeIndex);
+    }
+
+    public void Init()
+    {
+
     }
 
     public void BuildDefaultGraph()
@@ -106,5 +126,87 @@ public class UnityGraph : ScriptableObject
                 }
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Graph == null)
+            return;
+
+        int NumGraph = 0;
+        float Height = 5;
+
+        foreach (var Node in Graph.Nodes)
+        {
+            UnityNode GraphNode = null;
+
+            GraphNode = (UnityNode)Graph.GetNode(Node.NodeIndex);
+
+            if (GraphNode == null)
+                continue;
+
+            //if (DrawTiles)
+            //{
+            Gizmos.color = DefaultTileColor;
+            Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, (Height * NumGraph) + transform.position.y + Node.Position.y - 1f, transform.position.z + Node.Position.z);
+
+            Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
+            Gizmos.DrawCube(CubePosition, CubeSize);
+            // }
+
+            //if (DrawEdges)
+            //{
+            foreach (var Edge in Graph.Edges[Node.NodeIndex])
+            {
+                var FromNode = Graph.GetNode(Edge.FromNodeIndex) as UnityNode;
+                var ToNode = Graph.GetNode(Edge.ToNodeIndex) as UnityNode;
+                var FromPosition = new Vector3(transform.position.x + FromNode.Position.x, transform.position.y + (Height * NumGraph), transform.position.z + FromNode.Position.z);
+                var ToPosition = new Vector3(transform.position.x + ToNode.Position.x, transform.position.y + (Height * NumGraph), transform.position.z + ToNode.Position.z);
+
+                Gizmos.color = DefaultEdgeColor;
+                Gizmos.DrawLine(FromPosition, ToPosition);
+            }
+            //}
+        }
+    }
+
+    public void OnBeforeSerialize()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+
+        if (Graph != null)
+        {
+            // Hack to serialize nodes
+            foreach (var Node in Graph.Nodes)
+            {
+                Node.OnBeforeSerialize();
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                bf.Serialize(ms, Graph);
+                GraphByteArray = ms.ToArray();
+            }
+        }
+    }
+
+
+    public void OnAfterDeserialize()
+    {
+        using (var memStream = new MemoryStream())
+        {
+            var binForm = new BinaryFormatter();
+            memStream.Write(GraphByteArray, 0, GraphByteArray.Length);
+            memStream.Seek(0, SeekOrigin.Begin);
+
+            Graph = binForm.Deserialize(memStream) as SparseGraph<UnityNode, UnityEdge>;
+
+            // Hack to restore nodes
+            foreach (var Node in Graph.Nodes)
+            {
+                Node.OnAfterDeserialize();
+            }
+        }
+
     }
 }

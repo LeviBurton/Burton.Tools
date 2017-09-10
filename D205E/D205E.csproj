@@ -127,6 +127,7 @@
     <Compile Include="Assets\Scripts\ScrollDetailTexture.cs" />
     <Compile Include="Assets\Scripts\ShowSliderValue.cs" />
     <Compile Include="Assets\Scripts\TiltWindow.cs" />
+    <Compile Include="Assets\Scripts\UnitySingleton.cs" />
     <Compile Include="Assets\UI\Panel_Character.cs" />
   </ItemGroup>
   <ItemGroup>

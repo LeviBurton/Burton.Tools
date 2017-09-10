@@ -1,38 +1,39 @@
 ﻿using Burton.Lib.Graph;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnityNode : GraphNode
+[Serializable]
+public class UnityNode : GraphNode, ISerializationCallbackReceiver
 {
+    [NonSerialized]
     public Vector3 Position;
 
-    public float X
+    // For serialization since Unity can't serialize Vector3
+    private float Y;
+    private float X;
+    private float Z;
+
+    public UnityNode()
     {
-        get
-        {
-            return Position.x;
-        }
-        set
-        {
-            Position.x = value;
-        }
-    }
-    public float Y
-    {
-        get
-        {
-            return Position.y;
-        }
-        set
-        {
-            Position.y = value;
-        }
     }
 
     public UnityNode(int NodeIndex, Vector3 Position)
         : base(NodeIndex)
     {
         this.Position = Position;    
+    }
+
+    public void OnBeforeSerialize()
+    {
+        Y = Position.y;
+        X = Position.x;
+        Z = Position.z;
+    }
+
+    public void OnAfterDeserialize()
+    {
+        Position = new Vector3(X, Y, Z);
     }
 }

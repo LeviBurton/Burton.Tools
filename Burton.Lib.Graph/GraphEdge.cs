@@ -30,6 +30,7 @@ namespace Burton.Lib.Graph
         /// </summary>
         public double EdgeCost;
 
+
         public GraphEdge(int FromNodeIndex, int ToNodeIndex, double EdgeCost)
         {
             this.FromNodeIndex = FromNodeIndex;

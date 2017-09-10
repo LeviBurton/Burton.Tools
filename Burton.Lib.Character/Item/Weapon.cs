@@ -184,7 +184,7 @@ namespace Burton.Lib.Characters
     // Move to a UnityEditor specific file since we won't be dealing with the asset database directly in game, i dont thnk.
     public class WeaponManager
     {
-        static string AssetsBasePath = @"Assets/Data/Items/Weapons";
+        static string AssetsBasePath = @"Assets/Resources/Data/Items/Weapons";
         public List<Weapon> Items;
         public List<WeaponProperty> WeaponProperties;
 

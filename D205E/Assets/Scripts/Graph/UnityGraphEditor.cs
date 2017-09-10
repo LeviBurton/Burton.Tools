@@ -3,85 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
+
 [CustomEditor(typeof(UnityGraph))]
-[Serializable]
-public class GraphEditor : Editor
-{
-    public UnityGraph Graph;
-
-    [Range(0, 100)]
-    public int Test;
-
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        Debug.Log("GraphEditor.OnInspectorGUI()");
-
-        Graph = target as UnityGraph;
-
-        DrawDefaultInspector();
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField(new GUIContent("Name", "Name of this graph"));
-        Graph.Name = EditorGUILayout.TextField(Graph.Name);
-
-        EditorGUILayout.LabelField(new GUIContent("Build Graph", "Builds a new graph based on the contents of the scene"));
-        if (GUILayout.Button("Build Graph"))
-        {
-    
-        }
-
-        EditorGUILayout.EndHorizontal();
-    }
-}
-
-[CustomEditor(typeof(UnityGraphManager))]
 public class UnityGraphEditor : Editor
 {
-    public UnityGraph SelectedGraph;
-    public UnityGraphManager GraphManager;
+    // Might not need this -- serializedObject may be more appropriate.
+    UnityGraph Graph;
 
-    [MenuItem("D20/Graphs/Create")]
-    public static void CreateAsset()
+    public void OnEnable()
     {
-        var AssetPath = UnityGraphManager.Instance.GraphAssetsPath + string.Format(@"/{0}.asset", "Test");
-        UnityGraph NewAsset = ScriptableObject.CreateInstance<UnityGraph>();
-
-        AssetDatabase.CreateAsset(NewAsset, AssetPath);
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        EditorUtility.FocusProjectWindow();
-        Selection.activeObject = NewAsset;
+        Graph = serializedObject.targetObject as UnityGraph;
     }
 
     public override void OnInspectorGUI()
     {
-        GraphManager = target as UnityGraphManager;
+        serializedObject.Update();
 
-        DrawDefaultInspector();
-
-        UnityGraphManager.Instance.DefaultTileColor = EditorGUILayout.ColorField(UnityGraphManager.Instance.DefaultTileColor);
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField(new GUIContent("Build Graph", "Builds a new graph based on the contents of the scene"));
-        if (GUILayout.Button("Build Graph"))
+        if (GUILayout.Button("Rebuild"))
         {
-            var Graph = UnityGraphManager.Instance.Graphs[0];
-            if (Graph != null)
-            {
-                Graph.BuildDefaultGraph();
-            }
+            Graph.BuildDefaultGraph();
         }
 
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField(new GUIContent("Remove  Test", "currently only loads the default graph"));
+        #region Test
+        EditorGUILayout.LabelField("Test Stuff", EditorStyles.boldLabel);
         if (GUILayout.Button("Remove Test"))
         {
-            var Graph = UnityGraphManager.Instance.Graphs[0];
             for (int i = 0; i <= 10; i++)
             {
                 Graph.RemoveNode(i);
@@ -95,23 +44,109 @@ public class UnityGraphEditor : Editor
             {
                 Graph.RemoveNode(i);
             }
+            // EditorUtility.SetDirty(Graph);
 
+           // EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
+        EditorGUILayout.Separator(); EditorGUILayout.Separator();
+        #endregion
 
-        EditorGUILayout.EndHorizontal();
-        SceneView.RepaintAll();
-    }
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesX"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesY"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("TileWidth"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("TileHeight"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultTileColor"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultEdgeColor"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("TilePadding"));
+        EditorGUILayout.LabelField(string.Format("Nodes: {0}", Graph.Graph == null ? 0 : Graph.Nodes.Count));
 
-    protected virtual void OnSceneGUI()
-    {
-        GraphManager = target as UnityGraphManager;
-        if (Event.current.type == EventType.Repaint)
-        {
-        }
-    }
+        //     EditorGUILayout.PropertyField(serializedObject.FindProperty("Graph"));
 
-    private void DrawGraph()
-    {
-        
+        serializedObject.ApplyModifiedProperties();
     }
 }
+
+
+//[CustomEditor(typeof(UnityGraphManager))]
+//public class UnityGraphEditor : Editor
+//{
+//    public UnityGraph SelectedGraph;
+//    public List<UnityGraph> AvailableGraphs = new List<UnityGraph>();
+
+//    [MenuItem("D20/Graphs/Create")]
+//    public static void CreateAsset()
+//    {
+
+//    }
+
+//    private void OnEnable()
+//    {
+//        Debug.Log("UnityGraphEditor.OnEnable");
+//        AvailableGraphs.Clear();
+
+//        // Populate AvailableGraphs using the UnityGraphManager
+//        AvailableGraphs = UnityGraphManager.Instance.Graphs;
+//    }
+
+//    public override void OnInspectorGUI()
+//    {
+//        serializedObject.Update();
+
+//        // DrawDefaultInspector();
+
+//        EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
+//        if (GUILayout.Button("Create Graph"))
+//        {
+//            UnityGraphManager.Instance.ResetAll();
+//            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+//        }
+
+//        if (GUILayout.Button("Load All"))
+//        {
+//            UnityGraphManager.Instance.LoadAll();
+//            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+//        }
+
+//        if (GUILayout.Button("Save All"))
+//        {
+
+//        }
+//        EditorGUILayout.Separator(); EditorGUILayout.Separator();
+
+//        EditorGUILayout.LabelField("Graphs", EditorStyles.boldLabel);
+//        foreach (var Graph in AvailableGraphs)
+//        {
+//            EditorGUILayout.BeginHorizontal();
+//            EditorGUILayout.Space();
+//            EditorGUILayout.LabelField("Name");
+//            Graph.Name = EditorGUILayout.TextField(Graph.Name);
+//            EditorGUILayout.EndHorizontal();
+
+
+//            EditorGUILayout.BeginHorizontal();
+//            EditorGUILayout.Space();
+//            // UnityGraphManager.Instance.DefaultTileColor = EditorGUILayout.ColorField(UnityGraphManager.Instance.DefaultTileColor);
+//            EditorGUILayout.LabelField("Default Tile Color");
+//            Graph.DefaultTileColor = EditorGUILayout.ColorField(Graph.DefaultTileColor);
+//            EditorGUILayout.EndHorizontal();
+
+//            EditorGUILayout.BeginHorizontal();
+//            EditorGUILayout.Space();
+//            EditorGUILayout.LabelField("Default Edge Color");
+//            Graph.DefaultEdgeColor = EditorGUILayout.ColorField(Graph.DefaultEdgeColor);
+//            EditorGUILayout.EndHorizontal();
+
+//            EditorGUILayout.Separator(); EditorGUILayout.Separator();
+
+//        }
+
+//    }
+
+//    protected virtual void OnSceneGUI()
+//    {
+//        if (Event.current.type == EventType.Repaint)
+//        {
+//        }
+//    }
+//}

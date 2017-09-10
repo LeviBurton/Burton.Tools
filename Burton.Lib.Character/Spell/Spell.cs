@@ -237,7 +237,7 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
-        static string SpellAssetsBasePath = @"Assets/Data/Spells";
+        static string SpellAssetsBasePath = @"Assets/Resources/Data/Spells";
         public List<Spell> Spells;
 
         public SpellManager()

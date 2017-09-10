@@ -174,7 +174,7 @@ namespace Burton.Lib.Characters
         }
         #endregion
 
-        static string AssetsBasePath = @"Assets/Data/Items";
+        static string AssetsBasePath = @"Assets/Resources/Data/Items";
 
 
         public List<Item> Items;

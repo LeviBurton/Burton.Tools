@@ -8,7 +8,7 @@ using System;
 
 public class WeaponListWindow : EditorWindow
 {
-    static string SpellAssetsBasePath = @"Assets/Data/Items";
+    static string SpellAssetsBasePath = @"Assets/Resources/Data/Items";
     private Vector2 ScrollVector;
     private string DatabaseFile;
     public List<Weapon> Items;

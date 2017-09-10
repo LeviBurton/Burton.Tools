@@ -149,7 +149,7 @@ public class SpellEditorWindow : EditorWindow
 }
 public class SpellListWindow : EditorWindow
 {
-    static string SpellAssetsBasePath = @"Assets/Data/Spells";
+    static string SpellAssetsBasePath = @"Assets/Resources/Data/Spells";
     private Assembly SpellMethodsAssembly = typeof(UnitySpellMethods).Assembly;
     private Vector2 ScrollVector;
     private List<Spell> Spells = new List<Spell>();
