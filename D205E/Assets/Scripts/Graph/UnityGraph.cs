@@ -12,10 +12,9 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 {
     public string Name = "UnityGraph";
 
-    public SparseGraph<UnityNode, UnityEdge> Graph;
+    public SparseGraph<UnityNode, UnityEdge> Graph = new SparseGraph<UnityNode, UnityEdge>();
 
-    private byte[] GraphByteArray;
-    private string GraphXml;
+    public byte[] GraphByteArray;
 
     public int NumTilesX = 25;
     public int NumTilesY = 25;
@@ -37,7 +36,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
     public UnityGraph()
     {
-      
+
     }
 
     public void RemoveNode(int NodeIndex)
@@ -46,11 +45,6 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             return;
 
         Graph.RemoveNode(NodeIndex);
-    }
-
-    public void Init()
-    {
-
     }
 
     public void BuildDefaultGraph()
@@ -174,39 +168,40 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     {
         BinaryFormatter bf = new BinaryFormatter();
 
-        if (Graph != null)
-        {
-            // Hack to serialize nodes
-            foreach (var Node in Graph.Nodes)
-            {
-                Node.OnBeforeSerialize();
-            }
 
-            using (var ms = new MemoryStream())
-            {
-                bf.Serialize(ms, Graph);
-                GraphByteArray = ms.ToArray();
-            }
+        // Hack to serialize nodes
+        foreach (var Node in Graph.Nodes)
+        {
+            Node.OnBeforeSerialize();
+        }
+
+        using (var ms = new MemoryStream())
+        {
+            bf.Serialize(ms, Graph);
+            GraphByteArray = ms.ToArray();
         }
     }
 
-
     public void OnAfterDeserialize()
     {
-        using (var memStream = new MemoryStream())
+        BinaryFormatter bf = new BinaryFormatter();
+
+        try
         {
-            var binForm = new BinaryFormatter();
-            memStream.Write(GraphByteArray, 0, GraphByteArray.Length);
-            memStream.Seek(0, SeekOrigin.Begin);
-
-            Graph = binForm.Deserialize(memStream) as SparseGraph<UnityNode, UnityEdge>;
-
-            // Hack to restore nodes
-            foreach (var Node in Graph.Nodes)
+            using (MemoryStream ms = new MemoryStream(GraphByteArray))
             {
-                Node.OnAfterDeserialize();
+                Graph = (SparseGraph<UnityNode, UnityEdge>)bf.Deserialize(ms);
+
+                // Hack to serialize nodes
+                foreach (var Node in Graph.Nodes)
+                {
+                    Node.OnAfterDeserialize();
+                }
             }
         }
+        catch (ArgumentException e)
+        {
 
+        }
     }
 }

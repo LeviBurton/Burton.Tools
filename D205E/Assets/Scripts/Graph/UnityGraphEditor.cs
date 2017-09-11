@@ -51,6 +51,7 @@ public class UnityGraphEditor : Editor
         EditorGUILayout.Separator(); EditorGUILayout.Separator();
         #endregion
 
+
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesX"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesY"));

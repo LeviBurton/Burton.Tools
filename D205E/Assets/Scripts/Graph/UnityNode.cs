@@ -11,9 +11,9 @@ public class UnityNode : GraphNode, ISerializationCallbackReceiver
     public Vector3 Position;
 
     // For serialization since Unity can't serialize Vector3
-    private float Y;
-    private float X;
-    private float Z;
+    public float Y;
+    public float X;
+    public float Z;
 
     public UnityNode()
     {
