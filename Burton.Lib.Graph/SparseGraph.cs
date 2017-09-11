@@ -6,17 +6,17 @@ namespace Burton.Lib.Graph
     public enum ENodeType { InvalidNodeIndex = -1 }
 
     [Serializable]
-    public class SparseGraph<NodeType, EdgeType> where NodeType : GraphNode
-                                                 where EdgeType : GraphEdge
+    public class SparseGraph<TNode, TEdge> where TNode : GraphNode
+                                           where TEdge : GraphEdge
     {
         public SparseGraph()
         {
         }
 
-        public List<NodeType> Nodes = new List<NodeType>();
+        public List<TNode> Nodes = new List<TNode>();
 
         // Graph edges -- this is maintained as a list of edges indexed by node id.
-        public List<List<GraphEdge>> Edges = new List<List<GraphEdge>>();
+        public List<List<TEdge>> Edges = new List<List<TEdge>>();
 
         /// <summary>
         /// Is this a directed graoh?
@@ -34,14 +34,14 @@ namespace Burton.Lib.Graph
         /// </summary>
         /// <param name="NodeIndex"></param>
         /// <returns>Node at nodeIndex</returns>
-        public NodeType GetNode(int NodeIndex)
+        public TNode GetNode(int NodeIndex)
         {
             if (NodeIndex >= Nodes.Count || NodeIndex == -1)
             {
                 return null;
             }
 
-            NodeType Node = Nodes[NodeIndex];
+            TNode Node = Nodes[NodeIndex];
             return Node;
         }
 
@@ -51,19 +51,19 @@ namespace Burton.Lib.Graph
         /// <param name="From"></param>
         /// <param name="To"></param>
         /// <returns>The edge connecting From to To</returns>
-        public EdgeType GetEdge(int From, int To)
+        public TEdge GetEdge(int From, int To)
         {
-            EdgeType EdgeToReturn = null;
+            TEdge EdgeToReturn = null;
 
             foreach (var Edge in Edges[From])
             {
                 if (Edge.ToNodeIndex == To)
                 {
-                    EdgeToReturn = (EdgeType) Edge;
+                    EdgeToReturn = (TEdge) Edge;
                 }
             }
 
-            return (EdgeType)EdgeToReturn;
+            return (TEdge)EdgeToReturn;
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Burton.Lib.Graph
         /// </summary>
         /// <param name="Node"></param>
         /// <returns>New Node Index</returns>
-        public int AddNode(NodeType Node)
+        public int AddNode(TNode Node)
         {
             if (Node.NodeIndex < Nodes.Count)
             {
@@ -131,7 +131,7 @@ namespace Burton.Lib.Graph
 
             foreach (var FromEdge in Edges[NodeIndex])
             {
-                var EdgesToRemove = new List<GraphEdge>();
+                var EdgesToRemove = new List<TEdge>();
                 foreach (var ToEdge in Edges[FromEdge.ToNodeIndex])
                 {
                     if (ToEdge.ToNodeIndex == NodeIndex)
@@ -149,7 +149,7 @@ namespace Burton.Lib.Graph
             Edges[NodeIndex].Clear();
         }
 
-        public void AddEdge(EdgeType Edge)
+        public void AddEdge(TEdge Edge)
         {
             if (!Edges[Edge.FromNodeIndex].Contains(Edge))
             {
@@ -159,7 +159,7 @@ namespace Burton.Lib.Graph
 
         public void RemoveEdge(int From, int To)
         {
-            GraphEdge EdgeToRemove = null;
+            TEdge EdgeToRemove = null;
 
             foreach (var Edge in Edges[From])
             {
@@ -259,12 +259,12 @@ namespace Burton.Lib.Graph
                 var NewNode = new GraphNode();
                 if (NewNode.NodeIndex != (int)ENodeType.InvalidNodeIndex)
                 {
-                    AddNode((NodeType)NewNode);
+                    AddNode((TNode)NewNode);
                 }
                 else
                 {
-                    Nodes.Add((NodeType)NewNode);
-                    Edges.Add(new List<GraphEdge>());
+                    Nodes.Add((TNode)NewNode);
+                    Edges.Add(new List<TEdge>());
                     ++NextNodeIndex;
                 }
             }
@@ -278,7 +278,7 @@ namespace Burton.Lib.Graph
         {
             this.bIsDigraph = bIsDigraph;
             NextNodeIndex = 0;
-            Edges = new List<List<GraphEdge>>();
+            Edges = new List<List<TEdge>>();
         }
     }
 }

@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Burton.Lib.Graph
 {
-    class HeuristicEuclid<T> : IHeuristic<T> where T: SparseGraph<GraphNode, GraphEdge>
+    class HeuristicEuclid<T, TNode, TEdge> : IHeuristic<T> where T: SparseGraph<TNode, TEdge> 
+                                                           where TNode : NavGraphNode 
+                                                           where TEdge : GraphEdge
     {
         private double Distance(double x1, double y1, double x2, double y2)
         {
@@ -16,8 +18,8 @@ namespace Burton.Lib.Graph
 
         public double Calculate(T Graph, int Node1, int Node2)
         {
-            var StartNode = (NavGraphNode) Graph.GetNode(Node1);
-            var EndNode = (NavGraphNode) Graph.GetNode(Node2);
+            var StartNode = Graph.GetNode(Node1);
+            var EndNode = Graph.GetNode(Node2);
             return Distance(StartNode.X, StartNode.Y, EndNode.X, EndNode.Y);
         }
     }

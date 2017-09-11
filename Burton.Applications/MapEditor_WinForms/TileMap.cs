@@ -13,7 +13,7 @@ namespace GraphVisualizerTest
 {
     public class TileMap
     {
-        public SparseGraph<GraphNode, GraphEdge> Graph;
+        public SparseGraph<NavGraphNode, GraphEdge> Graph;
 
         // List of brush type ids that represent the tiles brush.
         public List<EBrushType> Terrain = new List<EBrushType>();
@@ -55,7 +55,7 @@ namespace GraphVisualizerTest
         {
             bCanDraw = false;
 
-            Graph = new SparseGraph<GraphNode, GraphEdge>(false);
+            Graph = new SparseGraph<NavGraphNode, GraphEdge>(false);
 
             CreateGrid();
 
@@ -83,7 +83,7 @@ namespace GraphVisualizerTest
                 for (int Col = 0; Col < NumCellsX; ++Col)
                 {
                     var NodeIndex = Graph.AddNode(new NavGraphNode(Graph.GetNextFreeNodeIndex(),
-                                                                   MidX + (Col * TileWidth), MidY + (Row * TileWidth)));
+                                                                   MidX + (Col * TileWidth), MidY + (Row * TileWidth), 0));
                     Graph.Edges.Insert(NodeIndex, new List<GraphEdge>());
                 }
             }
@@ -183,7 +183,7 @@ namespace GraphVisualizerTest
                     float MidY = TileHeight / 2;
 
                     Vector2 Position = new Vector2(MidX + (x * TileWidth), MidY + (y * TileHeight));
-                    var NodeIndex = Graph.AddNode(new NavGraphNode(TileIndex, Position.X, Position.Y));
+                    var NodeIndex = Graph.AddNode(new NavGraphNode(TileIndex, (float)Position.X, (float)Position.Y, 0f));
 
                     AddAllNeighborsToGridNode(y, x, NumCellsX, NumCellsY);
                 }

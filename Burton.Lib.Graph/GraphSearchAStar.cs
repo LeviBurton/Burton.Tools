@@ -5,15 +5,16 @@ using Burton.Lib.Alg;
 
 namespace Burton.Lib.Graph
 {
-    public class GraphSearchAStar
+    public class GraphSearchAStar<TNode, TEdge> where TNode : NavGraphNode 
+                                                where TEdge : GraphEdge
     {
        public enum NodeStatus { Visited, Unvisited, NoParentAssigned };
 
-        SparseGraph<GraphNode, GraphEdge> Graph;
-        public IHeuristic<SparseGraph<GraphNode, GraphEdge>> Heuristic;
+        SparseGraph<TNode, TEdge> Graph;
+        public IHeuristic<SparseGraph<TNode, TEdge>> Heuristic;
 
-        public List<GraphEdge> ShortestPathTree;
-        public List<GraphEdge> SearchFrontier;
+        public List<TEdge> ShortestPathTree;
+        public List<TEdge> SearchFrontier;
 
         public List<double> CostToThisNode;
         public List<double> GCosts;
@@ -25,12 +26,12 @@ namespace Burton.Lib.Graph
 
         public bool bFound;
 
-        public GraphSearchAStar(SparseGraph<GraphNode,GraphEdge> Graph, int Source, int Target)
+        public GraphSearchAStar(SparseGraph<TNode, TEdge> Graph, int Source, int Target)
         {
             this.Graph = Graph;
             this.bFound = false;
 
-            Heuristic = new HeuristicEuclid<SparseGraph<GraphNode, GraphEdge>>();
+            Heuristic = new HeuristicEuclid<SparseGraph<TNode, TEdge>, TNode, TEdge>();
 
             SourceNodeIndex = Source;
             TargetNodeIndex = Target;
@@ -38,8 +39,8 @@ namespace Burton.Lib.Graph
             int ActiveNodeCount = Graph.ActiveNodeCount();
             int NodeCount = Graph.NodeCount();
 
-            ShortestPathTree = new List<GraphEdge>(NodeCount);
-            SearchFrontier = new List<GraphEdge>(NodeCount);
+            ShortestPathTree = new List<TEdge>(NodeCount);
+            SearchFrontier = new List<TEdge>(NodeCount);
             CostToThisNode = new List<double>(NodeCount);
             GCosts = new List<double>(NodeCount);
             FCosts = new List<double>(NodeCount);
@@ -103,7 +104,7 @@ namespace Burton.Lib.Graph
             return false;
         }
 
-        public List<GraphEdge> GetSPT()
+        public List<TEdge> GetSPT()
         {
             return ShortestPathTree;
         }

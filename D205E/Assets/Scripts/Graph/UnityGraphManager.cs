@@ -21,6 +21,11 @@ public class UnityGraphManager : UnitySingleton<UnityGraphManager>
     }
     #endregion
 
+    void Start()
+    {
+      
+    }
+    
     #region Load/Save Graphs
     public void ResetAll()
     {

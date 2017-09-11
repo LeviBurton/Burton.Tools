@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Burton.Lib.Math
 {
+    [Serializable]
     public class Vector2 
     {
         public double X;

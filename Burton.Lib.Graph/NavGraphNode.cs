@@ -8,44 +8,20 @@ namespace Burton.Lib.Graph
     [Serializable]
     public class NavGraphNode : GraphNode
     {
-        public Vector2 Position = new Vector2(0,0);
+        public float X;
+        public float Y;
+        public float Z;
 
-        public double X
-        {
-            get
-            {
-                return Position.X;
-            }
-            set
-            {
-                Position.X = value;
-            }
-        }
-        public double Y
-        {
-            get
-            {
-                return Position.Y;
-            }
-            set
-            {
-                Position.Y = value;
-            }
-        }
-      
         public NavGraphNode() { }
 
-        public NavGraphNode(int Index, Vector2 Position)
-        {
-            this.NodeIndex = Index;
-            this.Position = Position;
-        }
 
-        public NavGraphNode(int Index, double LocationX, double LocationY)
+     
+        public NavGraphNode(int Index, float LocationX, float LocationY, float LocationZ)
         {
             this.NodeIndex = Index;
             this.X = LocationX;
             this.Y = LocationY;
+            this.Z = LocationZ;
         }
     }
 }

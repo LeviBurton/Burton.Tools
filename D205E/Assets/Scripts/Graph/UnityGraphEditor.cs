@@ -21,7 +21,7 @@ public class UnityGraphEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-
+        EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
         if (GUILayout.Button("Rebuild"))
         {
             Graph.BuildDefaultGraph();
@@ -46,13 +46,15 @@ public class UnityGraphEditor : Editor
             }
             // EditorUtility.SetDirty(Graph);
 
-           // EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            //EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
         EditorGUILayout.Separator(); EditorGUILayout.Separator();
         #endregion
 
-
+        EditorGUILayout.LabelField("Properties", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodes"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawEdges"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesX"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesY"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TileWidth"));

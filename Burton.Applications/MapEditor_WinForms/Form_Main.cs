@@ -19,7 +19,7 @@ namespace GraphVisualizerTest
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public SparseGraph<GraphNode, GraphEdge> Graph;
+        public SparseGraph<NavGraphNode, GraphEdge> Graph;
         public TileMap CurrentMap;
 
         // List of brush type ids that represent the tiles brush.
@@ -37,8 +37,8 @@ namespace GraphVisualizerTest
         public int TargetNode;
         public int GridWidthPx = 0;
         public int GridHeightPx = 0;
-        public int NumCellsX = 10;
-        public int NumCellsY = 5;
+        public int NumCellsX = 13;
+        public int NumCellsY = 7;
         public int BigCircle = 12;
         public int MediumCircle = 5;
         public int SmallCircle = 2;
@@ -137,24 +137,24 @@ namespace GraphVisualizerTest
 
         private void CreatePathAStar()
         {
-            SubTree.Clear();
-            Path.Clear();
+            CurrentMap.SubTree.Clear();
+            CurrentMap.Path.Clear();
 
             Stopwatch Stopwatch = new Stopwatch();
             Stopwatch.Start();
-            var AStar = new GraphSearchAStar(Graph, SourceNode, TargetNode);
+            var AStar = new GraphSearchAStar<NavGraphNode, GraphEdge>(CurrentMap.Graph, CurrentMap.SourceNode, CurrentMap.TargetNode);
             AStar.Search();
             Stopwatch.Stop();
 
             if (AStar.bFound)
             {
                 var PathToTarget = AStar.GetPathToTarget();
-                SubTree = AStar.ShortestPathTree;
+                CurrentMap.SubTree = AStar.ShortestPathTree;
 
                 foreach (var NodeIndex in PathToTarget)
                 {
-                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
-                    Path.Add(Node);
+                    var Node = (NavGraphNode)CurrentMap.Graph.GetNode(NodeIndex);
+                    CurrentMap.Path.Add(Node);
                 }
 
                 // Movement cost is simply the number of nodes in the path to the target.
@@ -164,82 +164,82 @@ namespace GraphVisualizerTest
 
             GridPanel.Refresh();
         }
-        private void CreatePathDijkstra()
-        {
-            SubTree.Clear();
-            Path.Clear();
+        //private void CreatePathDijkstra()
+        //{
+        //    SubTree.Clear();
+        //    Path.Clear();
 
-            Stopwatch Stopwatch = new Stopwatch();
-            Stopwatch.Start();
-            var Dijkstra = new GraphSearchDijkstra(Graph, SourceNode, TargetNode);
-            Dijkstra.Search();
-            Stopwatch.Stop();
+        //    Stopwatch Stopwatch = new Stopwatch();
+        //    Stopwatch.Start();
+        //    var Dijkstra = new GraphSearchDijkstra(Graph, SourceNode, TargetNode);
+        //    Dijkstra.Search();
+        //    Stopwatch.Stop();
 
-            if (Dijkstra.bFound)
-            {
-                var PathToTarget = Dijkstra.GetPathToTarget();
-                SubTree = Dijkstra.ShortestPathTree;
+        //    if (Dijkstra.bFound)
+        //    {
+        //        var PathToTarget = Dijkstra.GetPathToTarget();
+        //        SubTree = Dijkstra.ShortestPathTree;
 
-                foreach (var NodeIndex in PathToTarget)
-                {
-                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
-                    Path.Add(Node);
-                }
-            }
+        //        foreach (var NodeIndex in PathToTarget)
+        //        {
+        //            var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
+        //            Path.Add(Node);
+        //        }
+        //    }
 
-            GridPanel.Refresh();
-        }
-        private void CreatePathBFS()
-        {
-            SubTree.Clear();
-            Path.Clear();
+        //    GridPanel.Refresh();
+        //}
+        //private void CreatePathBFS()
+        //{
+        //    SubTree.Clear();
+        //    Path.Clear();
 
-            Stopwatch Stopwatch = new Stopwatch();
-            Stopwatch.Start();
-            var BFS = new GraphSearchBFS(Graph, SourceNode, TargetNode);
-            BFS.Search();
-            Stopwatch.Stop();
+        //    Stopwatch Stopwatch = new Stopwatch();
+        //    Stopwatch.Start();
+        //    var BFS = new GraphSearchBFS(Graph, SourceNode, TargetNode);
+        //    BFS.Search();
+        //    Stopwatch.Stop();
 
-            if (BFS.bFound)
-            {
-                var PathToTarget = BFS.GetPathToTarget();
-                SubTree = BFS.TraversedEdges;
+        //    if (BFS.bFound)
+        //    {
+        //        var PathToTarget = BFS.GetPathToTarget();
+        //        SubTree = BFS.TraversedEdges;
 
-                foreach (var NodeIndex in PathToTarget)
-                {
-                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
-                    Path.Add(Node);
-                }
-            }
+        //        foreach (var NodeIndex in PathToTarget)
+        //        {
+        //            var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
+        //            Path.Add(Node);
+        //        }
+        //    }
 
-            GridPanel.Refresh();
-        }
-        private void CreatePathDFS()
-        {
-            SubTree.Clear();
-            Path.Clear();
+        //    GridPanel.Refresh();
+        //}
+        //private void CreatePathDFS()
+        //{
+        //    SubTree.Clear();
+        //    Path.Clear();
 
-            Stopwatch Stopwatch = new Stopwatch();
-            Stopwatch.Start();
-            var DFS = new GraphSearchDFS(Graph, SourceNode, TargetNode);    
-            DFS.Search();
-            Stopwatch.Stop();
+        //    Stopwatch Stopwatch = new Stopwatch();
+        //    Stopwatch.Start();
+        //    var DFS = new GraphSearchDFS(Graph, SourceNode, TargetNode);    
+        //    DFS.Search();
+        //    Stopwatch.Stop();
            
-            if (DFS.bFound)
-            {
-                var PathToTarget = DFS.GetPathToTarget();
-                SubTree = DFS.SpanningTree;
+        //    if (DFS.bFound)
+        //    {
+        //        var PathToTarget = DFS.GetPathToTarget();
+        //        SubTree = DFS.SpanningTree;
 
-                foreach (var NodeIndex in PathToTarget)
-                {
-                    var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
-                    Path.Add(Node);
-                }
-            }
+        //        foreach (var NodeIndex in PathToTarget)
+        //        {
+        //            var Node = (NavGraphNode)Graph.GetNode(NodeIndex);
+        //            Path.Add(Node);
+        //        }
+        //    }
 
-            GridPanel.Refresh();
-            //Console.WriteLine(string.Format("Elapsed Search Time: {0}", Stopwatch.Elapsed.ToString()));
-        }
+        //    GridPanel.Refresh();
+        //    //Console.WriteLine(string.Format("Elapsed Search Time: {0}", Stopwatch.Elapsed.ToString()));
+        //}
 
         private void ChangeBrush(EBrushType NewBrush)
         {
@@ -292,7 +292,7 @@ namespace GraphVisualizerTest
                 // CreatePathDFS();
                 //CreatePathBFS();
                 // CreatePathDijkstra();
-                //  CreatePathAStar();
+                CreatePathAStar();
             }
         }
 
