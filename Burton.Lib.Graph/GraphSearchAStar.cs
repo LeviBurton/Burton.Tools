@@ -5,13 +5,13 @@ using Burton.Lib.Alg;
 
 namespace Burton.Lib.Graph
 {
-    public class GraphSearchAStar<TNode, TEdge> where TNode : GraphNode 
-                                                where TEdge : GraphEdge
+    public class Search_AStar<TNode, TEdge> where TNode : GraphNode 
+                                            where TEdge : GraphEdge
     {
        public enum NodeStatus { Visited, Unvisited, NoParentAssigned };
 
         SparseGraph<TNode, TEdge> Graph;
-        public IHeuristic<SparseGraph<TNode, TEdge>> Heuristic;
+        IHeuristic<SparseGraph<TNode, TEdge>> Heuristic;
 
         public List<TEdge> ShortestPathTree;
         public List<TEdge> SearchFrontier;
@@ -22,17 +22,14 @@ namespace Burton.Lib.Graph
 
         public int SourceNodeIndex;
         public int TargetNodeIndex;
-
-
         public bool bFound;
 
-        public GraphSearchAStar(SparseGraph<TNode, TEdge> Graph, int Source, int Target)
+        public Search_AStar(SparseGraph<TNode, TEdge> Graph, IHeuristic<SparseGraph<TNode, TEdge>> Heuristic, int Source, int Target)
         {
             this.Graph = Graph;
             this.bFound = false;
+            this.Heuristic = Heuristic;
 
-            //Heuristic = new HeuristicEuclid<SparseGraph<TNode, TEdge>, TNode, TEdge>();
-         
             SourceNodeIndex = Source;
             TargetNodeIndex = Target;
 

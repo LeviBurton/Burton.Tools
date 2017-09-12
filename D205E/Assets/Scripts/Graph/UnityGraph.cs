@@ -7,21 +7,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using UnityEngine;
 
-public static class StringExtensions
+public class UnityDistanceHeuristic : IHeuristic<SparseGraph<UnityNode, UnityEdge>>
 {
-    public static T Deserialize<T>(this string toDeserialize)
+    public double Calculate(SparseGraph<UnityNode, UnityEdge> Graph, int Node1, int Node2)
     {
-        XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-        StringReader textReader = new StringReader(toDeserialize);
-        return (T)xmlSerializer.Deserialize(textReader);
-    }
+        var UnityNode1 = Graph.GetNode(Node1);
+        var UnityNode2 = Graph.GetNode(Node2);
+        var Distance = Vector3.Distance(UnityNode1.Position, UnityNode2.Position);
 
-    public static string Serialize<T>(this T toSerialize)
-    {
-        XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-        StringWriter textWriter = new StringWriter();
-        xmlSerializer.Serialize(textWriter, toSerialize);
-        return textWriter.ToString();
+        return Distance;
     }
 }
 
@@ -29,14 +23,13 @@ public static class StringExtensions
 [Serializable]
 public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 {
-    public string Name = "UnityGraph";
-    public string Xml = string.Empty;
-
     [NonSerialized]
     public SparseGraph<UnityNode, UnityEdge> Graph = new SparseGraph<UnityNode, UnityEdge>();
+    public byte[] SerializedGraph;
 
-    public byte[] GraphByteArray;
+    private IHeuristic<SparseGraph<UnityNode, UnityEdge>> Heuristic = new UnityDistanceHeuristic();
 
+    public string Name = "UnityGraph";
     public int NumTilesX = 25;
     public int NumTilesY = 25;
     public int TileWidth = 10;      // TODO: What units do these represent?
@@ -51,9 +44,11 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     int Width = 0;
     int Height = 0;
 
-    public UnityGraph()
+    public void TestCalc()
     {
+        var Distance = Heuristic.Calculate(Graph, Graph.GetNode(0).NodeIndex, Graph.GetNode(2).NodeIndex);
 
+        Debug.Log("Distance: " + Distance);
     }
 
     public void RemoveNode(int NodeIndex)
@@ -64,10 +59,12 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
         Graph.RemoveNode(NodeIndex);
     }
 
-    private void Start()
+    [ExecuteInEditMode]
+    void Start()
     {
-
+        Debug.Log("UnityGraph:Start()");
     }
+
     private void OnDrawGizmos()
     {
         if (Graph == null)
@@ -90,8 +87,6 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
                 Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
                 Gizmos.DrawCube(CubePosition, CubeSize);
             }
-
-
 
             if (DrawEdges)
             {
@@ -204,7 +199,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
         using (var ms = new MemoryStream())
         {
             bf.Serialize(ms, Graph);
-            GraphByteArray = ms.ToArray();
+            SerializedGraph = ms.ToArray();
         }
 
         StopWatch.Stop();
@@ -213,11 +208,14 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
     public void OnAfterDeserialize()
     {
+        if (SerializedGraph == null)
+            return;
+
         var StopWatch = new System.Diagnostics.Stopwatch();
         StopWatch.Start();
 
         BinaryFormatter bf = new BinaryFormatter();
-        using (MemoryStream ms = new MemoryStream(GraphByteArray))
+        using (MemoryStream ms = new MemoryStream(SerializedGraph))
         {
             Graph = (SparseGraph<UnityNode, UnityEdge>)bf.Deserialize(ms);
             foreach (var Node in Graph.Nodes)

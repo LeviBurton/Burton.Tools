@@ -48,8 +48,14 @@ public class UnityGraphEditor : Editor
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
 
+      
         #region Test
         EditorGUILayout.LabelField("Test Stuff", EditorStyles.boldLabel);
+        if (GUILayout.Button("Test Calc"))
+        {
+            Graph.TestCalc();
+        }
+
         if (GUILayout.Button("Remove Test"))
         {
             for (int i = 0; i <= 5; i++)

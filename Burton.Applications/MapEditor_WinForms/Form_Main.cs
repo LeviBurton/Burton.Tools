@@ -137,32 +137,32 @@ namespace GraphVisualizerTest
 
         private void CreatePathAStar()
         {
-            CurrentMap.SubTree.Clear();
-            CurrentMap.Path.Clear();
+            //CurrentMap.SubTree.Clear();
+            //CurrentMap.Path.Clear();
 
-            Stopwatch Stopwatch = new Stopwatch();
-            Stopwatch.Start();
-            var AStar = new GraphSearchAStar<NavGraphNode, GraphEdge>(CurrentMap.Graph, CurrentMap.SourceNode, CurrentMap.TargetNode);
-            AStar.Search();
-            Stopwatch.Stop();
+            //Stopwatch Stopwatch = new Stopwatch();
+            //Stopwatch.Start();
+            //var AStar = new GraphSearchAStar<NavGraphNode, GraphEdge>(CurrentMap.Graph, CurrentMap.SourceNode, CurrentMap.TargetNode);
+            //AStar.Search();
+            //Stopwatch.Stop();
 
-            if (AStar.bFound)
-            {
-                var PathToTarget = AStar.GetPathToTarget();
-                CurrentMap.SubTree = AStar.ShortestPathTree;
+            //if (AStar.bFound)
+            //{
+            //    var PathToTarget = AStar.GetPathToTarget();
+            //    CurrentMap.SubTree = AStar.ShortestPathTree;
 
-                foreach (var NodeIndex in PathToTarget)
-                {
-                    var Node = (NavGraphNode)CurrentMap.Graph.GetNode(NodeIndex);
-                    CurrentMap.Path.Add(Node);
-                }
+            //    foreach (var NodeIndex in PathToTarget)
+            //    {
+            //        var Node = (NavGraphNode)CurrentMap.Graph.GetNode(NodeIndex);
+            //        CurrentMap.Path.Add(Node);
+            //    }
 
-                // Movement cost is simply the number of nodes in the path to the target.
-                int MovementCost = PathToTarget.Count - 1;
-                Console.WriteLine(MovementCost);
-            }
+            //    // Movement cost is simply the number of nodes in the path to the target.
+            //    int MovementCost = PathToTarget.Count - 1;
+            //    Console.WriteLine(MovementCost);
+            //}
 
-            GridPanel.Refresh();
+            //GridPanel.Refresh();
         }
         //private void CreatePathDijkstra()
         //{

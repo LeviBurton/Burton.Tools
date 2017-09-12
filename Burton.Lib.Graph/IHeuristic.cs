@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Burton.Lib.Graph
 {
-    public interface IHeuristic<T>
+    public interface IHeuristic<TGraph>
     {
-        double Calculate(T Graph, int Node1, int Node2);
+        double Calculate(TGraph Graph, int Node1, int Node2);
     }
 }
