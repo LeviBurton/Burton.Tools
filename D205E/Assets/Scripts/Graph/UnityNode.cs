@@ -10,10 +10,6 @@ public class UnityNode : NavGraphNode, ISerializationCallbackReceiver
     [NonSerialized]
     public Vector3 Position;
 
-    public UnityNode()
-    {
-    }
-
     public UnityNode(int NodeIndex, Vector3 Position)
         : base(NodeIndex, Position.x, Position.z, Position.y)
     {

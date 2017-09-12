@@ -7,10 +7,32 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using UnityEngine;
 
+public static class StringExtensions
+{
+    public static T Deserialize<T>(this string toDeserialize)
+    {
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+        StringReader textReader = new StringReader(toDeserialize);
+        return (T)xmlSerializer.Deserialize(textReader);
+    }
+
+    public static string Serialize<T>(this T toSerialize)
+    {
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+        StringWriter textWriter = new StringWriter();
+        xmlSerializer.Serialize(textWriter, toSerialize);
+        return textWriter.ToString();
+    }
+}
+
+
 [Serializable]
 public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 {
     public string Name = "UnityGraph";
+    public string Xml = string.Empty;
+
+    [NonSerialized]
     public SparseGraph<UnityNode, UnityEdge> Graph = new SparseGraph<UnityNode, UnityEdge>();
 
     public byte[] GraphByteArray;
@@ -25,13 +47,6 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     public Color DefaultEdgeColor;
     public bool DrawEdges = true;
     public bool DrawNodes = true;
-
-
-    public List<UnityNode> Nodes
-    {
-        get { return Graph.Nodes; }
-        set { }
-    }
 
     int Width = 0;
     int Height = 0;
@@ -71,12 +86,10 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             {
                 Gizmos.color = DefaultTileColor;
                 Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
-              
+
                 Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
                 Gizmos.DrawCube(CubePosition, CubeSize);
             }
-
-
 
 
 
@@ -171,12 +184,18 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             }
         }
     }
+    // Test
     #endregion
 
     #region Serialization
+
     public void OnBeforeSerialize()
     {
+        var StopWatch = new System.Diagnostics.Stopwatch();
+        StopWatch.Start();
+
         BinaryFormatter bf = new BinaryFormatter();
+
         foreach (var Node in Graph.Nodes)
         {
             Node.OnBeforeSerialize();
@@ -187,29 +206,31 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             bf.Serialize(ms, Graph);
             GraphByteArray = ms.ToArray();
         }
+
+        StopWatch.Stop();
+       // Debug.Log("OnBeforeSerialize: " + StopWatch.Elapsed);
     }
 
     public void OnAfterDeserialize()
     {
+        var StopWatch = new System.Diagnostics.Stopwatch();
+        StopWatch.Start();
+
         BinaryFormatter bf = new BinaryFormatter();
-
-        try
+        using (MemoryStream ms = new MemoryStream(GraphByteArray))
         {
-            using (MemoryStream ms = new MemoryStream(GraphByteArray))
+            Graph = (SparseGraph<UnityNode, UnityEdge>)bf.Deserialize(ms);
+            foreach (var Node in Graph.Nodes)
             {
-                Graph = (SparseGraph<UnityNode, UnityEdge>)bf.Deserialize(ms);
-                foreach (var Node in Graph.Nodes)
-                {
-                    Node.OnAfterDeserialize();
-                }
+                Node.OnAfterDeserialize();
             }
+        }
+        StopWatch.Stop();
 
-        }
-        catch (ArgumentException e)
-        {
-            Debug.Log(e.Message);
-        }
+     //   Debug.Log("OnAfterDeserialize: " + StopWatch.Elapsed);
     }
-    #endregion
-
 }
+#endregion
+
+
+

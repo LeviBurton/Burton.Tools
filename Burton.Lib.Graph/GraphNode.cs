@@ -12,8 +12,13 @@ namespace Burton.Lib.Graph
 
     [Serializable]
     public class GraphNode
-    { 
-        public int NodeIndex { get; set; }
+    {
+        int _NodeIndex;
+        public int NodeIndex
+        {
+            get { return _NodeIndex; }
+            set { _NodeIndex = value; }
+        }
 
         public GraphNode() { NodeIndex = (int)NodeType.InvalidNodeIndex; }
         public GraphNode(int Index) { NodeIndex = Index; }

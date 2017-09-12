@@ -18,36 +18,49 @@ public class UnityGraphEditor : Editor
         Graph = serializedObject.targetObject as UnityGraph;
     }
 
+    //public override void OnInspectorGUI()
+    //{
+    //    Graph = (UnityGraph) this.target;
+
+    //    EditorGUILayout.BeginHorizontal();
+    //    EditorGUILayout.PrefixLabel("Name");
+    //    Graph.Name = EditorGUILayout.TextField(Graph.Name);
+    //    EditorGUILayout.EndHorizontal();
+
+    //    //EditorGUILayout.PrefixLabel("Name");
+    //    if (GUILayout.Button("Rebuild"))
+    //    {
+    //        Graph.BuildDefaultGraph();
+    //        EditorUtility.SetDirty(Graph);
+    //        serializedObject.ApplyModifiedPropertiesWithoutUndo();
+    //    }
+    //}
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
         EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
         if (GUILayout.Button("Rebuild"))
         {
             Graph.BuildDefaultGraph();
+            EditorUtility.SetDirty(Graph);
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
 
         #region Test
         EditorGUILayout.LabelField("Test Stuff", EditorStyles.boldLabel);
         if (GUILayout.Button("Remove Test"))
         {
-            for (int i = 0; i <= 10; i++)
-            {
-                Graph.RemoveNode(i);
-            }
-            for (int i = 30; i <= 40; i++)
+            for (int i = 0; i <= 5; i++)
             {
                 Graph.RemoveNode(i);
             }
 
-            for (int i = 60; i <= 75; i++)
-            {
-                Graph.RemoveNode(i);
-            }
-            // EditorUtility.SetDirty(Graph);
-
-            //EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            EditorUtility.SetDirty(Graph);
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
+
         EditorGUILayout.Separator(); EditorGUILayout.Separator();
         #endregion
 
@@ -62,11 +75,10 @@ public class UnityGraphEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultTileColor"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultEdgeColor"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TilePadding"));
-        EditorGUILayout.LabelField(string.Format("Nodes: {0}", Graph.Graph == null ? 0 : Graph.Nodes.Count));
-
-        //     EditorGUILayout.PropertyField(serializedObject.FindProperty("Graph"));
+        //EditorGUILayout.LabelField(string.Format("Nodes: {0}", Graph.Graph == null ? 0 : Graph.Graph.ActiveNodeCount()));
 
         serializedObject.ApplyModifiedProperties();
+
     }
 }
 

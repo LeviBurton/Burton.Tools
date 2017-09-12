@@ -5,7 +5,7 @@ using Burton.Lib.Alg;
 
 namespace Burton.Lib.Graph
 {
-    public class GraphSearchAStar<TNode, TEdge> where TNode : NavGraphNode 
+    public class GraphSearchAStar<TNode, TEdge> where TNode : GraphNode 
                                                 where TEdge : GraphEdge
     {
        public enum NodeStatus { Visited, Unvisited, NoParentAssigned };
@@ -31,8 +31,8 @@ namespace Burton.Lib.Graph
             this.Graph = Graph;
             this.bFound = false;
 
-            Heuristic = new HeuristicEuclid<SparseGraph<TNode, TEdge>, TNode, TEdge>();
-
+            //Heuristic = new HeuristicEuclid<SparseGraph<TNode, TEdge>, TNode, TEdge>();
+         
             SourceNodeIndex = Source;
             TargetNodeIndex = Target;
 
