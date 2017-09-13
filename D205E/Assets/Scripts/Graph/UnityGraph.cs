@@ -38,11 +38,34 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
     public Color DefaultTileColor;
     public Color DefaultEdgeColor;
+    public Color DefaultSearchPathColor;
+
     public bool DrawEdges = true;
     public bool DrawNodes = true;
+    public bool DrawSearchPaths = true;
+    public int StartNode = 0;
+    public int EndNode = 0;
+    public List<UnityNode> SearchPath = new List<UnityNode>();
 
     int Width = 0;
     int Height = 0;
+
+    public void TestPath()
+    {
+        var Search = new Search_AStar<UnityNode, UnityEdge>(Graph, Heuristic, StartNode, EndNode);
+        Search.Search();
+        SearchPath.Clear();
+
+        if (Search.bFound)
+        {
+            foreach (var NodeIndex in Search.GetPathToTarget())
+            {
+                SearchPath.Add(Graph.GetNode(NodeIndex));
+            }
+
+            SearchPath.Reverse();
+        }
+    }
 
     public void TestCalc()
     {
@@ -79,6 +102,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             if (GraphNode == null)
                 continue;
 
+         
             if (DrawNodes)
             {
                 Gizmos.color = DefaultTileColor;
@@ -100,6 +124,18 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
                     Gizmos.color = DefaultEdgeColor;
                     Gizmos.DrawLine(FromPosition, ToPosition);
                 }
+            }
+        }
+
+        if (DrawSearchPaths)
+        {
+            Gizmos.color = DefaultSearchPathColor;
+            foreach (var Node in SearchPath)
+            {
+                Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
+
+                Vector3 CubeSize = new Vector3(TileWidth/2 * (1 - TilePadding), .05f, TileHeight/2 * (1 - TilePadding));
+                Gizmos.DrawCube(CubePosition, CubeSize);
             }
         }
     }

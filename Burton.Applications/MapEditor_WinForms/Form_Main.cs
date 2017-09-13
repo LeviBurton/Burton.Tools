@@ -15,6 +15,26 @@ using System.Xml.Serialization;
 
 namespace GraphVisualizerTest
 {
+    public class HeuristicEuclid<T, TNode, TEdge> : IHeuristic<T> where T : SparseGraph<TNode, TEdge>
+                                                          where TNode : NavGraphNode
+                                                          where TEdge : GraphEdge
+    {
+        private double Distance(double x1, double y1, double x2, double y2)
+        {
+            double y = x2 - x1;
+            double x = y2 - y1;
+
+            return System.Math.Sqrt(y * y + x * x);
+        }
+
+        public double Calculate(T Graph, int Node1, int Node2)
+        {
+            var StartNode = Graph.GetNode(Node1);
+            var EndNode = Graph.GetNode(Node2);
+            return Distance(StartNode.X, StartNode.Y, EndNode.X, EndNode.Y);
+        }
+    }
+
     public partial class Form_Main : Form
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -137,32 +157,34 @@ namespace GraphVisualizerTest
 
         private void CreatePathAStar()
         {
-            //CurrentMap.SubTree.Clear();
-            //CurrentMap.Path.Clear();
+            CurrentMap.SubTree.Clear();
+            CurrentMap.Path.Clear();
 
-            //Stopwatch Stopwatch = new Stopwatch();
-            //Stopwatch.Start();
-            //var AStar = new GraphSearchAStar<NavGraphNode, GraphEdge>(CurrentMap.Graph, CurrentMap.SourceNode, CurrentMap.TargetNode);
-            //AStar.Search();
-            //Stopwatch.Stop();
+            Stopwatch Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+            var foo = new HeuristicEuclid<SparseGraph<NavGraphNode, GraphEdge>, NavGraphNode, GraphEdge>();
 
-            //if (AStar.bFound)
-            //{
-            //    var PathToTarget = AStar.GetPathToTarget();
-            //    CurrentMap.SubTree = AStar.ShortestPathTree;
+            var AStar = new Search_AStar<NavGraphNode, GraphEdge>(CurrentMap.Graph, foo, CurrentMap.SourceNode, CurrentMap.TargetNode);
+            AStar.Search();
+            Stopwatch.Stop();
 
-            //    foreach (var NodeIndex in PathToTarget)
-            //    {
-            //        var Node = (NavGraphNode)CurrentMap.Graph.GetNode(NodeIndex);
-            //        CurrentMap.Path.Add(Node);
-            //    }
+            if (AStar.bFound)
+            {
+                var PathToTarget = AStar.GetPathToTarget();
+                CurrentMap.SubTree = AStar.ShortestPathTree;
 
-            //    // Movement cost is simply the number of nodes in the path to the target.
-            //    int MovementCost = PathToTarget.Count - 1;
-            //    Console.WriteLine(MovementCost);
-            //}
+                foreach (var NodeIndex in PathToTarget)
+                {
+                    var Node = (NavGraphNode)CurrentMap.Graph.GetNode(NodeIndex);
+                    CurrentMap.Path.Add(Node);
+                }
 
-            //GridPanel.Refresh();
+                // Movement cost is simply the number of nodes in the path to the target.
+                int MovementCost = PathToTarget.Count - 1;
+                Console.WriteLine(MovementCost);
+            }
+
+            GridPanel.Refresh();
         }
         //private void CreatePathDijkstra()
         //{

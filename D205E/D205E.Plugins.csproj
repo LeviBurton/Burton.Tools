@@ -76,6 +76,9 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
+    <Reference Include="Burton.Lib.Alg.PriorityQueue">
+      <HintPath>Assets\Burton.Lib.Alg.PriorityQueue.dll</HintPath>
+    </Reference>
     <Reference Include="Burton.Lib.Characters">
       <HintPath>Assets\Burton.Lib.Characters.dll</HintPath>
     </Reference>

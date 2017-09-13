@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Burton.Lib.Graph
 {
-    //class HeuristicEuclid<T, TNode, TEdge> : IHeuristic<T> where T: SparseGraph<TNode, TEdge> 
-    //                                                       where TNode : GraphNode 
+    //class HeuristicEuclid<T, TNode, TEdge> : IHeuristic<T> where T : SparseGraph<TNode, TEdge>
+    //                                                       where TNode : GraphNode
     //                                                       where TEdge : GraphEdge
     //{
     //    private double Distance(double x1, double y1, double x2, double y2)

@@ -15,13 +15,14 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,7 +50,7 @@
     <Compile Include="CellSpacePartition.cs" />
     <Compile Include="GraphEdge.cs" />
     <Compile Include="GraphNode.cs" />
-    <Compile Include="GraphSearchAStar.cs" />
+    <Compile Include="Search_AStar.cs" />
     <Compile Include="GraphSearchDijkstra.cs" />
     <Compile Include="GraphSearchBFS.cs" />
     <Compile Include="GraphSearchDFS.cs" />
@@ -77,8 +78,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "C:\Users\levib\Documents\Visual Studio 2015\Projects\Burton.Tools\D205E\Assets"
-xcopy /y "$(TargetDir)$(TargetName).pdb" "C:\Users\levib\Documents\Visual Studio 2015\Projects\Burton.Tools\D205E\Assets"</PostBuildEvent>
+    <PostBuildEvent>
+xcopy /V /Y "$(TargetPath)" "C:\Users\levib\Documents\Visual Studio 2015\Projects\Burton.Tools\D205E\Assets"
+</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

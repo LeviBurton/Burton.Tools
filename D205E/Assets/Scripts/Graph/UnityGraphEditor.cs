@@ -51,9 +51,11 @@ public class UnityGraphEditor : Editor
       
         #region Test
         EditorGUILayout.LabelField("Test Stuff", EditorStyles.boldLabel);
-        if (GUILayout.Button("Test Calc"))
+        if (GUILayout.Button("Test Path"))
         {
-            Graph.TestCalc();
+            Graph.TestPath();
+            EditorUtility.SetDirty(Graph);
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
 
         if (GUILayout.Button("Remove Test"))
@@ -74,12 +76,16 @@ public class UnityGraphEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodes"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawEdges"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawSearchPaths"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("StartNode"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("EndNode"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesX"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesY"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TileWidth"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TileHeight"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultTileColor"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultEdgeColor"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultSearchPathColor"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TilePadding"));
         //EditorGUILayout.LabelField(string.Format("Nodes: {0}", Graph.Graph == null ? 0 : Graph.Graph.ActiveNodeCount()));
 
