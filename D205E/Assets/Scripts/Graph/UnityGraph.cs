@@ -47,6 +47,8 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     public int EndNode = 0;
     public List<UnityNode> SearchPath = new List<UnityNode>();
 
+    private bool bEnabled = true;
+
     int Width = 0;
     int Height = 0;
 
@@ -67,6 +69,17 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
         }
     }
 
+    void OnEnable()
+    {
+        bEnabled = true;
+
+    }
+
+    void OnDisable()
+    {
+        bEnabled = false;
+    }
+
     public void TestCalc()
     {
         var Distance = Heuristic.Calculate(Graph, Graph.GetNode(0).NodeIndex, Graph.GetNode(2).NodeIndex);
@@ -85,12 +98,17 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     [ExecuteInEditMode]
     void Start()
     {
-        Debug.Log("UnityGraph:Start()");
+
+    }
+
+    void OnGUI()
+    {
+       
     }
 
     private void OnDrawGizmos()
     {
-        if (Graph == null)
+        if (Graph == null || !bEnabled)
             return;
 
         foreach (var Node in Graph.Nodes)
@@ -102,12 +120,10 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             if (GraphNode == null)
                 continue;
 
-         
             if (DrawNodes)
             {
                 Gizmos.color = DefaultTileColor;
                 Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
-
                 Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
                 Gizmos.DrawCube(CubePosition, CubeSize);
             }
@@ -134,7 +150,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             {
                 Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
 
-                Vector3 CubeSize = new Vector3(TileWidth/2 * (1 - TilePadding), .05f, TileHeight/2 * (1 - TilePadding));
+                Vector3 CubeSize = new Vector3(TileWidth/2 * (1 - TilePadding), .01f, TileHeight/2 * (1 - TilePadding));
                 Gizmos.DrawCube(CubePosition, CubeSize);
             }
         }
@@ -220,6 +236,8 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
     #region Serialization
 
+    // This is called when this object is selected in the editor -- it serializes the 
+    // graph into a byte array during property editing.  This allows us to work on our graph in edit mode.
     public void OnBeforeSerialize()
     {
         var StopWatch = new System.Diagnostics.Stopwatch();

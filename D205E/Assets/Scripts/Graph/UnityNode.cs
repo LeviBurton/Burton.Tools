@@ -8,12 +8,14 @@ using UnityEngine;
 public class UnityNode : NavGraphNode, ISerializationCallbackReceiver
 {
     [NonSerialized]
-    public Vector3 Position;
+    public Vector3 Position = new Vector3();
+
+    public List<GameObject> GameObjects = new List<GameObject>();
 
     public UnityNode(int NodeIndex, Vector3 Position)
         : base(NodeIndex, Position.x, Position.z, Position.y)
     {
-        this.Position = Position;    
+        this.Position = Position;
     }
 
     public void OnBeforeSerialize()
@@ -25,6 +27,8 @@ public class UnityNode : NavGraphNode, ISerializationCallbackReceiver
 
     public void OnAfterDeserialize()
     {
-        Position = new Vector3(X, Y, Z);
+        Position.x = X;
+        Position.y = Y;
+        Position.z = Z;
     }
 }
