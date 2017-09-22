@@ -39,7 +39,9 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     public Color DefaultTileColor;
     public Color DefaultEdgeColor;
     public Color DefaultSearchPathColor;
+    public float PathSphereSize = 1.0f;
 
+    public bool DrawNodeIndex = true;
     public bool DrawEdges = true;
     public bool DrawNodes = true;
     public bool DrawSearchPaths = true;
@@ -106,6 +108,17 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
        
     }
 
+    static void drawString(string text, Vector3 worldPos, Color? colour = null)
+    {
+        UnityEditor.Handles.BeginGUI();
+        if (colour.HasValue) GUI.color = colour.Value;
+        var view = UnityEditor.SceneView.currentDrawingSceneView;
+        Vector3 screenPos = view.camera.WorldToScreenPoint(worldPos);
+        Vector2 size = GUI.skin.label.CalcSize(new GUIContent(text));
+        GUI.Label(new Rect(screenPos.x - (size.x / 2), -screenPos.y + view.position.height , size.x, size.y), text);
+        UnityEditor.Handles.EndGUI();
+    }
+
     private void OnDrawGizmos()
     {
         if (Graph == null || !bEnabled)
@@ -119,6 +132,13 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
             if (GraphNode == null)
                 continue;
+
+            if (DrawNodeIndex)
+            {
+                var StringPosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
+                StringPosition.y += 1.5f;
+                drawString(Node.NodeIndex.ToString(), StringPosition, Color.white);
+            }
 
             if (DrawNodes)
             {
@@ -141,6 +161,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
                     Gizmos.DrawLine(FromPosition, ToPosition);
                 }
             }
+
         }
 
         if (DrawSearchPaths)
@@ -148,16 +169,53 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             Gizmos.color = DefaultSearchPathColor;
             foreach (var Node in SearchPath)
             {
-                Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
+                Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + (Node.Position.y + TileWidth / 4), transform.position.z + Node.Position.z);
 
-                Vector3 CubeSize = new Vector3(TileWidth/2 * (1 - TilePadding), .01f, TileHeight/2 * (1 - TilePadding));
+                Vector3 CubeSize = new Vector3(TileWidth/2 * (1 - TilePadding), .1f, TileHeight/2 * (1 - TilePadding));
+               // Gizmos.DrawSphere(CubePosition, PathSphereSize);
                 Gizmos.DrawCube(CubePosition, CubeSize);
             }
         }
     }
 
     #region Grid Graph Stuff
-    public void BuildDefaultGraph()
+
+    public void Rebuild()
+    {
+        // Reset the graph (resets nodes and edges connecting them)
+        ResetGraph();
+
+        // Find all walls and update our graph with them
+        BuildWalls();
+
+
+    }
+
+    public void BuildWalls()
+    {
+        var Walls = FindObjectsOfType<Wall>();
+
+        foreach (var Wall in Walls)
+        {
+            var Origin = Wall.transform.position;
+            var Length = Wall.Length;
+            var Width = Wall.Width;
+
+            if (Wall.Length > 0)
+            {
+                for (int WallSection = 0; WallSection < Wall.Length; WallSection++)
+                {
+                    var Node = GetNodeAtPosition(Origin);
+
+                    Graph.RemoveNode(Node.NodeIndex);
+
+                    Origin.x += TileWidth;
+                }
+            }
+        }
+    }
+
+    public void ResetGraph()
     {
         Graph = new SparseGraph<UnityNode, UnityEdge>(false);
 
@@ -233,6 +291,18 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     }
     // Test
     #endregion
+
+
+    public UnityNode GetNodeAtPosition(Vector3 Position)
+    {
+        var LocalOrigin = Position - transform.position;
+        int NodeIndex = ((int)(LocalOrigin.z / TileHeight) * NumTilesX) + ((int)LocalOrigin.x / TileWidth);
+        var Node = Graph.GetNode(NodeIndex);
+
+        Debug.LogFormat("{0} : {1}", LocalOrigin, Node.NodeIndex);
+
+        return Node;
+    }
 
     #region Serialization
 

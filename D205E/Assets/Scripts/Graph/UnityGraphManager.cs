@@ -31,7 +31,7 @@ public class UnityGraphManager : UnitySingleton<UnityGraphManager>
     {
         foreach (var Graph in Graphs)
         {
-            Graph.BuildDefaultGraph();
+            Graph.ResetGraph();
         }
     }
 
