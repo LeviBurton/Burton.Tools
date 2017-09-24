@@ -79,14 +79,16 @@ public class UnityGraphEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawEdges"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodeIndex"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawSearchPaths"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("StartNode"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("EndNode"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("StartNodeIndex"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("EndNodeIndex"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesX"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesY"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TileWidth"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TileHeight"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultTileColor"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultEdgeColor"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("StartNodeColor"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("EndNodeColor"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultSearchPathColor"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("PathSphereSize"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TilePadding"));

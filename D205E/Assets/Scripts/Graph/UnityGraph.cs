@@ -39,14 +39,17 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     public Color DefaultTileColor;
     public Color DefaultEdgeColor;
     public Color DefaultSearchPathColor;
+    public Color StartNodeColor;
+    public Color EndNodeColor;
+
     public float PathSphereSize = 1.0f;
 
     public bool DrawNodeIndex = true;
     public bool DrawEdges = true;
     public bool DrawNodes = true;
     public bool DrawSearchPaths = true;
-    public int StartNode = 0;
-    public int EndNode = 0;
+    public int StartNodeIndex = 0;
+    public int EndNodeIndex = 0;
     public List<UnityNode> SearchPath = new List<UnityNode>();
 
     private bool bEnabled = true;
@@ -56,7 +59,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
     public void TestPath()
     {
-        var Search = new Search_AStar<UnityNode, UnityEdge>(Graph, Heuristic, StartNode, EndNode);
+        var Search = new Search_AStar<UnityNode, UnityEdge>(Graph, Heuristic, StartNodeIndex, EndNodeIndex);
         Search.Search();
         SearchPath.Clear();
 
@@ -167,16 +170,55 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
         if (DrawSearchPaths)
         {
             Gizmos.color = DefaultSearchPathColor;
-            foreach (var Node in SearchPath)
-            {
-                Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + (Node.Position.y + TileWidth / 4), transform.position.z + Node.Position.z);
+            UnityNode CurrentNode = null;
+            UnityNode NextNode = null;
+          
+            var EndNode = Graph.GetNode(EndNodeIndex);
 
-                Vector3 CubeSize = new Vector3(TileWidth/2 * (1 - TilePadding), .1f, TileHeight/2 * (1 - TilePadding));
-               // Gizmos.DrawSphere(CubePosition, PathSphereSize);
+
+            for (int i = 0; i < SearchPath.Count - 1; i++)
+            {
+                CurrentNode = SearchPath[i];
+
+
+                NextNode = SearchPath[i + 1];
+
+                var FromPosition = new Vector3(transform.position.x + CurrentNode.Position.x, transform.position.y, transform.position.z + CurrentNode.Position.z);
+                var ToPosition = new Vector3(transform.position.x + NextNode.Position.x, transform.position.y, transform.position.z + NextNode.Position.z);
+
+                Gizmos.color = DefaultSearchPathColor;
+                Gizmos.DrawLine(FromPosition, ToPosition);
+
+                Vector3 CubePosition = new Vector3(transform.position.x + CurrentNode.Position.x, transform.position.y + (CurrentNode.Position.y + TileWidth / 4), transform.position.z + CurrentNode.Position.z);
+                Vector3 CubeSize = new Vector3(TileWidth / 2 * (1 - TilePadding), .1f, TileHeight / 2 * (1 - TilePadding));
+                // Gizmos.DrawSphere(CubePosition, PathSphereSize);
                 Gizmos.DrawCube(CubePosition, CubeSize);
             }
+
+
+            DrawStartNode(StartNodeIndex);
+            DrawEndNode(EndNodeIndex);
         }
     }
+
+    public void DrawStartNode(int NodeIndex)
+    {
+        var Node = Graph.GetNode(NodeIndex);
+        Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + (Node.Position.y + TileWidth / 4), transform.position.z + Node.Position.z);
+        Vector3 CubeSize = new Vector3(TileWidth / 2 * (1 - TilePadding), .1f, TileHeight / 2 * (1 - TilePadding));
+        Gizmos.color = StartNodeColor ;
+        Gizmos.DrawCube(CubePosition, CubeSize);
+    }
+
+    public void DrawEndNode(int NodeIndex)
+    {
+        var Node = Graph.GetNode(NodeIndex);
+        Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + (Node.Position.y + TileWidth / 4), transform.position.z + Node.Position.z);
+        Vector3 CubeSize = new Vector3(TileWidth / 2 * (1 - TilePadding), .1f, TileHeight / 2 * (1 - TilePadding));
+        Gizmos.color = EndNodeColor;
+        Gizmos.DrawCube(CubePosition, CubeSize);
+    }
+
 
     #region Grid Graph Stuff
 
