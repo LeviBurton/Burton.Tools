@@ -87,10 +87,12 @@ namespace Burton.Lib.Graph
                         Q.Insert(Edge.ToNodeIndex);
                         SearchFrontier[Edge.ToNodeIndex] = Edge;
                     }
-                    else if ( (GCost < GCosts[Edge.ToNodeIndex]) &&
-                              (ShortestPathTree[Edge.ToNodeIndex] == null) )
-                    {
-                        FCosts[Edge.ToNodeIndex] = GCost + HCost;
+                    //else if ( (GCost < GCosts[Edge.ToNodeIndex]) &&
+                    //          (ShortestPathTree[Edge.ToNodeIndex] == null) )
+                    //{
+                          else if (GCost < GCosts[Edge.ToNodeIndex])
+                        {
+                            FCosts[Edge.ToNodeIndex] = GCost + HCost;
                         GCosts[Edge.ToNodeIndex] = GCost;
                         Q.ChangePriority(Edge.ToNodeIndex);
                         SearchFrontier[Edge.ToNodeIndex] = Edge;

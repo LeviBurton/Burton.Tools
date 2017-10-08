@@ -18,24 +18,6 @@ public class UnityGraphEditor : Editor
         Graph = serializedObject.targetObject as UnityGraph;
     }
 
-    //public override void OnInspectorGUI()
-    //{
-    //    Graph = (UnityGraph) this.target;
-
-    //    EditorGUILayout.BeginHorizontal();
-    //    EditorGUILayout.PrefixLabel("Name");
-    //    Graph.Name = EditorGUILayout.TextField(Graph.Name);
-    //    EditorGUILayout.EndHorizontal();
-
-    //    //EditorGUILayout.PrefixLabel("Name");
-    //    if (GUILayout.Button("Rebuild"))
-    //    {
-    //        Graph.BuildDefaultGraph();
-    //        EditorUtility.SetDirty(Graph);
-    //        serializedObject.ApplyModifiedPropertiesWithoutUndo();
-    //    }
-    //}
-
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -49,7 +31,21 @@ public class UnityGraphEditor : Editor
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
 
-      
+        if (GUILayout.Button("Weight Edges"))
+        {
+            Graph.WeightEdges();
+            EditorUtility.SetDirty(Graph);
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        }
+
+        if (GUILayout.Button("Floodfill"))
+        {
+            //Graph.BuildDefaultGraph();
+            Graph.Floodfill();
+            EditorUtility.SetDirty(Graph);
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        }
+
         #region Test
         EditorGUILayout.LabelField("Test Stuff", EditorStyles.boldLabel);
         if (GUILayout.Button("Test Path"))
@@ -75,6 +71,7 @@ public class UnityGraphEditor : Editor
 
         EditorGUILayout.LabelField("Properties", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("WallLayerMask"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodes"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawEdges"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodeIndex"));
@@ -97,6 +94,8 @@ public class UnityGraphEditor : Editor
         serializedObject.ApplyModifiedProperties();
 
     }
+
+
 }
 
 

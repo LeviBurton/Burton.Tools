@@ -13,9 +13,11 @@ public class UnityDistanceHeuristic : IHeuristic<SparseGraph<UnityNode, UnityEdg
     {
         var UnityNode1 = Graph.GetNode(Node1);
         var UnityNode2 = Graph.GetNode(Node2);
-        var Distance = Vector3.Distance(UnityNode1.Position, UnityNode2.Position);
 
-        return Distance;
+        var Pos1 = UnityNode1.Position;
+        var Pos2 = UnityNode2.Position;
+
+        return Vector3.Distance(Pos1, Pos2);
     }
 }
 
@@ -26,8 +28,11 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     [NonSerialized]
     public SparseGraph<UnityNode, UnityEdge> Graph = new SparseGraph<UnityNode, UnityEdge>();
     public byte[] SerializedGraph;
+    public LayerMask WallLayerMask;
 
     private IHeuristic<SparseGraph<UnityNode, UnityEdge>> Heuristic = new UnityDistanceHeuristic();
+
+    public List<UnityNode> VisitedNodes;
 
     public string Name = "UnityGraph";
     public int NumTilesX = 25;
@@ -62,6 +67,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
         var Search = new Search_AStar<UnityNode, UnityEdge>(Graph, Heuristic, StartNodeIndex, EndNodeIndex);
         Search.Search();
         SearchPath.Clear();
+        // 102, 103, 123 (problem node)
 
         if (Search.bFound)
         {
@@ -111,7 +117,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
        
     }
 
-    static void drawString(string text, Vector3 worldPos, Color? colour = null)
+    static void DrawString(string text, Vector3 worldPos, Color? colour = null)
     {
         UnityEditor.Handles.BeginGUI();
         if (colour.HasValue) GUI.color = colour.Value;
@@ -139,8 +145,8 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             if (DrawNodeIndex)
             {
                 var StringPosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
-                StringPosition.y += 1.5f;
-                drawString(Node.NodeIndex.ToString(), StringPosition, Color.white);
+                StringPosition.y += 0.5f;
+                DrawString(Node.NodeIndex.ToString(), StringPosition, Color.white);
             }
 
             if (DrawNodes)
@@ -160,11 +166,25 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
                     var FromPosition = new Vector3(transform.position.x + FromNode.Position.x, transform.position.y, transform.position.z + FromNode.Position.z);
                     var ToPosition = new Vector3(transform.position.x + ToNode.Position.x, transform.position.y, transform.position.z + ToNode.Position.z);
 
-                    Gizmos.color = DefaultEdgeColor;
-                    Gizmos.DrawLine(FromPosition, ToPosition);
+                    if (Edge.EdgeCost == 100)
+                    {
+                        Gizmos.color = Color.red;
+                    }
+                    else
+                    {
+                        Gizmos.color = DefaultEdgeColor;
+                    }
+                        Gizmos.DrawLine(FromPosition, ToPosition);
                 }
             }
+        }
 
+        foreach (var Node in VisitedNodes)
+        {
+            Gizmos.color = Color.white;
+            Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
+            Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
+            Gizmos.DrawCube(CubePosition, CubeSize);
         }
 
         if (DrawSearchPaths)
@@ -175,11 +195,9 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
           
             var EndNode = Graph.GetNode(EndNodeIndex);
 
-
             for (int i = 0; i < SearchPath.Count - 1; i++)
             {
                 CurrentNode = SearchPath[i];
-
 
                 NextNode = SearchPath[i + 1];
 
@@ -187,14 +205,13 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
                 var ToPosition = new Vector3(transform.position.x + NextNode.Position.x, transform.position.y, transform.position.z + NextNode.Position.z);
 
                 Gizmos.color = DefaultSearchPathColor;
-                Gizmos.DrawLine(FromPosition, ToPosition);
+                Gizmos.DrawLine(FromPosition + (Vector3.up * 0.5f), ToPosition + (Vector3.up * 0.5f));
 
                 Vector3 CubePosition = new Vector3(transform.position.x + CurrentNode.Position.x, transform.position.y + (CurrentNode.Position.y + TileWidth / 4), transform.position.z + CurrentNode.Position.z);
                 Vector3 CubeSize = new Vector3(TileWidth / 2 * (1 - TilePadding), .1f, TileHeight / 2 * (1 - TilePadding));
-                // Gizmos.DrawSphere(CubePosition, PathSphereSize);
-                Gizmos.DrawCube(CubePosition, CubeSize);
+                Gizmos.DrawSphere(CubePosition + (Vector3.up * 0.5f), PathSphereSize);
+                //Gizmos.DrawCube(CubePosition, CubeSize);
             }
-
 
             DrawStartNode(StartNodeIndex);
             DrawEndNode(EndNodeIndex);
@@ -222,6 +239,92 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
     #region Grid Graph Stuff
 
+    public void WeightEdges()
+    {
+        var EdgesToRemove = new List<UnityEdge>();
+
+        foreach (var Node in Graph.Nodes)
+        {
+            foreach (var Edge in Graph.Edges[Node.NodeIndex])
+            {
+                var FromNode = Graph.GetNode(Edge.FromNodeIndex);
+                var ToNode = Graph.GetNode(Edge.ToNodeIndex);
+
+                RaycastHit hit;
+                var Origin = FromNode.Position;
+                Origin.y += 1;
+
+                var Direction = Vector3.Normalize(ToNode.Position - FromNode.Position);
+
+                if (Physics.CapsuleCast(Origin, Origin + Vector3.up * 0.25f, 0.25f, Direction, 1.25f, WallLayerMask))
+                {
+                    EdgesToRemove.Add(Graph.GetEdge(FromNode.NodeIndex, ToNode.NodeIndex));
+                    EdgesToRemove.Add(Graph.GetEdge(ToNode.NodeIndex, FromNode.NodeIndex)); 
+                }
+
+            }
+
+        }
+
+        foreach (var Edge in EdgesToRemove)
+        {
+            Graph.RemoveEdge(Edge.FromNodeIndex, Edge.ToNodeIndex);
+            Graph.RemoveEdge(Edge.ToNodeIndex, Edge.FromNodeIndex);
+        }
+    }
+
+    public void Floodfill()
+    {
+        ResetGraph();
+
+        var StartPosition = transform.position;
+
+        var NodeQueue = new Queue<UnityNode>();
+        VisitedNodes = new List<UnityNode>();
+        var NodesToRemove = new List<UnityNode>();
+
+        var Root = Graph.GetNode(0);
+
+        VisitedNodes.Add(Root);
+        NodeQueue.Enqueue(Root);
+
+        while (NodeQueue.Count > 0)
+        {
+            var Node = NodeQueue.Dequeue();
+
+            //Debug.LogFormat("Node: {0}", Node.NodeIndex);
+
+           
+
+            foreach (var Edge in Graph.Edges[Node.NodeIndex])
+            {
+                var ToNode = Graph.GetNode(Edge.ToNodeIndex);
+
+                if (!VisitedNodes.Contains(ToNode))
+                {
+                    RaycastHit hit;
+                    var Origin = Node.Position;
+                    Origin.y += 1;
+
+                    if (Physics.Raycast(Origin, ToNode.Position - Node.Position, out hit, 1))
+                    {
+                        NodesToRemove.Add(ToNode);
+                        Debug.LogFormat("Hit {0} {1}", hit.transform.name, hit.distance);
+                    }
+
+                    VisitedNodes.Add(ToNode);
+                    NodeQueue.Enqueue(Graph.GetNode(Edge.ToNodeIndex));
+                }
+            }
+        }
+
+        foreach (var Node in NodesToRemove)
+        {
+            Graph.RemoveNode(Node.NodeIndex);
+        }
+        Debug.LogFormat("Visited Count: {0}", VisitedNodes.Count);
+    }
+
     public void Rebuild()
     {
         // Reset the graph (resets nodes and edges connecting them)
@@ -229,8 +332,6 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
         // Find all walls and update our graph with them
         BuildWalls();
-
-
     }
 
     public void BuildWalls()
@@ -260,6 +361,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     public void ResetGraph()
     {
         Graph = new SparseGraph<UnityNode, UnityEdge>(false);
+        VisitedNodes = new List<UnityNode>();
 
         Width = TileWidth * NumTilesX;
         Height = TileHeight * NumTilesY;
