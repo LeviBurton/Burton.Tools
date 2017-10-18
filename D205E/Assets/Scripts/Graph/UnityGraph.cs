@@ -174,7 +174,8 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
                     {
                         Gizmos.color = DefaultEdgeColor;
                     }
-                        Gizmos.DrawLine(FromPosition, ToPosition);
+
+                    Gizmos.DrawLine(FromPosition, ToPosition);
                 }
             }
         }
@@ -206,11 +207,8 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
                 Gizmos.color = DefaultSearchPathColor;
                 Gizmos.DrawLine(FromPosition + (Vector3.up * 0.5f), ToPosition + (Vector3.up * 0.5f));
-
-                Vector3 CubePosition = new Vector3(transform.position.x + CurrentNode.Position.x, transform.position.y + (CurrentNode.Position.y + TileWidth / 4), transform.position.z + CurrentNode.Position.z);
-                Vector3 CubeSize = new Vector3(TileWidth / 2 * (1 - TilePadding), .1f, TileHeight / 2 * (1 - TilePadding));
-                Gizmos.DrawSphere(CubePosition + (Vector3.up * 0.5f), PathSphereSize);
-                //Gizmos.DrawCube(CubePosition, CubeSize);
+                Vector3 SpherePosition = new Vector3(transform.position.x + CurrentNode.Position.x, transform.position.y + (CurrentNode.Position.y + TileWidth / 4), transform.position.z + CurrentNode.Position.z);
+                Gizmos.DrawSphere(SpherePosition + (Vector3.up * 0.5f), PathSphereSize);
             }
 
             DrawStartNode(StartNodeIndex);

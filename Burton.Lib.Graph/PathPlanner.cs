@@ -17,14 +17,14 @@ namespace Burton.Lib.Graph
         // current graph search algorithm
         Graph_SearchTimeSliced<GraphEdge> CurrentSearch;
 
-        public int CycleOnce()
+        public ESearchStatus CycleOnce()
         {
-            int Result = CurrentSearch.CycleOnce();
-            if (Result == (int)ESearchStatus.TargetNotFound)
+            ESearchStatus Result = CurrentSearch.CycleOnce();
+            if (Result == ESearchStatus.TargetNotFound)
             {
                 // send a message to owner it was not found
             }
-            else if (Result == (int)ESearchStatus.TargetFound)
+            else if (Result == ESearchStatus.TargetFound)
             {
                 //if the search was for an item type then the final node in the path will
                 //represent a giver trigger. Consequently, it's worth passing the pointer

@@ -17,7 +17,6 @@ namespace Burton.Lib.Graph
         // requests
         int NumSearchCyclesPerUpdate;
 
-
         public PathManager(int NumCyclesPerUpdate)
         {
             NumSearchCyclesPerUpdate = NumCyclesPerUpdate;
@@ -35,10 +34,10 @@ namespace Burton.Lib.Graph
 
             while (NumCyclesRemaining-- > 0 && SearchRequests.Any())
             {
-                int Result = (SearchRequests[CurSearchIndex]).CycleOnce();
+                ESearchStatus Result = (SearchRequests[CurSearchIndex]).CycleOnce();
 
-                if ((Result == (int)ESearchStatus.TargetFound) ||
-                    (Result == (int)ESearchStatus.TargetNotFound))
+                if ((Result == ESearchStatus.TargetFound) ||
+                    (Result == ESearchStatus.TargetNotFound))
                 {
                     // Remove path from list
                     SearchRequests.RemoveAt(CurSearchIndex);

@@ -23,6 +23,7 @@ namespace Burton.Lib.Graph
         public int SourceNodeIndex;
         public int TargetNodeIndex;
         public bool bFound;
+        private IndexedPriorityQueueLow<double> TimeSlicedQ;
 
         public Search_AStar(SparseGraph<TNode, TEdge> Graph, IHeuristic<SparseGraph<TNode, TEdge>> Heuristic, int Source, int Target)
         {
@@ -51,6 +52,53 @@ namespace Burton.Lib.Graph
                 FCosts.Insert(i, 0);
                 GCosts.Insert(i, 0);
             }
+
+            TimeSlicedQ = new IndexedPriorityQueueLow<double>(FCosts, Graph.NodeCount());
+            TimeSlicedQ.Insert(SourceNodeIndex);
+        }
+
+        public ESearchStatus CycleOnce()
+        {
+            if (SourceNodeIndex > Graph.NodeCount())
+                return ESearchStatus.TargetNotFound;
+
+            if (TimeSlicedQ.IsEmpty())
+            {
+                return ESearchStatus.TargetNotFound;
+            }
+
+            int NextClosestNode = TimeSlicedQ.Pop();
+
+            ShortestPathTree[NextClosestNode] = SearchFrontier[NextClosestNode];
+
+            if (NextClosestNode == TargetNodeIndex)
+            {
+                return ESearchStatus.TargetFound;
+            }
+
+            foreach (var Edge in Graph.Edges[NextClosestNode])
+            {
+                double NewCost = CostToThisNode[NextClosestNode] + Edge.EdgeCost;
+                double HCost = Heuristic.Calculate(Graph, TargetNodeIndex, Edge.ToNodeIndex);
+                double GCost = GCosts[NextClosestNode] + Edge.EdgeCost;
+
+                if (SearchFrontier[Edge.ToNodeIndex] == null)
+                {
+                    FCosts[Edge.ToNodeIndex] = GCost + HCost;
+                    GCosts[Edge.ToNodeIndex] = GCost;
+                    TimeSlicedQ.Insert(Edge.ToNodeIndex);
+                    SearchFrontier[Edge.ToNodeIndex] = Edge;
+                }
+                else if (GCost < GCosts[Edge.ToNodeIndex])
+                {
+                    FCosts[Edge.ToNodeIndex] = GCost + HCost;
+                    GCosts[Edge.ToNodeIndex] = GCost;
+                    TimeSlicedQ.ChangePriority(Edge.ToNodeIndex);
+                    SearchFrontier[Edge.ToNodeIndex] = Edge;
+                }
+            }
+
+            return ESearchStatus.SearchIncomplete;
         }
 
         public bool Search()

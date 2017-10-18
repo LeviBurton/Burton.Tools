@@ -16,7 +16,7 @@ namespace Burton.Lib.Graph
             SearchType = Type;
         }
 
-        public abstract int CycleOnce();
+        public abstract ESearchStatus CycleOnce();
         public abstract List<TEdgeType> GetSPT();
         public abstract double GetCostToTarget();
         public abstract List<int> GetPathToTarget();
