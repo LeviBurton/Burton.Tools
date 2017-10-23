@@ -9,8 +9,6 @@ namespace Burton.Lib.Graph
 
     public class PathPlanner
     {
-        // private Owner
-
         // The NavGraph
         SparseGraph<GraphNode, GraphEdge> Graph;
 
@@ -22,10 +20,11 @@ namespace Burton.Lib.Graph
             ESearchStatus Result = CurrentSearch.CycleOnce();
             if (Result == ESearchStatus.TargetNotFound)
             {
-                // send a message to owner it was not found
+            
             }
             else if (Result == ESearchStatus.TargetFound)
             {
+            
                 //if the search was for an item type then the final node in the path will
                 //represent a giver trigger. Consequently, it's worth passing the pointer
                 //to the trigger in the extra info field of the message. (The pointer

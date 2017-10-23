@@ -8,7 +8,10 @@ namespace Burton.Lib.Graph
     public enum ESearchStatus { TargetFound, TargetNotFound, SearchIncomplete };
 
     public class PathManager<TPathPlanner> where TPathPlanner : PathPlanner
-    {   
+    {
+        public Action OnTargetFound;
+        public Action OnTargetNotFound;
+
         // Active search requests
         private List<TPathPlanner> SearchRequests;
 
@@ -36,11 +39,16 @@ namespace Burton.Lib.Graph
             {
                 ESearchStatus Result = (SearchRequests[CurSearchIndex]).CycleOnce();
 
-                if ((Result == ESearchStatus.TargetFound) ||
-                    (Result == ESearchStatus.TargetNotFound))
+                if (Result == ESearchStatus.TargetFound)
                 {
-                    // Remove path from list
+                    OnTargetFound();
                     SearchRequests.RemoveAt(CurSearchIndex);
+                }
+                else if (Result == ESearchStatus.TargetNotFound)
+                {
+                    OnTargetNotFound();
+
+                    SearchRequests.RemoveAt(CurSearchIndex);     
                 }
                 else
                 {
@@ -50,7 +58,9 @@ namespace Burton.Lib.Graph
 
                 // if we are at the end, reset to beginning.
                 if (CurSearchIndex >= SearchRequests.Count())
+                {
                     CurSearchIndex = 0;
+                }
             }
         }
 

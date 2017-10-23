@@ -38,14 +38,6 @@ public class UnityGraphEditor : Editor
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
 
-        if (GUILayout.Button("Floodfill"))
-        {
-            //Graph.BuildDefaultGraph();
-            Graph.Floodfill();
-            EditorUtility.SetDirty(Graph);
-            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-        }
-
         #region Test
         EditorGUILayout.LabelField("Test Stuff", EditorStyles.boldLabel);
         if (GUILayout.Button("Test Path"))
