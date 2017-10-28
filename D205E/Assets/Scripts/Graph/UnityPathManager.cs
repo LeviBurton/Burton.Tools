@@ -15,34 +15,61 @@ public class UnityPathManager : MonoBehaviour
     public int NumSearchCyclesPerUpdate;
     public Color StartNodeColor;
     public Color EndNodeColor;
-
     public Color DefaultSearchPathColor;
 
     public List<UnityPathPlanner> SearchRequests = new List<UnityPathPlanner>();
+    public List<UnityPathPlanner> TargetFoundSearchRequests = new List<UnityPathPlanner>();
+
+    public List<Search> Searches = new List<Search>();
 
     private void OnDrawGizmos()
     {
-        //if (DrawSearchPaths)
-        //{
-        //    foreach (var SearchRequest in SearchRequests)
-        //    {
-        //        var PathToTarget = SearchRequest.Search.GetPathToTarget();
+        Gizmos.color = Color.green;
 
-        //        foreach (var NodeIndex in PathToTarget)
-        //        {
-        //            Debug.LogFormat("{0}", NodeIndex);
+        for (int CurSearchIndex = 0; CurSearchIndex < TargetFoundSearchRequests.Count; CurSearchIndex++)
+        {
+            var CurrentSearchRequest = TargetFoundSearchRequests[CurSearchIndex];
 
-        //        }
-        //    }
-        //}
+            var StartingNode = CurrentSearchRequest.Graph.GetNode(CurrentSearchRequest.Search.SourceNodeIndex);
+            var EndNode = CurrentSearchRequest.Graph.GetNode(CurrentSearchRequest.Search.TargetNodeIndex);
+
+            var PathToTarget = new List<UnityNode>();
+
+            foreach (var NodeIndex in CurrentSearchRequest.Search.GetPathToTarget())
+            {
+                PathToTarget.Add(CurrentSearchRequest.Graph.GetNode(NodeIndex));
+            }
+
+            UnityNode CurrentNode = null;
+            UnityNode NextNode = null;
+
+            for (int i = 0; i < PathToTarget.Count; i++)
+            {
+                CurrentNode = PathToTarget.ElementAtOrDefault(i);
+                NextNode = PathToTarget.ElementAtOrDefault(i + 1);
+
+                Vector3 SpherePosition = new Vector3(CurrentNode.Position.x, (CurrentNode.Position.y + CurrentSearchRequest.UnityGraph.TileWidth / 4), CurrentNode.Position.z);
+                Gizmos.DrawSphere(SpherePosition + (Vector3.up * 0.5f), 0.10f);
+
+                if (NextNode != null)
+                {
+                    var FromPosition = new Vector3(CurrentNode.Position.x, 0.5f, CurrentNode.Position.z);
+                    var ToPosition = new Vector3(NextNode.Position.x, 0.5f, NextNode.Position.z);
+
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawLine(FromPosition, ToPosition);
+                }
+            }
+        }
     }
 
     void Start()
     {
         SearchRequests = new List<UnityPathPlanner>();
-	}
+        TargetFoundSearchRequests = new List<UnityPathPlanner>();
+    }
 
-	void Update ()
+    void Update()
     {
         UpdateSearches();
     }
@@ -52,7 +79,7 @@ public class UnityPathManager : MonoBehaviour
     {
         if (!SearchRequests.Contains(PathPlanner))
         {
-          //  OnTargetFound += PathPlanner.OnTargetFound;
+            //  OnTargetFound += PathPlanner.OnTargetFound;
             SearchRequests.Add(PathPlanner);
         }
     }
@@ -75,19 +102,13 @@ public class UnityPathManager : MonoBehaviour
 
         while (NumCyclesRemaining-- > 0 && SearchRequests.Any())
         {
-            ESearchStatus Result = (SearchRequests[CurSearchIndex]).CycleOnce();
+            var SearchRequest = SearchRequests[CurSearchIndex];
+
+            ESearchStatus Result = SearchRequest.CycleOnce();
 
             if (Result == ESearchStatus.TargetFound)
             {
-                var PathToTarget = SearchRequests[CurSearchIndex].Search.GetPathToTarget();
-
-                //  Notify all interested parties that we found a path to the target.
-                Debug.Log("\n");
-                foreach (var p in PathToTarget)
-                {
-                    Debug.LogFormat("PathToTarget: {0}", p);
-                }
-
+                TargetFoundSearchRequests.Add(SearchRequest);
                 SearchRequests.RemoveAt(CurSearchIndex);
             }
             else if (Result == ESearchStatus.TargetNotFound)

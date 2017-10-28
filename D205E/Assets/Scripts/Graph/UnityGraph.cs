@@ -34,6 +34,8 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
     public List<UnityNode> VisitedNodes;
 
+    public List<UnityPathPlanner> Searches = new List<UnityPathPlanner>();
+
     public string Name = "UnityGraph";
     public int NumTilesX = 25;
     public int NumTilesY = 25;

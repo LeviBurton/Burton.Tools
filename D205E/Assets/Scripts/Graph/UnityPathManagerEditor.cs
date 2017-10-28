@@ -25,7 +25,6 @@ public class UnityPathManagerEditor : Editor
     // Might not need this -- serializedObject may be more appropriate.
     UnityGraph Graph = null;
     UnityPathManager PathManager = null;
-    List<Search> Searches = new List<Search>();
 
     public void OnEnable()
     {
@@ -44,25 +43,30 @@ public class UnityPathManagerEditor : Editor
         EditorGUILayout.Separator();
         if (GUILayout.Button("Add Search"))
         {
-            Searches.Add(new Search(0, 0));
+            PathManager.Searches.Add(new Search(0, 0));
         }
 
         if (GUILayout.Button("Clear Searches"))
         {
-            Searches.Clear();
+            PathManager.Searches.Clear();
+            PathManager.TargetFoundSearchRequests.Clear();
+            EditorUtility.SetDirty(PathManager);
         }
 
         EditorGUILayout.LabelField("Searches", EditorStyles.boldLabel);
 
-        if (GUILayout.Button("Submit Searches"))
+        if (GUILayout.Button("Set Searches"))
         {
+            PathManager.TargetFoundSearchRequests.Clear();
+            PathManager.SearchRequests.Clear();
+
             IHeuristic<SparseGraph<UnityNode, UnityEdge>> Heuristic = new UnityDistanceHeuristic();
 
-            foreach (var Search in Searches)
+            foreach (var Search in PathManager.Searches)
             {
                 var Astar = new Search_AStar<UnityNode, UnityEdge>(Graph.Graph, Heuristic, Search.StartNode, Search.EndNode);
-                var PathPlan = new UnityPathPlanner(Graph.Graph, Astar);
-
+                var PathPlan = new UnityPathPlanner(Graph, Astar);
+          
                 PathManager.Register(PathPlan);
             }
         }
@@ -70,10 +74,11 @@ public class UnityPathManagerEditor : Editor
         if (GUILayout.Button("Step Search"))
         {
             PathManager.UpdateSearches();
+            EditorUtility.SetDirty(PathManager);
         }
 
         EditorGUILayout.BeginVertical();
-        foreach (var Search in Searches)
+        foreach (var Search in PathManager.Searches)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("StartNode: ");
@@ -91,90 +96,4 @@ public class UnityPathManagerEditor : Editor
 
         serializedObject.ApplyModifiedProperties();
     }
-
-
 }
-
-
-//[CustomEditor(typeof(UnityGraphManager))]
-//public class UnityGraphEditor : Editor
-//{
-//    public UnityGraph SelectedGraph;
-//    public List<UnityGraph> AvailableGraphs = new List<UnityGraph>();
-
-//    [MenuItem("D20/Graphs/Create")]
-//    public static void CreateAsset()
-//    {
-
-//    }
-
-//    private void OnEnable()
-//    {
-//        Debug.Log("UnityGraphEditor.OnEnable");
-//        AvailableGraphs.Clear();
-
-//        // Populate AvailableGraphs using the UnityGraphManager
-//        AvailableGraphs = UnityGraphManager.Instance.Graphs;
-//    }
-
-//    public override void OnInspectorGUI()
-//    {
-//        serializedObject.Update();
-
-//        // DrawDefaultInspector();
-
-//        EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
-//        if (GUILayout.Button("Create Graph"))
-//        {
-//            UnityGraphManager.Instance.ResetAll();
-//            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-//        }
-
-//        if (GUILayout.Button("Load All"))
-//        {
-//            UnityGraphManager.Instance.LoadAll();
-//            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-//        }
-
-//        if (GUILayout.Button("Save All"))
-//        {
-
-//        }
-//        EditorGUILayout.Separator(); EditorGUILayout.Separator();
-
-//        EditorGUILayout.LabelField("Graphs", EditorStyles.boldLabel);
-//        foreach (var Graph in AvailableGraphs)
-//        {
-//            EditorGUILayout.BeginHorizontal();
-//            EditorGUILayout.Space();
-//            EditorGUILayout.LabelField("Name");
-//            Graph.Name = EditorGUILayout.TextField(Graph.Name);
-//            EditorGUILayout.EndHorizontal();
-
-
-//            EditorGUILayout.BeginHorizontal();
-//            EditorGUILayout.Space();
-//            // UnityGraphManager.Instance.DefaultTileColor = EditorGUILayout.ColorField(UnityGraphManager.Instance.DefaultTileColor);
-//            EditorGUILayout.LabelField("Default Tile Color");
-//            Graph.DefaultTileColor = EditorGUILayout.ColorField(Graph.DefaultTileColor);
-//            EditorGUILayout.EndHorizontal();
-
-//            EditorGUILayout.BeginHorizontal();
-//            EditorGUILayout.Space();
-//            EditorGUILayout.LabelField("Default Edge Color");
-//            Graph.DefaultEdgeColor = EditorGUILayout.ColorField(Graph.DefaultEdgeColor);
-//            EditorGUILayout.EndHorizontal();
-
-//            EditorGUILayout.Separator(); EditorGUILayout.Separator();
-
-//        }
-
-//    }
-
-//    protected virtual void OnSceneGUI()
-//    {
-//        if (Event.current.type == EventType.Repaint)
-//        {
-//        }
-//    }
-//}
