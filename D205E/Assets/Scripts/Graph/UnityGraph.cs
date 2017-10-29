@@ -107,8 +107,7 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
 
         Graph.RemoveNode(NodeIndex);
     }
-
-    [ExecuteInEditMode]
+    
     void Start()
     {
 
@@ -235,7 +234,6 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
         Gizmos.color = EndNodeColor;
         Gizmos.DrawCube(CubePosition, CubeSize);
     }
-
 
     #region Grid Graph Stuff
 
@@ -433,9 +431,20 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
             }
         }
     }
-    // Test
     #endregion
 
+    public UnityNode GetClosestNodeToPosition(Vector3 Position)
+    {
+        UnityNode Node = null;
+
+        var LocalOrigin = Position - transform.position;
+        int NodeIndex = ((int)(LocalOrigin.z / TileHeight) * NumTilesX) + ((int)LocalOrigin.x / TileWidth);
+        Node = Graph.GetNode(NodeIndex);
+
+        Debug.LogFormat("{0} : {1}", LocalOrigin, Node.NodeIndex);
+
+        return Node;
+    }
 
     public UnityNode GetNodeAtPosition(Vector3 Position)
     {

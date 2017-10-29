@@ -17,6 +17,8 @@ public class UnityPathManager : MonoBehaviour
     public Color EndNodeColor;
     public Color DefaultSearchPathColor;
 
+    public Transform Target;
+
     public List<UnityPathPlanner> SearchRequests = new List<UnityPathPlanner>();
     public List<UnityPathPlanner> TargetFoundSearchRequests = new List<UnityPathPlanner>();
 

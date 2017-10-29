@@ -31,7 +31,14 @@ public class UnityPathManagerEditor : Editor
         PathManager = serializedObject.targetObject as UnityPathManager;
         Graph = FindObjectsOfType<UnityGraph>()[0];
 
-        Debug.LogFormat("Graph: {0}, PathManager: {1}", Graph.Name, PathManager.name);
+     //   Debug.LogFormat("Graph: {0}, PathManager: {1}", Graph.Name, PathManager.name);
+
+        SceneView.onSceneGUIDelegate += OnSceneGUI;
+    }
+
+    static void OnSceneGUI(SceneView sceneView)
+    {
+        //Debug.Log("OnSceneGUI");
     }
 
     public override void OnInspectorGUI()
@@ -41,6 +48,9 @@ public class UnityPathManagerEditor : Editor
         EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
 
         EditorGUILayout.Separator();
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("Target"));
+
         if (GUILayout.Button("Add Search"))
         {
             PathManager.Searches.Add(new Search(0, 0));
@@ -54,6 +64,23 @@ public class UnityPathManagerEditor : Editor
         }
 
         EditorGUILayout.LabelField("Searches", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("Path to Target"))
+        {
+            // Get node closest to transform.position
+            var TargetPosition = PathManager.Target.position;
+
+            // map it to graph coordinate space
+            var LocalPosition = Graph.transform.InverseTransformPoint(TargetPosition);
+            
+            // Snap to closest grid point
+            var NodePosition = new Vector3(Mathf.Round((LocalPosition.x * Graph.TileWidth) / Graph.TileWidth), Mathf.Round((LocalPosition.y * Graph.TileWidth) / Graph.TileWidth), Mathf.Round((LocalPosition.z * Graph.TileHeight) / Graph.TileHeight));
+
+            // Get the node at that grid point
+            var Node = Graph.GetNodeAtPosition(NodePosition);
+
+            Debug.LogFormat("World: {0}, Local: {1}, Test: {2}, Node: {3}", TargetPosition, LocalPosition, NodePosition, Node != null ? Node.NodeIndex : 0);
+        }
 
         if (GUILayout.Button("Set Searches"))
         {
