@@ -22,6 +22,12 @@ public class UnityPathPlanner
     public ESearchStatus CycleOnce()
     {
         ESearchStatus Result = Search.CycleOnce();
+
+        if (Result == ESearchStatus.TargetFound)
+        {
+            PathToTarget.AddRange(Search.GetPathAsPathEdges());
+        }
+
         return Result;
     }
 }

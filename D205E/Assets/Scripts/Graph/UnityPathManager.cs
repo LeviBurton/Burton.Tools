@@ -59,14 +59,8 @@ public class UnityPathManager : MonoBehaviour
 
                 Gizmos.color *= 1.25f;
                 Gizmos.DrawSphere(SpherePosition + (Vector3.up * 0.5f), 0.10f);
-
-                if (ToNode != null)
-                {
-                    var FromPosition = new Vector3(FromNode.Position.x, 0.5f, FromNode.Position.z);
-                    var ToPosition = new Vector3(ToNode.Position.x, 0.5f, ToNode.Position.z);
-                    Gizmos.color = SearchPathColor;
-                    Gizmos.DrawLine(FromPosition, ToPosition);
-                }
+                Gizmos.color = SearchPathColor;
+                Gizmos.DrawLine(FromNode.Position + (Vector3.up * 0.5f), ToNode.Position + (Vector3.up * 0.5f));
             }
         }
     }
@@ -81,19 +75,16 @@ public class UnityPathManager : MonoBehaviour
         //UpdateSearches();
     }
 
-    // FIXME -- interface? Generic?
     public void Register(UnityPathPlanner PathPlanner)
     {
         if (!SearchRequests.Contains(PathPlanner))
         {
-            //  OnTargetFound += PathPlanner.OnTargetFound;
             SearchRequests.Add(PathPlanner);
         }
     }
 
     public void UnRegister(UnityPathPlanner PathPlanner)
     {
-        //  OnTargetFound -= PathPlanner.OnTargetFound;
         SearchRequests.Remove(PathPlanner);
     }
 
@@ -114,7 +105,6 @@ public class UnityPathManager : MonoBehaviour
 
             if (Result == ESearchStatus.TargetFound)
             {
-                SearchRequest.PathToTarget.AddRange(SearchRequest.Search.GetPathAsPathEdges());
                 //SearchRequests.RemoveAt(CurSearchIndex);
             }
             else if (Result == ESearchStatus.TargetNotFound)
@@ -123,7 +113,7 @@ public class UnityPathManager : MonoBehaviour
             }
             else
             {
-                // go to next path
+                // go to next search
                 CurSearchIndex++;
             }
 
