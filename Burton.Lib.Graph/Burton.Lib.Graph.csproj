@@ -62,7 +62,6 @@
     <Compile Include="PathManager.cs" />
     <Compile Include="PathPlanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchAStar_TimeSliced.cs" />
     <Compile Include="SparseGraph.cs" />
     <Compile Include="UnityGraphNode.cs" />
   </ItemGroup>

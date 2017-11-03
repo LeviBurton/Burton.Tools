@@ -64,27 +64,11 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     int Width = 0;
     int Height = 0;
 
-    public void TestPath()
-    {
-        var Search = new Search_AStar<UnityNode, UnityEdge>(Graph, Heuristic, StartNodeIndex, EndNodeIndex);
-        Search.Search();
-        SearchPath.Clear();
-        // 102, 103, 123 (problem node)
-
-        if (Search.bFound)
-        {
-            foreach (var NodeIndex in Search.GetPathToTarget())
-            {
-                SearchPath.Add(Graph.GetNode(NodeIndex));
-            }
-
-            SearchPath.Reverse();
-        }
-    }
 
     void OnEnable()
     {
         bEnabled = true;
+
 
     }
 
@@ -433,27 +417,23 @@ public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     }
     #endregion
 
-    public UnityNode GetClosestNodeToPosition(Vector3 Position)
+    public Vector3 WorldToLocal(Vector3 WorldPosition)
     {
-        UnityNode Node = null;
+        return transform.parent.InverseTransformPoint(WorldPosition);
+    }
 
-        var LocalOrigin = Position - transform.position;
-        int NodeIndex = ((int)(LocalOrigin.z / TileHeight) * NumTilesX) + ((int)LocalOrigin.x / TileWidth);
-        Node = Graph.GetNode(NodeIndex);
+    public Vector3 WorldToLocalTile(Vector3 WorldPosition)
+    {
+        var LocalPosition = transform.parent.InverseTransformPoint(WorldPosition);
 
-        Debug.LogFormat("{0} : {1}", LocalOrigin, Node.NodeIndex);
-
-        return Node;
+        // Snap to closest grid point
+        return new Vector3(Mathf.Round((LocalPosition.x * TileWidth) / TileWidth), Mathf.Round((LocalPosition.y * TileWidth) / TileWidth), Mathf.Round((LocalPosition.z * TileHeight) / TileHeight));
     }
 
     public UnityNode GetNodeAtPosition(Vector3 Position)
     {
-        var LocalOrigin = Position - transform.position;
-        int NodeIndex = ((int)(LocalOrigin.z / TileHeight) * NumTilesX) + ((int)LocalOrigin.x / TileWidth);
+        int NodeIndex = ((int)(Position.z / TileHeight) * NumTilesX) + ((int)Position.x / TileWidth);
         var Node = Graph.GetNode(NodeIndex);
-
-        Debug.LogFormat("{0} : {1}", LocalOrigin, Node.NodeIndex);
-
         return Node;
     }
 

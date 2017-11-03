@@ -16,6 +16,7 @@ public class UnityGraphEditor : Editor
     public void OnEnable()
     {
         Graph = serializedObject.targetObject as UnityGraph;
+     
     }
 
     public override void OnInspectorGUI()
@@ -37,29 +38,6 @@ public class UnityGraphEditor : Editor
             EditorUtility.SetDirty(Graph);
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
-
-        #region Test
-        EditorGUILayout.LabelField("Test Stuff", EditorStyles.boldLabel);
-        if (GUILayout.Button("Test Path"))
-        {
-            Graph.TestPath();
-            EditorUtility.SetDirty(Graph);
-            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-        }
-
-        if (GUILayout.Button("Remove Test"))
-        {
-            for (int i = 0; i <= 5; i++)
-            {
-                Graph.RemoveNode(i);
-            }
-
-            EditorUtility.SetDirty(Graph);
-            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-        }
-
-        EditorGUILayout.Separator(); EditorGUILayout.Separator();
-        #endregion
 
         EditorGUILayout.LabelField("Properties", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));

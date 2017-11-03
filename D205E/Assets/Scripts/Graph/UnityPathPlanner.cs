@@ -8,11 +8,9 @@ public enum EPlanStatus { NoClosestNodeFound = -1 }
 public class UnityPathPlanner
 {
     public UnityGraph UnityGraph;
-
     public SparseGraph<UnityNode, UnityEdge> Graph;
-
-    //Search_AStar<UnityNode, UnityEdge>(Graph, Heuristic, StartNodeIndex, EndNodeIndex);
     public Search_AStar<UnityNode, UnityEdge> Search;
+    public List<PathEdge> PathToTarget = new List<PathEdge>();
 
     public UnityPathPlanner(UnityGraph UnityGraph, Search_AStar<UnityNode, UnityEdge> CurrentSearch)
     {
@@ -24,7 +22,6 @@ public class UnityPathPlanner
     public ESearchStatus CycleOnce()
     {
         ESearchStatus Result = Search.CycleOnce();
-
         return Result;
     }
 }

@@ -11,54 +11,60 @@ public class UnityPathManager : MonoBehaviour
     public Action<List<int>> OnTargetFound;
     public Action OnTargetNotFound;
 
+    public List<int> ShortestPathTree = new List<int>();
+
     public bool DrawSearchPaths = true;
     public int NumSearchCyclesPerUpdate;
     public Color StartNodeColor;
     public Color EndNodeColor;
-    public Color DefaultSearchPathColor;
+
+    public Color SearchPathColor = Color.green;
+    public Color FrontierPathColor = Color.yellow;
 
     public Transform Target;
 
     public List<UnityPathPlanner> SearchRequests = new List<UnityPathPlanner>();
-    public List<UnityPathPlanner> TargetFoundSearchRequests = new List<UnityPathPlanner>();
 
-    public List<Search> Searches = new List<Search>();
+    public void ClearSearches()
+    {
+        SearchRequests.Clear();
+    }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
+        DrawPathsToTargets();
+    }
 
-        for (int CurSearchIndex = 0; CurSearchIndex < TargetFoundSearchRequests.Count; CurSearchIndex++)
+    private void DrawPathsToTargets()
+    {
+        Gizmos.color = SearchPathColor;
+
+        for (int CurSearchIndex = 0; CurSearchIndex < SearchRequests.Count; CurSearchIndex++)
         {
-            var CurrentSearchRequest = TargetFoundSearchRequests[CurSearchIndex];
+            var SearchRequest = SearchRequests[CurSearchIndex];
 
-            var StartingNode = CurrentSearchRequest.Graph.GetNode(CurrentSearchRequest.Search.SourceNodeIndex);
-            var EndNode = CurrentSearchRequest.Graph.GetNode(CurrentSearchRequest.Search.TargetNodeIndex);
+            if (!SearchRequest.PathToTarget.Any())
+                continue;
 
-            var PathToTarget = new List<UnityNode>();
+            var StartNode = SearchRequest.Graph.GetNode(SearchRequest.Search.SourceNodeIndex);
+            var EndNode = SearchRequest.Graph.GetNode(SearchRequest.Search.TargetNodeIndex);
 
-            foreach (var NodeIndex in CurrentSearchRequest.Search.GetPathToTarget())
+            for (int i = 0; i < SearchRequest.PathToTarget.Count; i++)
             {
-                PathToTarget.Add(CurrentSearchRequest.Graph.GetNode(NodeIndex));
-            }
+                var PathEdge = SearchRequest.PathToTarget[i];
+                var FromNode = SearchRequest.Graph.GetNode(PathEdge.SourceIndex);
+                var ToNode = SearchRequest.Graph.GetNode(PathEdge.DestinationIndex);
 
-            UnityNode CurrentNode = null;
-            UnityNode NextNode = null;
+                Vector3 SpherePosition = new Vector3(FromNode.Position.x, (FromNode.Position.y + SearchRequest.UnityGraph.TileWidth / 4), FromNode.Position.z);
 
-            for (int i = 0; i < PathToTarget.Count; i++)
-            {
-                CurrentNode = PathToTarget.ElementAtOrDefault(i);
-                NextNode = PathToTarget.ElementAtOrDefault(i + 1);
-
-                Vector3 SpherePosition = new Vector3(CurrentNode.Position.x, (CurrentNode.Position.y + CurrentSearchRequest.UnityGraph.TileWidth / 4), CurrentNode.Position.z);
+                Gizmos.color *= 1.25f;
                 Gizmos.DrawSphere(SpherePosition + (Vector3.up * 0.5f), 0.10f);
 
-                if (NextNode != null)
+                if (ToNode != null)
                 {
-                    var FromPosition = new Vector3(CurrentNode.Position.x, 0.5f, CurrentNode.Position.z);
-                    var ToPosition = new Vector3(NextNode.Position.x, 0.5f, NextNode.Position.z);
-
-                    Gizmos.color = Color.green;
+                    var FromPosition = new Vector3(FromNode.Position.x, 0.5f, FromNode.Position.z);
+                    var ToPosition = new Vector3(ToNode.Position.x, 0.5f, ToNode.Position.z);
+                    Gizmos.color = SearchPathColor;
                     Gizmos.DrawLine(FromPosition, ToPosition);
                 }
             }
@@ -68,12 +74,11 @@ public class UnityPathManager : MonoBehaviour
     void Start()
     {
         SearchRequests = new List<UnityPathPlanner>();
-        TargetFoundSearchRequests = new List<UnityPathPlanner>();
     }
 
     void Update()
     {
-        UpdateSearches();
+        //UpdateSearches();
     }
 
     // FIXME -- interface? Generic?
@@ -105,17 +110,16 @@ public class UnityPathManager : MonoBehaviour
         while (NumCyclesRemaining-- > 0 && SearchRequests.Any())
         {
             var SearchRequest = SearchRequests[CurSearchIndex];
-
             ESearchStatus Result = SearchRequest.CycleOnce();
 
             if (Result == ESearchStatus.TargetFound)
             {
-                TargetFoundSearchRequests.Add(SearchRequest);
-                SearchRequests.RemoveAt(CurSearchIndex);
+                SearchRequest.PathToTarget.AddRange(SearchRequest.Search.GetPathAsPathEdges());
+                //SearchRequests.RemoveAt(CurSearchIndex);
             }
             else if (Result == ESearchStatus.TargetNotFound)
             {
-                SearchRequests.RemoveAt(CurSearchIndex);
+                //SearchRequests.RemoveAt(CurSearchIndex);
             }
             else
             {

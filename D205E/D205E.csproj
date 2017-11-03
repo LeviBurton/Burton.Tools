@@ -142,12 +142,14 @@
     <Compile Include="Assets\Scripts\GameEntities\UnityItem.cs" />
     <Compile Include="Assets\Scripts\GameEntities\UnityWeapon.cs" />
     <Compile Include="Assets\Scripts\GameEntities\Wall.cs" />
+    <Compile Include="Assets\Scripts\Graph\PathTester.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityEdge.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityGraph.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityGraphEditor.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityGraphManager.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityHeuristicEuclid.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityNode.cs" />
+    <Compile Include="Assets\Scripts\Graph\UnityPathEdge.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityPathManager.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityPathManagerEditor.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityPathPlanner.cs" />

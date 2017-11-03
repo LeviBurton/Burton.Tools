@@ -78,7 +78,6 @@ namespace Burton.Lib.Graph
 
             foreach (var Edge in Graph.Edges[NextClosestNode])
             {
-                double NewCost = CostToThisNode[NextClosestNode] + Edge.EdgeCost;
                 double HCost = Heuristic.Calculate(Graph, TargetNodeIndex, Edge.ToNodeIndex);
                 double GCost = GCosts[NextClosestNode] + Edge.EdgeCost;
 
@@ -89,7 +88,8 @@ namespace Burton.Lib.Graph
                     TimeSlicedQ.Insert(Edge.ToNodeIndex);
                     SearchFrontier[Edge.ToNodeIndex] = Edge;
                 }
-                else if (GCost < GCosts[Edge.ToNodeIndex])
+                else if (GCost < GCosts[Edge.ToNodeIndex] && 
+                        (ShortestPathTree[Edge.ToNodeIndex] == null))
                 {
                     FCosts[Edge.ToNodeIndex] = GCost + HCost;
                     GCosts[Edge.ToNodeIndex] = GCost;
@@ -151,28 +151,23 @@ namespace Burton.Lib.Graph
             return false;
         }
 
-        public List<TEdge> GetSPT()
-        {
-            return ShortestPathTree;
-        }
-
         public List<int> GetPathToTarget()
         {
-            var Path = new List<int>(Graph.NodeCount());
+            var Path = new List<int>();
 
             if (TargetNodeIndex < 0)
                 return Path;
 
-            int Node = TargetNodeIndex;
+            int CurNodeIndex = TargetNodeIndex;
 
-            Path.Insert(0, Node);
+            Path.Insert(0, CurNodeIndex);
 
             int NodeCount = Graph.NodeCount();
 
-            while ( (Node != SourceNodeIndex) && (ShortestPathTree[Node] != null) && Path.Count <= NodeCount) 
+            while ((CurNodeIndex != SourceNodeIndex) && (ShortestPathTree[CurNodeIndex] != null) && Path.Count <= NodeCount) 
             {
-                Node = ShortestPathTree[Node].FromNodeIndex;
-                Path.Insert(0, Node);
+                CurNodeIndex = ShortestPathTree[CurNodeIndex].FromNodeIndex;
+                Path.Insert(0, CurNodeIndex);
             }
             
             return Path;
@@ -186,6 +181,23 @@ namespace Burton.Lib.Graph
         public double GetCostToNode(int NodeIndex)
         {
             return CostToThisNode[NodeIndex];
+        }
+
+        public List<PathEdge> GetPathAsPathEdges()
+        {
+            List<PathEdge> Path = new List<PathEdge>();
+
+            if (TargetNodeIndex < 0) return Path;
+
+            int Node = TargetNodeIndex;
+
+            while ((Node != SourceNodeIndex) && (ShortestPathTree[Node] != null) && Path.Count <= Graph.NodeCount())
+            {
+                Path.Add(new PathEdge(ShortestPathTree[Node].FromNodeIndex, ShortestPathTree[Node].ToNodeIndex, 0, 0));
+                Node = ShortestPathTree[Node].FromNodeIndex;
+            }
+
+            return Path;
         }
     }
 }

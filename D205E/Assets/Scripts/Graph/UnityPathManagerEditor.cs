@@ -30,17 +30,8 @@ public class UnityPathManagerEditor : Editor
     {
         PathManager = serializedObject.targetObject as UnityPathManager;
         Graph = FindObjectsOfType<UnityGraph>()[0];
-
-     //   Debug.LogFormat("Graph: {0}, PathManager: {1}", Graph.Name, PathManager.name);
-
-        SceneView.onSceneGUIDelegate += OnSceneGUI;
     }
-
-    static void OnSceneGUI(SceneView sceneView)
-    {
-        //Debug.Log("OnSceneGUI");
-    }
-
+    
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -50,52 +41,31 @@ public class UnityPathManagerEditor : Editor
         EditorGUILayout.Separator();
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Target"));
-
-        if (GUILayout.Button("Add Search"))
-        {
-            PathManager.Searches.Add(new Search(0, 0));
-        }
-
-        if (GUILayout.Button("Clear Searches"))
-        {
-            PathManager.Searches.Clear();
-            PathManager.TargetFoundSearchRequests.Clear();
-            EditorUtility.SetDirty(PathManager);
-        }
-
         EditorGUILayout.LabelField("Searches", EditorStyles.boldLabel);
 
         if (GUILayout.Button("Path to Target"))
         {
-            // Get node closest to transform.position
-            var TargetPosition = PathManager.Target.position;
+            PathManager.ClearSearches();
+
+            var TargetWorldPosition = PathManager.Target.position;
+
+            var TargetNode = Graph.GetNodeAtPosition(Graph.WorldToLocalTile(TargetWorldPosition));
+            var SourceNode = Graph.GetNodeAtPosition(Graph.WorldToLocalTile(PathManager.transform.position));
 
             // map it to graph coordinate space
-            var LocalPosition = Graph.transform.InverseTransformPoint(TargetPosition);
-            
-            // Snap to closest grid point
-            var NodePosition = new Vector3(Mathf.Round((LocalPosition.x * Graph.TileWidth) / Graph.TileWidth), Mathf.Round((LocalPosition.y * Graph.TileWidth) / Graph.TileWidth), Mathf.Round((LocalPosition.z * Graph.TileHeight) / Graph.TileHeight));
-
-            // Get the node at that grid point
-            var Node = Graph.GetNodeAtPosition(NodePosition);
-
-            Debug.LogFormat("World: {0}, Local: {1}, Test: {2}, Node: {3}", TargetPosition, LocalPosition, NodePosition, Node != null ? Node.NodeIndex : 0);
-        }
-
-        if (GUILayout.Button("Set Searches"))
-        {
-            PathManager.TargetFoundSearchRequests.Clear();
-            PathManager.SearchRequests.Clear();
+            var LocalNodePosition = Graph.transform.InverseTransformPoint(TargetWorldPosition);
 
             IHeuristic<SparseGraph<UnityNode, UnityEdge>> Heuristic = new UnityDistanceHeuristic();
+            var Astar = new Search_AStar<UnityNode, UnityEdge>(Graph.Graph, Heuristic, SourceNode.NodeIndex, TargetNode.NodeIndex);
+            var PathPlan = new UnityPathPlanner(Graph, Astar);
 
-            foreach (var Search in PathManager.Searches)
-            {
-                var Astar = new Search_AStar<UnityNode, UnityEdge>(Graph.Graph, Heuristic, Search.StartNode, Search.EndNode);
-                var PathPlan = new UnityPathPlanner(Graph, Astar);
-          
-                PathManager.Register(PathPlan);
-            }
+            PathManager.Register(PathPlan);
+
+            PathManager.UpdateSearches();
+
+            EditorUtility.SetDirty(PathManager);
+
+            Debug.LogFormat("World: {0}, Local: {1}, Node: {2}, Node: {3}", TargetWorldPosition, LocalNodePosition, TargetNode.Position, TargetNode != null ? TargetNode.NodeIndex : 0);
         }
 
         if (GUILayout.Button("Step Search"))
@@ -104,23 +74,19 @@ public class UnityPathManagerEditor : Editor
             EditorUtility.SetDirty(PathManager);
         }
 
-        EditorGUILayout.BeginVertical();
-        foreach (var Search in PathManager.Searches)
+        if (GUILayout.Button("Clear Searches"))
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("StartNode: ");
-            Search.StartNode = EditorGUILayout.IntField(Search.StartNode);
-            EditorGUILayout.PrefixLabel("EndNode: ");
-            Search.EndNode = EditorGUILayout.IntField(Search.EndNode);
-            EditorGUILayout.EndHorizontal();
+            PathManager.ClearSearches();
+            EditorUtility.SetDirty(PathManager);
         }
-        EditorGUILayout.EndVertical();
+
+     
 
         EditorGUILayout.Separator();
 
         EditorGUILayout.LabelField("Properties", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("NumSearchCyclesPerUpdate"));
-
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("SearchPathColor"));
         serializedObject.ApplyModifiedProperties();
     }
 }
