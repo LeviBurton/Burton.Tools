@@ -1,73 +1,63 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-
-[CustomEditor(typeof(UnityGraph))]
-public class UnityGraphEditor : Editor
+namespace Burton.Lib.Unity
 {
-    // Might not need this -- serializedObject may be more appropriate.
-    UnityGraph Graph;
-
-    public void OnEnable()
+    [CustomEditor(typeof(UnityGraph))]
+    public class UnityGraphEditor : Editor
     {
-        Graph = serializedObject.targetObject as UnityGraph;
-     
-    }
+        // Might not need this -- serializedObject may be more appropriate.
+        UnityGraph Graph;
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-
-        EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
-        if (GUILayout.Button("Rebuild"))
+        public void OnEnable()
         {
-            //Graph.BuildDefaultGraph();
-            Graph.Rebuild();
-            EditorUtility.SetDirty(Graph);
-            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            Graph = serializedObject.targetObject as UnityGraph;
+
         }
 
-        if (GUILayout.Button("Weight Edges"))
+        public override void OnInspectorGUI()
         {
-            Graph.WeightEdges();
-            EditorUtility.SetDirty(Graph);
-            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            serializedObject.Update();
+
+            EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
+            if (GUILayout.Button("Rebuild"))
+            {
+                //Graph.BuildDefaultGraph();
+                Graph.Rebuild();
+                EditorUtility.SetDirty(Graph);
+                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            }
+
+            if (GUILayout.Button("Weight Edges"))
+            {
+                Graph.WeightEdges();
+                EditorUtility.SetDirty(Graph);
+                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            }
+
+            EditorGUILayout.LabelField("Properties", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("WallLayerMask"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodes"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawEdges"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodeIndex"));
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesX"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesY"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("TileWidth"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("TileHeight"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultTileColor"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultEdgeColor"));
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("TilePadding"));
+            //EditorGUILayout.LabelField(string.Format("Nodes: {0}", Graph.Graph == null ? 0 : Graph.Graph.ActiveNodeCount()));
+
+            serializedObject.ApplyModifiedProperties();
+
         }
-
-        EditorGUILayout.LabelField("Properties", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("WallLayerMask"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodes"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawEdges"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodeIndex"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawSearchPaths"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("StartNodeIndex"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("EndNodeIndex"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesX"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesY"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("TileWidth"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("TileHeight"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultTileColor"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultEdgeColor"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("StartNodeColor"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("EndNodeColor"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultSearchPathColor"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("PathSphereSize"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("TilePadding"));
-        //EditorGUILayout.LabelField(string.Format("Nodes: {0}", Graph.Graph == null ? 0 : Graph.Graph.ActiveNodeCount()));
-
-        serializedObject.ApplyModifiedProperties();
-
     }
-
-
 }
-
 
 //[CustomEditor(typeof(UnityGraphManager))]
 //public class UnityGraphEditor : Editor

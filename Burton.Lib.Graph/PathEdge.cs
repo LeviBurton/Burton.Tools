@@ -8,17 +8,17 @@ namespace Burton.Lib.Graph
 {
     public class PathEdge
     {
-        public int SourceIndex;
-        public int DestinationIndex;
+        public int FromIndex;
+        public int ToIndex;
         public int Behavior;
 
         // FIXME: what is a door
         public int DoorID;
 
-        public PathEdge(int SourceIndex, int DestinationIndex, int Behavior, int DoorID = 0)
+        public PathEdge(int FromIndex, int ToIndex, int Behavior, int DoorID = 0)
         {
-            this.SourceIndex = SourceIndex;
-            this.DestinationIndex = DestinationIndex;
+            this.FromIndex = FromIndex;
+            this.ToIndex = ToIndex;
             this.Behavior = Behavior;
             this.DoorID = DoorID;
         }

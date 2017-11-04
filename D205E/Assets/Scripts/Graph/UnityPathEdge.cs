@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class UnityPathEdge
 {
-    public Vector3 Source;
-    public Vector3 Destination;
+    public Vector3 FromPosition;
+    public Vector3 ToPosition;
 
     public int Behavior;
 
-    public UnityPathEdge(Vector3 Source, Vector3 Destination, int Behavior)
+    public UnityPathEdge(Vector3 From, Vector3 To, int Behavior)
     {
-        this.Source = Source;
-        this.Destination = Destination;
+        this.FromPosition = From;
+        this.ToPosition = To;
         this.Behavior = Behavior;
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Burton.Lib.Unity;
 
 [CustomEditor(typeof(PathTester))]
 public class PathTesterEditor : Editor

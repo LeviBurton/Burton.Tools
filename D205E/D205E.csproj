@@ -141,7 +141,6 @@
     <Compile Include="Assets\Scripts\GameEntities\UnityGear.cs" />
     <Compile Include="Assets\Scripts\GameEntities\UnityItem.cs" />
     <Compile Include="Assets\Scripts\GameEntities\UnityWeapon.cs" />
-    <Compile Include="Assets\Scripts\GameEntities\Wall.cs" />
     <Compile Include="Assets\Scripts\Graph\PathTester.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityEdge.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityGraph.cs" />
