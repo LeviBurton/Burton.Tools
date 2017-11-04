@@ -8,31 +8,21 @@ using UnityEngine;
 
 public class UnityPathManager : MonoBehaviour
 {
-    public Action<List<int>> OnTargetFound;
-    public Action OnTargetNotFound;
-
-    public List<int> ShortestPathTree = new List<int>();
-
     public bool DrawSearchPaths = true;
     public int NumSearchCyclesPerUpdate;
+
     public Color StartNodeColor;
     public Color EndNodeColor;
-
     public Color SearchPathColor = Color.green;
     public Color FrontierPathColor = Color.yellow;
 
-    public Transform Target;
+    public Vector3 TargetPosition;
 
     public List<UnityPathPlanner> SearchRequests = new List<UnityPathPlanner>();
 
     public void ClearSearches()
     {
         SearchRequests.Clear();
-    }
-
-    private void OnDrawGizmos()
-    {
-        DrawPathsToTargets();
     }
 
     private void DrawPathsToTargets()

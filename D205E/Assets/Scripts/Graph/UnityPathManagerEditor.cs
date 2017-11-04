@@ -7,18 +7,6 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class Search
-{
-    public int StartNode;
-    public int EndNode;
-
-    public Search(int startNode, int endNode)
-    {
-        StartNode = startNode;
-        EndNode = endNode;
-    }
-}
-
 [CustomEditor(typeof(UnityPathManager))]
 public class UnityPathManagerEditor : Editor
 {
@@ -31,23 +19,73 @@ public class UnityPathManagerEditor : Editor
         PathManager = serializedObject.targetObject as UnityPathManager;
         Graph = FindObjectsOfType<UnityGraph>()[0];
     }
-    
+
+    public void OnSceneGUI()
+    {
+        PathManager.TargetPosition = Handles.PositionHandle(PathManager.TargetPosition, Quaternion.identity);
+
+        foreach (var SearchRequest in PathManager.SearchRequests)
+        {
+            if (SearchRequest.PathToTarget.Count == 0)
+                continue;
+
+            List<Vector3> Points = new List<Vector3>();
+            Points.Add(SearchRequest.Graph.GetNode(SearchRequest.Search.TargetNodeIndex).Position);
+            SearchRequest.PathToTarget.ForEach(x => Points.Add(SearchRequest.Graph.GetNode(x.SourceIndex).Position));
+
+            using (new Handles.DrawingScope(PathManager.SearchPathColor))
+            {
+                Handles.DrawAAPolyLine(Points.ToArray());
+            }
+
+            using (new Handles.DrawingScope(PathManager.SearchPathColor * 1.1f))
+            {
+                Points.ForEach(x => Handles.SphereHandleCap(0, x, Quaternion.identity, .05f, EventType.Repaint));
+            }
+        }
+
+        Handles.BeginGUI();
+        GUILayout.BeginArea(new Rect(20, 20, 150, 60));
+        var rect = EditorGUILayout.BeginVertical();
+        GUI.Box(rect, GUIContent.none);
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Rotate");
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        GUI.backgroundColor = Color.red;
+        if (GUILayout.Button("Left"))
+        {
+
+        }
+
+        if (GUILayout.Button("Right"))
+        {
+
+        }
+
+        GUILayout.EndHorizontal();
+        EditorGUILayout.EndVertical();
+        GUILayout.EndArea();
+        Handles.EndGUI();
+    }
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
         EditorGUILayout.LabelField("General", EditorStyles.boldLabel);
-
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("TargetPosition"));
         EditorGUILayout.Separator();
 
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("Target"));
         EditorGUILayout.LabelField("Searches", EditorStyles.boldLabel);
 
         if (GUILayout.Button("Path to Target"))
         {
             PathManager.ClearSearches();
 
-            var TargetWorldPosition = PathManager.Target.position;
+            var TargetWorldPosition = PathManager.TargetPosition;
 
             var TargetNode = Graph.GetNodeAtPosition(Graph.WorldToLocalTile(TargetWorldPosition));
             var SourceNode = Graph.GetNodeAtPosition(Graph.WorldToLocalTile(PathManager.transform.position));
@@ -80,7 +118,7 @@ public class UnityPathManagerEditor : Editor
             EditorUtility.SetDirty(PathManager);
         }
 
-     
+
 
         EditorGUILayout.Separator();
 

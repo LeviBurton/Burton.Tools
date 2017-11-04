@@ -8,16 +8,19 @@ public class PathTesterEditor : Editor
 {
     public void OnEnable()
     {
-        Debug.Log("OnEnable");
     }
 
     public void OnDisable()
     {
-        Debug.Log("OnDisable");
     }
+
 
     public override void OnInspectorGUI()
     {
+        base.OnInspectorGUI();
+
+        return;
+
         serializedObject.Update();
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("EnableMouseTracking"));
@@ -28,6 +31,13 @@ public class PathTesterEditor : Editor
     public void OnSceneGUI()
     {
         var PathTester = serializedObject.targetObject as PathTester;
+
+        PathTester.PointA = Handles.PositionHandle(PathTester.PointA, Quaternion.identity);
+        PathTester.PointB = Handles.PositionHandle(PathTester.PointB, Quaternion.identity);
+        PathTester.TangentA = Handles.PositionHandle(PathTester.TangentA, Quaternion.identity);
+        PathTester.TangentB = Handles.PositionHandle(PathTester.TangentB, Quaternion.identity);
+
+        Handles.DrawBezier(PathTester.PointA, PathTester.PointB, PathTester.TangentA, PathTester.TangentB, Color.red, null, 5);
 
         if (PathTester.EnableMouseTracking)
         {
@@ -42,11 +52,16 @@ public class PathTesterEditor : Editor
 }
 
 [RequireComponent(typeof(UnityPathManager))]
-public class PathTester : MonoBehaviour {
+public class PathTester : MonoBehaviour
+{
     public bool EnableMouseTracking;
+    public Vector3 PointA;
+    public Vector3 PointB;
+    public Vector3 TangentA;
+    public Vector3 TangentB;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
