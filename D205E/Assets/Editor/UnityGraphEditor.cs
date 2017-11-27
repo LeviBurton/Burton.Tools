@@ -26,7 +26,7 @@ namespace Burton.Lib.Unity
                 Graph.Rebuild();
 
                // Graph.WeightEdges();
-                Graph.Weight();
+                Graph.RemoveUnWalkableNodesAndEdges();
                 EditorUtility.SetDirty(Graph);
                 EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             }
@@ -35,20 +35,26 @@ namespace Burton.Lib.Unity
             EditorGUILayout.LabelField("Properties", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("WallLayerMask"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodes"));
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawWalkable"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("WalkableRadius"));
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("TileColor"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("WalkableColor"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("BlockedColor"));
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("RayHitColor"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultRayColor"));
+
             EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawEdges"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("EdgeColor"));
+
             EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawNodeIndex"));
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesX"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("NumTilesY"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("TileWidth"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("TileHeight"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultTileColor"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultEdgeColor"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultWalkableColor"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultBlockedColor"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultRayHitColor"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("DefaultRayColor"));
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("TilePadding"));
             //EditorGUILayout.LabelField(string.Format("Nodes: {0}", Graph.Graph == null ? 0 : Graph.Graph.ActiveNodeCount()));

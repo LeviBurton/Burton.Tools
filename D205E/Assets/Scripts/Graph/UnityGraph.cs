@@ -42,21 +42,22 @@ namespace Burton.Lib.Unity
         public int TileWidth = 10;      // TODO: What units do these represent?
         public int TileHeight = 10;     // TODO: What units do these represent?
         public float TilePadding = .01f;
+        public float WalkableRadius = 0.25f;
 
-        public Color DefaultTileColor;
-        public Color DefaultEdgeColor;
+        public Color TileColor;
+        public Color EdgeColor;
 
-        public Color DefaultWalkableColor;
-        public Color DefaultBlockedColor;
+        public Color WalkableColor;
+        public Color BlockedColor;
 
         public Color DefaultRayColor;
-        public Color DefaultRayHitColor;
+        public Color RayHitColor;
 
         public float PathSphereSize = 1.0f;
 
         public bool DrawNodeIndex = true;
         public bool DrawEdges = true;
-        public bool DrawNodes = true;
+        public bool DrawWalkable = true;
         public bool DrawSearchPaths = true;
         public int StartNodeIndex = 0;
         public int EndNodeIndex = 0;
@@ -92,7 +93,7 @@ namespace Burton.Lib.Unity
 
         void OnGUI()
         {
-
+            // Draw some debug stuff in game here so we can see if everything works on our platforms.
         }
 
 #if UNITY_EDITOR_WIN
@@ -133,18 +134,18 @@ namespace Burton.Lib.Unity
                         var FromPosition = new Vector3(transform.position.x + FromNode.Position.x, transform.position.y, transform.position.z + FromNode.Position.z);
                         var ToPosition = new Vector3(transform.position.x + ToNode.Position.x, transform.position.y, transform.position.z + ToNode.Position.z);
 
-                        Gizmos.color = DefaultEdgeColor;
+                        Gizmos.color = EdgeColor;
                         Gizmos.DrawLine(FromPosition, ToPosition);
                     }
                 }
 
-                if (DrawNodes)
+                if (DrawWalkable)
                 {
-                    Gizmos.color = DefaultWalkableColor;
+                    Gizmos.color = WalkableColor;
 
                     if (Node.NodeIndex == (int)ENodeType.InvalidNodeIndex)
                     {
-                        Gizmos.color = DefaultBlockedColor;
+                        Gizmos.color = BlockedColor;
                     }
      
                     Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
@@ -154,11 +155,12 @@ namespace Burton.Lib.Unity
             }
         }
 #endif
+
         #region Grid Graph Stuff
-        public void Weight()
+        public void RemoveUnWalkableNodesAndEdges()
         {
             float RayLength = 2.0f;
-            float RaySphereRadius = 0.25f;
+
             var NodesToRemove = new List<int>();
             var EdgesToRemove = new List<UnityEdge>();
 
@@ -167,12 +169,12 @@ namespace Burton.Lib.Unity
                 RaycastHit Hit;
                 var GraphNode = Graph.GetNode(Node.NodeIndex);
                 var Origin = GraphNode.Position + (Vector3.up * RayLength);
-                var bHitSomething = Physics.SphereCast(Origin, RaySphereRadius, Vector3.down, out Hit, RayLength, WallLayerMask);
+                var bHitSomething = Physics.SphereCast(Origin, WalkableRadius, Vector3.down, out Hit, RayLength, WallLayerMask);
 
                 if (bHitSomething)
                 {
                     NodesToRemove.Add(Node.NodeIndex);
-                    Debug.DrawRay(Origin, Vector3.down * RayLength, DefaultRayHitColor, 10);
+                    Debug.DrawRay(Origin, Vector3.down * RayLength, RayHitColor, 10);
                 }
                 else
                 {
@@ -188,7 +190,7 @@ namespace Burton.Lib.Unity
                         FromNodePosition.y += 1;
 
                         var Direction = Vector3.Normalize(ToNode.Position - FromNode.Position);
-                        var bHitWall = Physics.CapsuleCast(FromNodePosition, FromNodePosition + Vector3.up * 0.25f, 0.25f, Direction, 1.25f, WallLayerMask);
+                        var bHitWall = Physics.CapsuleCast(FromNodePosition, FromNodePosition + Vector3.up * 0.25f, WalkableRadius, Direction, 1.25f, WallLayerMask);
 
                         if (bHitWall)
                         {
@@ -211,98 +213,11 @@ namespace Burton.Lib.Unity
             }
         }
 
-        public void WeightEdges()
-        {
-            var EdgesToRemove = new List<UnityEdge>();
-            var NodesToRemove = new List<int>();
-
-            foreach (var Node in Graph.Nodes)
-            {
-                foreach (var Edge in Graph.Edges[Node.NodeIndex])
-                {
-                    var FromNode = Graph.GetNode(Edge.FromNodeIndex);
-                    var ToNode = Graph.GetNode(Edge.ToNodeIndex);
-
-                    RaycastHit hit;
-                    var Origin = FromNode.Position;
-                    Origin.y += 1;
-
-                    var Direction = Vector3.Normalize(ToNode.Position - FromNode.Position);
-                    var bHitWall = Physics.CapsuleCast(Origin, Origin + Vector3.up * 0.25f, 0.25f, Direction, 1.25f, WallLayerMask);
-                    
-                    if (bHitWall)
-                    {
-                       EdgesToRemove.Add(Graph.GetEdge(FromNode.NodeIndex, ToNode.NodeIndex));
-                       EdgesToRemove.Add(Graph.GetEdge(ToNode.NodeIndex, FromNode.NodeIndex));
-                    }
-                }
-            }
-
-            foreach (var Edge in EdgesToRemove)
-            {
-                Graph.RemoveEdge(Edge.FromNodeIndex, Edge.ToNodeIndex);
-                Graph.RemoveEdge(Edge.ToNodeIndex, Edge.FromNodeIndex);
-
-            }
-        }
-
-        public void Floodfill()
-        {
-            ResetGraph();
-
-            var StartPosition = transform.position;
-
-            var NodeQueue = new Queue<UnityNode>();
-            VisitedNodes = new List<UnityNode>();
-            var NodesToRemove = new List<UnityNode>();
-
-            var Root = Graph.GetNode(0);
-
-            VisitedNodes.Add(Root);
-            NodeQueue.Enqueue(Root);
-
-            while (NodeQueue.Count > 0)
-            {
-                var Node = NodeQueue.Dequeue();
-
-                //Debug.LogFormat("Node: {0}", Node.NodeIndex);
-
-
-
-                foreach (var Edge in Graph.Edges[Node.NodeIndex])
-                {
-                    var ToNode = Graph.GetNode(Edge.ToNodeIndex);
-
-                    if (!VisitedNodes.Contains(ToNode))
-                    {
-                        RaycastHit hit;
-                        var Origin = Node.Position;
-                        Origin.y += 1;
-
-                        if (Physics.Raycast(Origin, ToNode.Position - Node.Position, out hit, 1))
-                        {
-                            NodesToRemove.Add(ToNode);
-                            Debug.LogFormat("Hit {0} {1}", hit.transform.name, hit.distance);
-                        }
-
-                        VisitedNodes.Add(ToNode);
-                        NodeQueue.Enqueue(Graph.GetNode(Edge.ToNodeIndex));
-                    }
-                }
-            }
-
-            foreach (var Node in NodesToRemove)
-            {
-                Graph.RemoveNode(Node.NodeIndex);
-            }
-            Debug.LogFormat("Visited Count: {0}", VisitedNodes.Count);
-        }
 
         public void Rebuild()
         {
             // Reset the graph (resets nodes and edges connecting them)
             ResetGraph();
-
         }
 
         public void ResetGraph()
