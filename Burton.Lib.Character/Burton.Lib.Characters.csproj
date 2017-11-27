@@ -36,9 +36,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEditor">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -66,10 +63,6 @@
     <Compile Include="Spell\SpellMethods.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Burton.Lib.Dice\Burton.Lib.Dice.csproj">
-      <Project>{3267817f-744f-48d1-b0d6-bfdd4dcb68a7}</Project>
-      <Name>Burton.Lib.Dice</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Burton.Lib.SimpleDB\Burton.Lib.SimpleDB.csproj">
       <Project>{ba7539b2-df91-47a3-9c9e-400a8362897e}</Project>
       <Name>Burton.Lib.SimpleDB</Name>

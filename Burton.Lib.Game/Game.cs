@@ -31,9 +31,6 @@ namespace Burton.Lib
         // A good middle ground is 10.
         public int MaxSearchCyclesPerUpdateStep= 10;
 
-        private static readonly log4net.ILog Log =
-          log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         public Game()
         {
  
@@ -41,17 +38,14 @@ namespace Burton.Lib
 
         public void Setup()
         {
-            Log.Info("Setup Starting");
-
+         
             LoadDefaultMap();
 
-            Log.Info("Setup Done");
         }
 
         public void LoadDefaultMap()
         {
-            Log.Info("LoadDefaultMap Starting");
-
+  
             Clear();
 
             PathManager = new PathManager<PathPlanner>(MaxSearchCyclesPerUpdateStep);
@@ -60,24 +54,19 @@ namespace Burton.Lib
 
             EntityManager.Instance.Reset();
 
-            Log.Info("LoadDefaultMap Done");
         }
 
         public void LoadMap(string FileName)
         {
-            Log.InfoFormat("LoadMap Starting");
-            Log.InfoFormat("LoadMap Loading '{0}'", FileName);
-
+        
             Clear();
 
             PathManager = new PathManager<PathPlanner>(MaxSearchCyclesPerUpdateStep);
             Map = new Map();
 
-            EntityManager.Instance.Reset();
-
+  
             Map.LoadMap(FileName);
 
-            Log.InfoFormat("LoadMap Done");
         }
 
         public void Clear()

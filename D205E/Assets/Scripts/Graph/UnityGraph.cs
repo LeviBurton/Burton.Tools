@@ -46,6 +46,12 @@ namespace Burton.Lib.Unity
         public Color DefaultTileColor;
         public Color DefaultEdgeColor;
 
+        public Color DefaultWalkableColor;
+        public Color DefaultBlockedColor;
+
+        public Color DefaultRayColor;
+        public Color DefaultRayHitColor;
+
         public float PathSphereSize = 1.0f;
 
         public bool DrawNodeIndex = true;
@@ -59,11 +65,10 @@ namespace Burton.Lib.Unity
 
         int Width = 0;
         int Height = 0;
+
         void OnEnable()
         {
             bEnabled = true;
-
-
         }
 
         void OnDisable()
@@ -82,6 +87,7 @@ namespace Burton.Lib.Unity
         void Start()
         {
 
+            Debug.LogFormat("UnityGraph.Start(): {0}", gameObject.name);
         }
 
         void OnGUI()
@@ -89,6 +95,7 @@ namespace Burton.Lib.Unity
 
         }
 
+#if UNITY_EDITOR_WIN
         static void DrawString(string text, Vector3 worldPos, Color? colour = null)
         {
             UnityEditor.Handles.BeginGUI();
@@ -102,34 +109,22 @@ namespace Burton.Lib.Unity
 
         private void OnDrawGizmos()
         {
+            // Scene view debug drawing here...
             if (Graph == null || !bEnabled)
                 return;
 
             foreach (var Node in Graph.Nodes)
             {
-                UnityNode GraphNode = null;
+                UnityNode GraphNode = (UnityNode)Graph.GetNode(Node.NodeIndex);
 
-                GraphNode = (UnityNode)Graph.GetNode(Node.NodeIndex);
-
-                if (GraphNode == null)
-                    continue;
-
-                if (DrawNodeIndex)
+                if (DrawNodeIndex && GraphNode != null)
                 {
                     var StringPosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
                     StringPosition.y += 0.5f;
                     DrawString(Node.NodeIndex.ToString(), StringPosition, Color.white);
                 }
 
-                if (DrawNodes)
-                {
-                    Gizmos.color = DefaultTileColor;
-                    Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
-                    Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
-                    Gizmos.DrawCube(CubePosition, CubeSize);
-                }
-
-                if (DrawEdges)
+                if (DrawEdges && GraphNode != null)
                 {
                     foreach (var Edge in Graph.Edges[Node.NodeIndex])
                     {
@@ -138,26 +133,88 @@ namespace Burton.Lib.Unity
                         var FromPosition = new Vector3(transform.position.x + FromNode.Position.x, transform.position.y, transform.position.z + FromNode.Position.z);
                         var ToPosition = new Vector3(transform.position.x + ToNode.Position.x, transform.position.y, transform.position.z + ToNode.Position.z);
 
-                        if (Edge.EdgeCost == 100)
-                        {
-                            Gizmos.color = Color.red;
-                        }
-                        else
-                        {
-                            Gizmos.color = DefaultEdgeColor;
-                        }
-
+                        Gizmos.color = DefaultEdgeColor;
                         Gizmos.DrawLine(FromPosition, ToPosition);
                     }
                 }
+
+                if (DrawNodes)
+                {
+                    Gizmos.color = DefaultWalkableColor;
+
+                    if (Node.NodeIndex == (int)ENodeType.InvalidNodeIndex)
+                    {
+                        Gizmos.color = DefaultBlockedColor;
+                    }
+     
+                    Vector3 CubePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y, transform.position.z + Node.Position.z);
+                    Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
+                    Gizmos.DrawCube(CubePosition, CubeSize);
+                }
             }
         }
-
+#endif
         #region Grid Graph Stuff
+        public void Weight()
+        {
+            float RayLength = 2.0f;
+            float RaySphereRadius = 0.25f;
+            var NodesToRemove = new List<int>();
+            var EdgesToRemove = new List<UnityEdge>();
+
+            foreach (var Node in Graph.Nodes)
+            {
+                RaycastHit Hit;
+                var GraphNode = Graph.GetNode(Node.NodeIndex);
+                var Origin = GraphNode.Position + (Vector3.up * RayLength);
+                var bHitSomething = Physics.SphereCast(Origin, RaySphereRadius, Vector3.down, out Hit, RayLength, WallLayerMask);
+
+                if (bHitSomething)
+                {
+                    NodesToRemove.Add(Node.NodeIndex);
+                    Debug.DrawRay(Origin, Vector3.down * RayLength, DefaultRayHitColor, 10);
+                }
+                else
+                {
+                    Debug.DrawRay(Origin, Vector3.down * RayLength, DefaultRayColor, 5);
+
+                    // Check to see if we can move to the end of any edges attached to this node
+                    foreach (var Edge in Graph.Edges[Node.NodeIndex])
+                    {
+                        var FromNode = Graph.GetNode(Edge.FromNodeIndex);
+                        var ToNode = Graph.GetNode(Edge.ToNodeIndex);
+
+                        var FromNodePosition = FromNode.Position;
+                        FromNodePosition.y += 1;
+
+                        var Direction = Vector3.Normalize(ToNode.Position - FromNode.Position);
+                        var bHitWall = Physics.CapsuleCast(FromNodePosition, FromNodePosition + Vector3.up * 0.25f, 0.25f, Direction, 1.25f, WallLayerMask);
+
+                        if (bHitWall)
+                        {
+                            EdgesToRemove.Add(Graph.GetEdge(FromNode.NodeIndex, ToNode.NodeIndex));
+                            EdgesToRemove.Add(Graph.GetEdge(ToNode.NodeIndex, FromNode.NodeIndex));
+                        }
+                    }
+
+                    foreach (var Edge in EdgesToRemove)
+                    {
+                        Graph.RemoveEdge(Edge.FromNodeIndex, Edge.ToNodeIndex);
+                        Graph.RemoveEdge(Edge.ToNodeIndex, Edge.FromNodeIndex);
+                    }
+                }
+            }
+
+            foreach (var NodeIndex in NodesToRemove)
+            {
+                Graph.RemoveNode(NodeIndex);
+            }
+        }
 
         public void WeightEdges()
         {
             var EdgesToRemove = new List<UnityEdge>();
+            var NodesToRemove = new List<int>();
 
             foreach (var Node in Graph.Nodes)
             {
@@ -171,21 +228,21 @@ namespace Burton.Lib.Unity
                     Origin.y += 1;
 
                     var Direction = Vector3.Normalize(ToNode.Position - FromNode.Position);
-
-                    if (Physics.CapsuleCast(Origin, Origin + Vector3.up * 0.25f, 0.25f, Direction, 1.25f, WallLayerMask))
+                    var bHitWall = Physics.CapsuleCast(Origin, Origin + Vector3.up * 0.25f, 0.25f, Direction, 1.25f, WallLayerMask);
+                    
+                    if (bHitWall)
                     {
-                        EdgesToRemove.Add(Graph.GetEdge(FromNode.NodeIndex, ToNode.NodeIndex));
-                        EdgesToRemove.Add(Graph.GetEdge(ToNode.NodeIndex, FromNode.NodeIndex));
+                       EdgesToRemove.Add(Graph.GetEdge(FromNode.NodeIndex, ToNode.NodeIndex));
+                       EdgesToRemove.Add(Graph.GetEdge(ToNode.NodeIndex, FromNode.NodeIndex));
                     }
-
                 }
-
             }
 
             foreach (var Edge in EdgesToRemove)
             {
                 Graph.RemoveEdge(Edge.FromNodeIndex, Edge.ToNodeIndex);
                 Graph.RemoveEdge(Edge.ToNodeIndex, Edge.FromNodeIndex);
+
             }
         }
 

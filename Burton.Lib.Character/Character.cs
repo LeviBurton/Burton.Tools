@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
-
-using Burton.Lib.Characters.Quirks;
-using Burton.Lib.Characters.Skills;
 using System;
 using System.ComponentModel;
-using Burton.Lib.Dice;
 using Burton.Lib.Characters.Combat;
 using UnityEngine;
 
@@ -128,20 +124,6 @@ namespace Burton.Lib.Characters
             EquippedArmor = ArmorToEquip;
         }
 
-        public void RollAbilities()
-        {
-            foreach (var Ability in Abilities)
-            {
-                // Roll 4D6 and remove the lowest die.
-                var Roll = DiceRoller.Instance.Roll(4, 6);
-                Roll.Sort();
-                Roll.RemoveAt(0);
-
-                int Sum = 0;
-                foreach (var r in Roll) Sum += r;
-                Ability.CurrentValue = Sum;
-            }
-        }
 
         // consider turning this into an interface called IAbility.
         // things that need abilities then implement that interface

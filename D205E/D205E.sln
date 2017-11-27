@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor_WinForms", "..\Bu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Math", "..\Burton.Lib.Math\Burton.Lib.Math.csproj", "{0755320C-7C06-422C-96D4-44AEDB0E1B5B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Game", "..\Burton.Lib.Game\Burton.Lib.Game.csproj", "{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{0755320C-7C06-422C-96D4-44AEDB0E1B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0755320C-7C06-422C-96D4-44AEDB0E1B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0755320C-7C06-422C-96D4-44AEDB0E1B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

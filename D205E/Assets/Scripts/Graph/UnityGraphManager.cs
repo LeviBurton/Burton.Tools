@@ -24,7 +24,7 @@ public class UnityGraphManager : UnitySingleton<UnityGraphManager>
 
     void Start()
     {
-      
+     
     }
     
     #region Load/Save Graphs

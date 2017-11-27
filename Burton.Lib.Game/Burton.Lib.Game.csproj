@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,10 +45,6 @@
     <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Burton.Lib.GameEntity\Burton.Lib.GameEntity.csproj">
-      <Project>{9beac654-22dd-4b12-aa6e-5e5d9b03923b}</Project>
-      <Name>Burton.Lib.GameEntity</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Burton.Lib.Graph\Burton.Lib.Graph.csproj">
       <Project>{2afb63fe-05c1-4fe3-abb7-8eb3704ba789}</Project>
       <Name>Burton.Lib.Graph</Name>
