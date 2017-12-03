@@ -109,6 +109,9 @@
     <Reference Include="Poly2Tri">
       <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\Poly2Tri.dll</HintPath>
     </Reference>
+    <Reference Include="Burton.Lib.StateMachine">
+      <HintPath>Assets\Burton.Lib.StateMachine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Standard Assets\Characters\FirstPersonCharacter\Scripts\FirstPersonController.cs" />

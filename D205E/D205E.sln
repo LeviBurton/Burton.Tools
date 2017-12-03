@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Math", "..\Burto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Game", "..\Burton.Lib.Game\Burton.Lib.Game.csproj", "{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.StateMachine", "..\Burton.Lib.StateMachine\Burton.Lib.StateMachine.csproj", "{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B5B7C3A-EBF4-43EC-9ACC-25614C6BDD11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

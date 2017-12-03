@@ -109,6 +109,9 @@
     <Reference Include="Poly2Tri">
       <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\Poly2Tri.dll</HintPath>
     </Reference>
+    <Reference Include="Burton.Lib.StateMachine">
+      <HintPath>Assets\Burton.Lib.StateMachine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D205E.Plugins.csproj">
@@ -117,6 +120,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GraphNodeCount.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\CameraControls.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\IcoBumpin.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Misc\HueCube.cs" />
@@ -135,6 +139,8 @@
     <Compile Include="Assets\Scripts\GameEntities\UnityGear.cs" />
     <Compile Include="Assets\Scripts\GameEntities\UnityItem.cs" />
     <Compile Include="Assets\Scripts\GameEntities\UnityWeapon.cs" />
+    <Compile Include="Assets\Scripts\GameManager\GameManager.cs" />
+    <Compile Include="Assets\Scripts\GameManager\GameStates.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityEdge.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityGraph.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityGraphManager.cs" />
@@ -147,6 +153,8 @@
     <Compile Include="Assets\Scripts\ResizePanel.cs" />
     <Compile Include="Assets\Scripts\ScrollDetailTexture.cs" />
     <Compile Include="Assets\Scripts\ShowSliderValue.cs" />
+    <Compile Include="Assets\Scripts\States\UnityTestEntity.cs" />
+    <Compile Include="Assets\Scripts\States\UnityTestState.cs" />
     <Compile Include="Assets\Scripts\TiltWindow.cs" />
     <Compile Include="Assets\Scripts\UnitySingleton.cs" />
     <Compile Include="Assets\UI\Panel_Character.cs" />

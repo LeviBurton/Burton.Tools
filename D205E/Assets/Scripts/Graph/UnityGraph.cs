@@ -23,6 +23,7 @@ namespace Burton.Lib.Unity
 
 
     [Serializable]
+    [ExecuteInEditMode]
     public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     {
         [NonSerialized]
@@ -91,9 +92,11 @@ namespace Burton.Lib.Unity
             Debug.LogFormat("UnityGraph.Start(): {0}", gameObject.name);
         }
 
+        
         void OnGUI()
         {
             // Draw some debug stuff in game here so we can see if everything works on our platforms.
+            
         }
 
 #if UNITY_EDITOR_WIN
