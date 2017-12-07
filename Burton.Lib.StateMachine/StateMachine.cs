@@ -19,7 +19,7 @@
         }
     }
 
-    public class TestState : State<TestEntity>
+    public class TestState : BaseState<TestEntity>
     {
         public override void OnEnter(TestEntity Entity)
         {
@@ -40,9 +40,9 @@
     public class StateMachine<TEntity>
     {
         private TEntity Owner;
-        public State<TEntity> CurrentState;
-        public State<TEntity> PreviousState;
-        public State<TEntity> GlobalState;
+        public BaseState<TEntity> CurrentState;
+        public BaseState<TEntity> PreviousState;
+        public BaseState<TEntity> GlobalState;
 
         public StateMachine(TEntity Owner)
         {
@@ -65,7 +65,7 @@
             }
         }
 
-        public void ChangeState(State<TEntity> NewState)
+        public void ChangeState(BaseState<TEntity> NewState)
         {
             if (NewState == null)
                 return;
@@ -87,7 +87,7 @@
         }
     }
 
-    public class State<TEntity>
+    public class BaseState<TEntity>
     {
         public virtual void OnEnter(TEntity Entity)
         {

@@ -1,7 +1,0 @@
-Name	Damage	DamageMods	Range	SubType	TL	Cost	Weight	Properties	Description	BookSet
-Assault Rifle	piercing (1d8)		100/400	two handed small arms	0	300	7	auto(1d10),reload(50)		Ultramodern5
-Shotgun	piercing (1d10)		30/120	two handed small arms	0	300	10	feed(6), shotgun, undermount		Ultramodern5
-Machine Pistol	piercing (1d4)		50/200	one handed small arms	0	300	3	auto(1d6),reload(20)		Ultramodern5
-										5ESRD
-										5ESRD
-										5ESRD

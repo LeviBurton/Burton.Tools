@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Burton.Lib.StateMachine;
 
-public class UnityTestState : State<UnityTestEntity>
+public class UnityTestState : BaseState<UnityTestEntity>
 {
     public override void OnEnter(UnityTestEntity Entity)
     {

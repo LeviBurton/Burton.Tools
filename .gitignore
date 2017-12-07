@@ -244,3 +244,5 @@ ModelManifest.xml
 # No source control contents
 Content_NoSC/
 
+# We may have stuff in our Unity assets folder we don't want to check in, such as 3rd party stuff.
+D205E/Assets/NO_SOURCE_CONTROL

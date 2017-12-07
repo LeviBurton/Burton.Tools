@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Burton.Lib.StateMachine;
 
-public class GameRunningState : State<GameManager>
+public class GameRunningState : BaseState<GameManager>
 {
     public override void OnEnter(GameManager GameManager)
     {
@@ -20,7 +20,7 @@ public class GameRunningState : State<GameManager>
 }
 
 
-public class MainMenuGameState : State<GameManager>
+public class MainMenuGameState : BaseState<GameManager>
 {
     public override void OnEnter(GameManager GameManager)
     {

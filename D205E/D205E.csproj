@@ -76,9 +76,6 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Burton.Lib.Alg.PriorityQueue">
-      <HintPath>Assets\Burton.Lib.Alg.PriorityQueue.dll</HintPath>
-    </Reference>
     <Reference Include="Burton.Lib.Characters">
       <HintPath>Assets\Burton.Lib.Characters.dll</HintPath>
     </Reference>
@@ -93,6 +90,9 @@
     </Reference>
     <Reference Include="Burton.Lib.SimpleDB">
       <HintPath>Assets\Burton.Lib.SimpleDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Burton.Lib.StateMachine">
+      <HintPath>Assets\Burton.Lib.StateMachine.dll</HintPath>
     </Reference>
     <Reference Include="ProBuilderCore-Unity5">
       <HintPath>Assets\ProCore\ProBuilder\Classes\ProBuilderCore-Unity5.dll</HintPath>
@@ -109,9 +109,6 @@
     <Reference Include="Poly2Tri">
       <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\Poly2Tri.dll</HintPath>
     </Reference>
-    <Reference Include="Burton.Lib.StateMachine">
-      <HintPath>Assets\Burton.Lib.StateMachine.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D205E.Plugins.csproj">
@@ -121,6 +118,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\GraphNodeCount.cs" />
+    <Compile Include="Assets\NO_SOURCE_CONTROL\Dynamic Music Pack by JLF\Web Demo Scene\Scripts\LayerLevels.cs" />
+    <Compile Include="Assets\NO_SOURCE_CONTROL\Dynamic Music Pack by JLF\Web Demo Scene\Scripts\MixLevels.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\CameraControls.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\IcoBumpin.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Misc\HueCube.cs" />
@@ -149,12 +148,19 @@
     <Compile Include="Assets\Scripts\Graph\UnityPathEdge.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityPathManager.cs" />
     <Compile Include="Assets\Scripts\Graph\UnityPathPlanner.cs" />
+    <Compile Include="Assets\Scripts\LoadSceneOnClick.cs" />
     <Compile Include="Assets\Scripts\PanelManager.cs" />
+    <Compile Include="Assets\Scripts\QuitOnClick.cs" />
     <Compile Include="Assets\Scripts\ResizePanel.cs" />
     <Compile Include="Assets\Scripts\ScrollDetailTexture.cs" />
+    <Compile Include="Assets\Scripts\SelectOnInput.cs" />
     <Compile Include="Assets\Scripts\ShowSliderValue.cs" />
     <Compile Include="Assets\Scripts\States\UnityTestEntity.cs" />
     <Compile Include="Assets\Scripts\States\UnityTestState.cs" />
+    <Compile Include="Assets\Scripts\Testing\ChangeMusic.cs" />
+    <Compile Include="Assets\Scripts\Testing\ClickToLoadAsync.cs" />
+    <Compile Include="Assets\Scripts\Testing\DontDestroy.cs" />
+    <Compile Include="Assets\Scripts\Testing\LoadOnClick.cs" />
     <Compile Include="Assets\Scripts\TiltWindow.cs" />
     <Compile Include="Assets\Scripts\UnitySingleton.cs" />
     <Compile Include="Assets\UI\Panel_Character.cs" />

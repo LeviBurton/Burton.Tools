@@ -115,9 +115,6 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="Burton.Lib.Alg.PriorityQueue">
-      <HintPath>Assets\Burton.Lib.Alg.PriorityQueue.dll</HintPath>
-    </Reference>
     <Reference Include="Burton.Lib.Characters">
       <HintPath>Assets\Burton.Lib.Characters.dll</HintPath>
     </Reference>
@@ -132,6 +129,9 @@
     </Reference>
     <Reference Include="Burton.Lib.SimpleDB">
       <HintPath>Assets\Burton.Lib.SimpleDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Burton.Lib.StateMachine">
+      <HintPath>Assets\Burton.Lib.StateMachine.dll</HintPath>
     </Reference>
     <Reference Include="ProBuilderCore-Unity5">
       <HintPath>Assets\ProCore\ProBuilder\Classes\ProBuilderCore-Unity5.dll</HintPath>
@@ -150,9 +150,6 @@
     </Reference>
     <Reference Include="ProBuilderEditor-Unity5">
       <HintPath>Assets\ProCore\ProBuilder\Editor\ProBuilderEditor-Unity5.dll</HintPath>
-    </Reference>
-    <Reference Include="Burton.Lib.StateMachine">
-      <HintPath>Assets\Burton.Lib.StateMachine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
