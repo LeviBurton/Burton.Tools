@@ -111,7 +111,6 @@
     <Compile Include="Assets\Scripts\Character\UnityCharacter.cs" />
     <Compile Include="Assets\Scripts\Character\UnitySpellMethods.cs" />
     <Compile Include="Assets\Scripts\DragMe.cs" />
-    <Compile Include="Assets\Scripts\DragPanel.cs" />
     <Compile Include="Assets\Scripts\DropMe.cs" />
     <Compile Include="Assets\Scripts\GameEntities\UnityGameEntity.cs" />
     <Compile Include="Assets\Scripts\GameEntities\UnityGear.cs" />
@@ -139,6 +138,7 @@
     <Compile Include="Assets\Scripts\Testing\ChangeMusic.cs" />
     <Compile Include="Assets\Scripts\Testing\ClickToLoadAsync.cs" />
     <Compile Include="Assets\Scripts\Testing\DontDestroy.cs" />
+    <Compile Include="Assets\Scripts\Testing\DragPanel.cs" />
     <Compile Include="Assets\Scripts\Testing\LoadOnClick.cs" />
     <Compile Include="Assets\Scripts\TiltWindow.cs" />
     <Compile Include="Assets\Scripts\UnitySingleton.cs" />
