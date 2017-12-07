@@ -65,7 +65,7 @@ MonoBehaviour:
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
-  m_LastLoadedLayoutName: 2 by 3
+  m_LastLoadedLayoutName: 
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_MinSize: {x: 917, y: 442}
   m_MaxSize: {x: 22012, y: 10021}
   vertical: 0
-  controlID: 34392
+  controlID: 64
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 442}
   m_MaxSize: {x: 4002, y: 8042}
   vertical: 1
-  controlID: 34393
+  controlID: 128
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -154,8 +154,8 @@ MonoBehaviour:
     y: 0
     width: 1133
     height: 506
-  m_MinSize: {x: 202, y: 224}
-  m_MaxSize: {x: 4002, y: 4024}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
@@ -206,8 +206,8 @@ MonoBehaviour:
     y: 0
     width: 204
     height: 987
-  m_MinSize: {x: 204, y: 224}
-  m_MaxSize: {x: 4004, y: 4024}
+  m_MinSize: {x: 204, y: 221}
+  m_MaxSize: {x: 4004, y: 4021}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -256,8 +256,8 @@ MonoBehaviour:
     y: 0
     width: 277
     height: 987
-  m_MinSize: {x: 277, y: 74}
-  m_MaxSize: {x: 4002, y: 4024}
+  m_MinSize: {x: 277, y: 71}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -495,7 +495,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ec23f1ffce26f1ff1095f1ff7c6cf2ff586df2ffd0fdf2ff70d0f3ff4ad1f3ff58dff3ff8a88f4ffb057f5ffbc57f5ff1803f6ff0432f6ffc236f6ff7e64f7ffc0adf7ff9cb6f7ffda4ff8ffe6a5f8ffd0aaf8ffe4aaf8ff6eacf8ff00b6f8ff8eb7f8ff50cef8ff04daf8ffe8f9f8ff6402f9ffec9df9ffda58faffe001fcff1ef3fcffaeadffffe2fbfffff4ffffff00000000b00c0100c00c0100b81101001c30010024300100723001007a300100a26c0100da6c0100fa6c0100
+    m_ExpandedIDs: e4fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -555,19 +555,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Models
+    - Assets
   m_ViewMode: 1
   m_StartGridSize: 80
   m_LastFolders:
-  - Assets/Models
+  - Assets/ProCore
   m_LastFoldersGridSize: 80
   m_LastProjectPath: C:\Users\levib\Documents\Visual Studio 2015\Projects\Burton.Tools\D205E
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 242b0000
-    m_LastClickedID: 11044
-    m_ExpandedIDs: 0000000098260000d226000018270000042800007c29000090290000b6290000d42900000c2b0000462b00002a2c0000ae2c0000c62d0000562e0000302f0000fe32000000330000023300000433000006330000083300000a3300000c3300000e330000103300005a24010000ca9a3bffffff7f
+    m_SelectedIDs: 80260000
+    m_LastClickedID: 9856
+    m_ExpandedIDs: 0000000080260000b8260000022700000c280000c6290000da290000062a0000302a00009a2b0000de2b0000d62c0000682d0000402f00001e30000030300000a8310000aa310000ac310000ae310000b0310000b2310000b4310000b6310000b8310000ba31000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -595,7 +595,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000098260000d226000018270000042800007c29000090290000b6290000d42900000c2b0000462b00002a2c0000ae2c0000c62d0000562e0000302f0000fe32000000330000023300000433000006330000083300000a3300000c3300000e330000103300005a24010000ca9a3bffffff7f
+    m_ExpandedIDs: 0000000080260000b8260000022700000c280000c6290000da290000062a0000302a00009a2b0000de2b0000d62c0000682d00009c2e0000402f00001e30000030300000a8310000aa310000ac310000ae310000b0310000b2310000b4310000b6310000b8310000ba310000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
