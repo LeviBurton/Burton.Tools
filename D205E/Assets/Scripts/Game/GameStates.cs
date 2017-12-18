@@ -3,35 +3,80 @@ using System.Collections.Generic;
 using UnityEngine;
 using Burton.Lib.StateMachine;
 
-public class GameRunningState : BaseState<GameManager>
+public class GameStartState : IState<GameInstance>
 {
-    public override void OnEnter(GameManager GameManager)
+    static float RoundStartWaitTime;
+
+    public void OnEnter(GameInstance GameManager)
     {
-        GameManager.RoundManager.StateMachine.ChangeState(new RoundBeginState());
+        Debug.Log("GameStartState::OnEnter");
+        RoundStartWaitTime = GameManager.GameMode.RoundStartWaitTime;
     }
 
-    public override void OnExecute(GameManager GameManager)
+    public void OnExecute(GameInstance GameManager)
+    {
+        RoundStartWaitTime -= Time.deltaTime;
+        Debug.LogFormat("RoundStartWaitTime: {0}", RoundStartWaitTime);
+
+        if (RoundStartWaitTime <= 0)
+        {
+            GameManager.StateMachine.ChangeState(GameManager.State_GameRunning);
+        }
+    }
+
+    public void OnExit(GameInstance GameManager)
+    {
+        Debug.Log("GameStartState::OnExit");
+    }
+}
+
+public class GameRunningState : IState<GameInstance>
+{
+    public void OnEnter(GameInstance GameManager)
+    {
+        GameManager.RoundManager.StateMachine.ChangeState(GameManager.RoundManager.State_RoundBegin);
+    }
+
+    public void OnExecute(GameInstance GameManager)
     {
 
     }
 
-    public override void OnExit(GameManager GameManager)
+    public void OnExit(GameInstance GameManager)
     {
     }
 }
 
 
-public class MainMenuGameState : BaseState<GameManager>
+public class GameEndState : IState<GameInstance>
 {
-    public override void OnEnter(GameManager GameManager)
+    public void OnEnter(GameInstance GameManager)
+    {
+
+    }
+
+    public void OnExecute(GameInstance GameManager)
+    {
+
+    }
+
+    public void OnExit(GameInstance GameManager)
+    {
+    }
+}
+
+
+public class MainMenuGameState : IState<GameInstance>
+{
+    public void OnEnter(GameInstance GameManager)
     {
     }
 
-    public override void OnExecute(GameManager GameManager)
+    public void OnExecute(GameInstance GameManager)
     {
     }
 
-    public override void OnExit(GameManager GameManager)
+    public void OnExit(GameInstance GameManager)
     {
     }
 }

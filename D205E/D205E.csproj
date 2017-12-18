@@ -246,7 +246,9 @@
     <Compile Include="Assets\GraphNodeCount.cs" />
     <Compile Include="Assets\Scripts\Character\UnityCharacter.cs" />
     <Compile Include="Assets\Scripts\Character\UnitySpellMethods.cs" />
-    <Compile Include="Assets\Scripts\Game\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Game\GameInstance.cs" />
+    <Compile Include="Assets\Scripts\Game\GameMode.cs" />
+    <Compile Include="Assets\Scripts\Game\GameState.cs" />
     <Compile Include="Assets\Scripts\Game\GameStates.cs" />
     <Compile Include="Assets\Scripts\Game\RoundManager.cs" />
     <Compile Include="Assets\Scripts\Game\RoundStates.cs" />

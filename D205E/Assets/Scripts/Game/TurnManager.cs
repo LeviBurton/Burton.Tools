@@ -10,7 +10,6 @@ public class TurnManager
     public TurnManager()
     {
         StateMachine = new StateMachine<TurnManager>(this);
-        StateMachine.ChangeState(new TurnBeginState());
     }
 
     public void Update()

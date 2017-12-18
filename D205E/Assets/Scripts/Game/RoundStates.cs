@@ -3,67 +3,74 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class RoundBeginState : BaseState<RoundManager>
+public class RoundBeginState : IState<RoundManager>
 {
     public static float Seconds = 0;
 
-    public override void OnEnter(RoundManager RoundManager)
+    public void OnEnter(RoundManager RoundManager)
     {
         Debug.Log("RoundBeginState::OnEnter");
     }
 
-    public override void OnExecute(RoundManager RoundManager)
+    public void OnExecute(RoundManager RoundManager)
     {
-        // Test.
-        Seconds += Time.deltaTime;
-    
-        if (Seconds >= 10)
-        {
-            RoundManager.StateMachine.ChangeState(new RoundRunState());
-        }
+        RoundManager.StateMachine.ChangeState(RoundManager.State_RoundRun);
     }
 
-    public override void OnExit(RoundManager RoundManager)
+    public void OnExit(RoundManager RoundManager)
     {
         Debug.Log("RoundBeginState::OnExit");
     }
 }
 
-public class RoundEndState : BaseState<RoundManager>
+public class RoundRunState : IState<RoundManager>
 {
-    public override void OnEnter(RoundManager RoundManager)
+    public float RoundRunTime;
+
+    public void OnEnter(RoundManager RoundManager)
+    {
+        Debug.Log("RoundRunState::OnEnter");
+        RoundRunTime = RoundManager.GameInstance.GameMode.GameRunTime;
+    }
+
+    public void OnExecute(RoundManager RoundManager)
+    {
+        RoundRunTime -= Time.deltaTime;
+        Debug.LogFormat("RoundRunTime: {0}", RoundRunTime);
+        if (RoundRunTime <= 0)
+        {
+            RoundManager.StateMachine.ChangeState(RoundManager.State_RoundEnd);
+        }
+    }
+
+    public void OnExit(RoundManager RoundManager)
+    {
+        Debug.Log("RoundRunState::OnExit");
+    }
+}
+
+public class RoundEndState : IState<RoundManager>
+{
+    public  void OnEnter(RoundManager RoundManager)
     {
         Debug.Log("RoundEndState::OnEnter");
     }
 
-    public override void OnExecute(RoundManager RoundManager)
+    public void OnExecute(RoundManager RoundManager)
     {
-  
+        Debug.Log("Exiting game...");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
-    public override void OnExit(RoundManager RoundManager)
+    public void OnExit(RoundManager RoundManager)
     {
         Debug.Log("RoundEndState::OnExit");
     }
 }
 
 
-public class RoundRunState : BaseState<RoundManager>
-{
-    public override void OnEnter(RoundManager RoundManager)
-    {
-        Debug.Log("RoundRunState::OnEnter");
-    }
-
-    public override void OnExecute(RoundManager RoundManager)
-    {
-
-    }
-
-    public override void OnExit(RoundManager RoundManager)
-    {
-        Debug.Log("RoundRunState::OnExecute");
-    }
-}
 

@@ -10,7 +10,7 @@ public class UnityTestEntity : MonoBehaviour
     public void Start()
     {
         StateMachine = new StateMachine<UnityTestEntity>(this);
-        StateMachine.ChangeState(new UnityTestState());
+     
     }
 
     void Update()

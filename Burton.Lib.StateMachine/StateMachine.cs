@@ -1,55 +1,43 @@
 ﻿namespace Burton.Lib.StateMachine
 {
-    public class TestEntity
+    public class ExampleState : IState<int>
     {
-        public StateMachine<TestEntity> StateMachine;
-
-        public TestEntity()
+        public void OnEnter(int Entity)
         {
-            StateMachine = new StateMachine<TestEntity>(this);
-
-            // Newing up states might not be the best approach, but doesn't really matter at this point,
-            // since they don't store any local state.
-            StateMachine.ChangeState(new TestState());
+            throw new System.NotImplementedException();
         }
 
-        public void Update()
+        public void OnExecute(int Entity)
         {
-            StateMachine.Update();
+            throw new System.NotImplementedException();
+        }
+
+        public void OnExit(int Entity)
+        {
+            throw new System.NotImplementedException();
         }
     }
 
-    public class TestState : BaseState<TestEntity>
+    public interface IState<TEntity>
     {
-        public override void OnEnter(TestEntity Entity)
-        {
-            base.OnEnter(Entity);
-        }
-
-        public override void OnExecute(TestEntity Entity)
-        {
-            base.OnExecute(Entity);
-        }
-
-        public override void OnExit(TestEntity Entity)
-        {
-            base.OnExit(Entity);
-        }
+        void OnEnter(TEntity Entity);
+        void OnExecute(TEntity Entity);
+        void OnExit(TEntity Entity);
     }
 
     public class StateMachine<TEntity>
     {
         private TEntity Owner;
-        public BaseState<TEntity> CurrentState;
-        public BaseState<TEntity> PreviousState;
-        public BaseState<TEntity> GlobalState;
+        public IState<TEntity> CurrentState;
+        public IState<TEntity> PreviousState;
+        public IState<TEntity> GlobalState;
 
         public StateMachine(TEntity Owner)
         {
             this.Owner = Owner;
             CurrentState = null;
             PreviousState = null;
-            GlobalState = null; 
+            GlobalState = null;
         }
 
         public void Update()
@@ -62,10 +50,10 @@
             if (CurrentState != null)
             {
                 CurrentState.OnExecute(Owner);
-            }
+            }  
         }
 
-        public void ChangeState(BaseState<TEntity> NewState)
+        public void ChangeState(IState<TEntity> NewState)
         {
             if (NewState == null)
                 return;
@@ -84,21 +72,6 @@
         public void RevertToPreviousState()
         {
             ChangeState(PreviousState);
-        }
-    }
-
-    public class BaseState<TEntity>
-    {
-        public virtual void OnEnter(TEntity Entity)
-        {
-        }
-
-        public virtual void OnExecute(TEntity Entity)
-        {
-        }
-
-        public virtual void OnExit(TEntity Entity)
-        {
         }
     }
 }

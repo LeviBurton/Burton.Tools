@@ -5,10 +5,16 @@ using UnityEngine;
 
 public class RoundManager
 {
+    public GameInstance GameInstance;
     public StateMachine<RoundManager> StateMachine;
 
-    public RoundManager()
+    public RoundBeginState State_RoundBegin = new RoundBeginState();
+    public RoundEndState State_RoundEnd = new RoundEndState();
+    public RoundRunState State_RoundRun = new RoundRunState();
+
+    public RoundManager(GameInstance GameInstance)
     {
+        this.GameInstance = GameInstance;
         StateMachine = new StateMachine<RoundManager>(this);
     }
 
