@@ -9,6 +9,6 @@ namespace GraphVisualizerTest
 {
     public static class Globals
     {
-        public static Game Game;
+     
     }
 }

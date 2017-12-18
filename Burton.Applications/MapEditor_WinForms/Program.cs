@@ -17,8 +17,7 @@ namespace GraphVisualizerTest
         [STAThread]
         static void Main()
         {
-            Globals.Game = new Game();
-            Globals.Game.LoadMap("Test.map");
+          
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

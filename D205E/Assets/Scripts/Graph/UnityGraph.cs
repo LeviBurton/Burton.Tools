@@ -88,11 +88,8 @@ namespace Burton.Lib.Unity
 
         void Start()
         {
-
-            Debug.LogFormat("UnityGraph.Start(): {0}", gameObject.name);
         }
 
-        
         void OnGUI()
         {
             // Draw some debug stuff in game here so we can see if everything works on our platforms.

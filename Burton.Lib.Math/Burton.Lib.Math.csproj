@@ -43,7 +43,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetPath)" "C:\Users\levib\Documents\Visual Studio 2015\Projects\Burton.Tools\D205E\Assets"</PostBuildEvent>
+    <PostBuildEvent>
+xcopy /V /Y "$(TargetPath)" "C:\Projects\Burton.Tools\D205E\Assets"
+xcopy /y "$(TargetDir)$(TargetName).pdb" "C:\Projects\Burton.Tools\D205E\Assets"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

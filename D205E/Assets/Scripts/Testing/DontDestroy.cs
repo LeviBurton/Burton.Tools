@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DontDestroy : MonoBehaviour {
 
-	void Awake () {
+	void Awake ()
+    {
         DontDestroyOnLoad(gameObject);
-
 	}
         
 }

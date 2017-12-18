@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.Alg.PriorityQueue", "Burton.Lib.Alg.PriorityQueue\Burton.Lib.Alg.PriorityQueue.csproj", "{C888B906-6E1E-4020-8E29-9536FDECFFF5}"
 EndProject
@@ -54,6 +54,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageCrop", "Burton.Applications\ImageCrop\ImageCrop.csproj", "{535BBA2A-04CC-4D7C-9AE0-0839FB17E231}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageCrop_WinForms", "Burton.Applications\ImageCrop_WinForms\ImageCrop_WinForms.csproj", "{6D8718DA-FFF4-40DE-B09A-6F6DCB5C258C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Burton.Lib.StateMachine", "Burton.Lib.StateMachine\Burton.Lib.StateMachine.csproj", "{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +159,10 @@ Global
 		{6D8718DA-FFF4-40DE-B09A-6F6DCB5C258C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D8718DA-FFF4-40DE-B09A-6F6DCB5C258C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D8718DA-FFF4-40DE-B09A-6F6DCB5C258C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5651ECA2-9BE1-4AC8-A4E4-2355403EEA59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,5 +177,8 @@ Global
 		{A1FE1758-1E08-4350-AECD-ACAEFDD9AA9C} = {3D618E62-0684-4617-83EE-D176EA31F4D3}
 		{535BBA2A-04CC-4D7C-9AE0-0839FB17E231} = {93B75227-7725-4B5E-9E96-33993F8A1A06}
 		{6D8718DA-FFF4-40DE-B09A-6F6DCB5C258C} = {93B75227-7725-4B5E-9E96-33993F8A1A06}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8276A8F0-2326-4B38-8805-CB7C5DB0B492}
 	EndGlobalSection
 EndGlobal
