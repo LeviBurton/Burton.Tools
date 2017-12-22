@@ -6,13 +6,15 @@ using Burton.Lib.StateMachine;
 public class GameInstance : MonoBehaviour
 {
     public StateMachine<GameInstance> StateMachine;
-
-    public GameStartState State_GameStart = new GameStartState();
-    public GameRunningState State_GameRunning = new GameRunningState();
-    public GameEndState State_GameEnd = new GameEndState();
+    public State_GameStart State_GameStart = new State_GameStart();
+    public State_GameRunning State_GameRunning = new State_GameRunning();
+    public State_GameEnd State_GameEnd = new State_GameEnd();
+    public State_GlobalGameState State_GlobalGameState = new State_GlobalGameState();
 
     public RoundManager RoundManager = null;
     public GameMode GameMode = null;
+
+    public float ElapsedGameTime = 0.0f;
 
     void Awake ()
     {
@@ -23,12 +25,17 @@ public class GameInstance : MonoBehaviour
         RoundManager = new RoundManager(this);
 
         StateMachine.ChangeState(State_GameStart);
-	}
+        StateMachine.GlobalState = State_GlobalGameState;
 
-	void Update ()
+	}
+    public void FixedUpdate()
     {
         StateMachine.Update();
         RoundManager.Update();
+    }
+    public void Update ()
+    {
+    
 	}
 }
 

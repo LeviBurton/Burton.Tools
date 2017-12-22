@@ -1,82 +1,85 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Burton.Lib.StateMachine;
 
-public class GameStartState : IState<GameInstance>
+public class State_GlobalGameState : IState<GameInstance>
 {
-    static float RoundStartWaitTime;
-
-    public void OnEnter(GameInstance GameManager)
+    public void OnExecute(GameInstance GameInstance)
     {
-        Debug.Log("GameStartState::OnEnter");
-        RoundStartWaitTime = GameManager.GameMode.RoundStartWaitTime;
+        // Tick the game elapsed time.
+        GameInstance.ElapsedGameTime += Time.deltaTime;
     }
 
-    public void OnExecute(GameInstance GameManager)
+    #region Unused.  Here to make compiler happy.
+    public void OnEnter(GameInstance GameInstance)
     {
-        RoundStartWaitTime -= Time.deltaTime;
-        Debug.LogFormat("RoundStartWaitTime: {0}", RoundStartWaitTime);
+    }
+    public void OnExit(GameInstance GameInstance)
+    {
+    }
+    #endregion
+}
 
-        if (RoundStartWaitTime <= 0)
+public class State_GameStart : IState<GameInstance>
+{
+    public void OnEnter(GameInstance GameInstance)
+    {
+
+        GameInstance.ElapsedGameTime = 0;
+    }
+
+    public void OnExecute(GameInstance GameInstance)
+    {
+        GameInstance.StateMachine.ChangeState(GameInstance.State_GameRunning);
+    }
+
+    public void OnExit(GameInstance GameManager)
+    {
+
+    }
+}
+
+public class State_GameRunning : IState<GameInstance>
+{
+    public void OnEnter(GameInstance GameInstance)
+    {
+      
+      //  GameInstance.RoundManager.StateMachine.ChangeState(GameInstance.RoundManager.State_RoundBegin);
+    }
+
+    public void OnExecute(GameInstance GameInstance)
+    {
+
+        if (GameInstance.ElapsedGameTime >= GameInstance.GameMode.GameRunTime)
         {
-            GameManager.StateMachine.ChangeState(GameManager.State_GameRunning);
+            //GameInstance.StateMachine.ChangeState(GameInstance.State_GameEnd);
         }
     }
 
-    public void OnExit(GameInstance GameManager)
-    {
-        Debug.Log("GameStartState::OnExit");
-    }
-}
-
-public class GameRunningState : IState<GameInstance>
-{
-    public void OnEnter(GameInstance GameManager)
-    {
-        GameManager.RoundManager.StateMachine.ChangeState(GameManager.RoundManager.State_RoundBegin);
-    }
-
-    public void OnExecute(GameInstance GameManager)
+    public void OnExit(GameInstance GameInstance)
     {
 
-    }
-
-    public void OnExit(GameInstance GameManager)
-    {
     }
 }
 
 
-public class GameEndState : IState<GameInstance>
+public class State_GameEnd : IState<GameInstance>
 {
-    public void OnEnter(GameInstance GameManager)
+    public void OnEnter(GameInstance GameInstance)
     {
 
     }
 
-    public void OnExecute(GameInstance GameManager)
+    public void OnExecute(GameInstance GameInstance)
     {
-
+        Debug.Log("Exiting game...");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
-    public void OnExit(GameInstance GameManager)
-    {
-    }
-}
-
-
-public class MainMenuGameState : IState<GameInstance>
-{
-    public void OnEnter(GameInstance GameManager)
-    {
-    }
-
-    public void OnExecute(GameInstance GameManager)
-    {
-    }
-
-    public void OnExit(GameInstance GameManager)
+    public void OnExit(GameInstance GameInstance)
     {
     }
 }

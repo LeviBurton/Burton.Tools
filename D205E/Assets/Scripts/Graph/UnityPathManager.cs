@@ -7,8 +7,10 @@ using UnityEngine;
 
 namespace Burton.Lib.Unity
 {
+    [ExecuteInEditMode]
     public class UnityPathManager : MonoBehaviour
     {
+        
         public bool DrawSearchPaths = true;
         public int NumSearchCyclesPerUpdate;
 
@@ -63,7 +65,7 @@ namespace Burton.Lib.Unity
 
         void Update()
         {
-            //UpdateSearches();
+            UpdateSearches();
         }
 
         public void Register(UnityPathPlanner PathPlanner)

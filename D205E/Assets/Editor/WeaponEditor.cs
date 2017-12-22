@@ -206,12 +206,12 @@ public class WeaponManager
         AssetDatabase.SaveAssets();
     }
 
-    // Should handle all item types
-    public T CreateAsset<T>(string Name, bool bOnlyCreateInstance = false) where T : Item
+    // Should handle all item types.  
+    public T CreateAsset<T>(string Name, bool bActuallyCreateAsset = true) where T : Item
     {
         var AssetPath = AssetsBasePath + string.Format(@"/{0}.asset", Name.Replace(" ", "_"));
         T ItemAsset = ScriptableObject.CreateInstance<T>();
-        if (!bOnlyCreateInstance)
+        if (bActuallyCreateAsset)
         {
             AssetDatabase.CreateAsset(ItemAsset, AssetPath);
         }

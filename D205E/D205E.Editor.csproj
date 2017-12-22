@@ -268,6 +268,12 @@
     <Reference Include="Burton.Lib.StateMachine">
       <HintPath>Assets/Burton.Lib.StateMachine.dll</HintPath>
     </Reference>
+    <Reference Include="TextMeshPro-2017.2-1.0.56-Editor">
+      <HintPath>Assets/NO_SOURCE_CONTROL/TextMesh Pro/Plugins/Editor DLL/TextMeshPro-2017.2-1.0.56-Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="TextMeshPro-2017.2-1.0.56-Runtime">
+      <HintPath>Assets/NO_SOURCE_CONTROL/TextMesh Pro/Plugins/Editor DLL/TextMeshPro-2017.2-1.0.56-Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>C:/Users/levib/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.ads@1.0.7/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>
@@ -315,10 +321,32 @@
   <ItemGroup>
     <None Include="Assets\Fonts\Jupiter\LICENSE.txt" />
     <None Include="Assets\Materials\UI-Default-No-Alpha.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Examples &amp; Extras\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Examples &amp; Extras\Fonts\NotoSans - License.txt" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald Bold - OFL.txt" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\NO_SOURCE_CONTROL\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+    <None Include="Assets\Standard Assets\Fonts\OpenSans\License!.txt" />
     <None Include="Assets\Standard Assets\Prototyping\Shaders\WorldCoordDiffuse.shader" />
     <None Include="Assets\Textures and Sprites\SF UI\Background\LICENSE.txt" />
   </ItemGroup>
