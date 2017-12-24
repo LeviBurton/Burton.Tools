@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestItem : MonoBehaviour, ISelectable
+public class TestItem : MonoBehaviour
 {
     public bool Selected = false;
     private Outline Outline;
+    SelectableGameObject Selectable = new SelectableGameObject();
 
     public void OnSelect()
     {
@@ -65,6 +66,14 @@ public class TestItem : MonoBehaviour, ISelectable
     // Use this for initialization
     void Start () {
         Outline = GetComponent<Outline>();
+        Selectable = GetComponent<SelectableGameObject>();
+
+        // We go through all these delegate hoops so that we can just grab all the SelectableGameObjects later on.
+        // That way we don't have to do any nasty inheritence or interfaces -- just tell the component how we want to behave.
+        Selectable.OnSelectEvent += OnSelect;
+        Selectable.OnToggleSelectedEvent += OnToggleSelected;
+        Selectable.OnDeselectEvent += OnDeselect;
+
         OnDeselect();
-	}
+	}   
 }
