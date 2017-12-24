@@ -102,8 +102,8 @@ public class PlayerController : MonoBehaviour
 
             foreach (var Obj in SelectableObjects)
             {
-                // Transform the world bounds of our SelectableObject to screen space so we can later
-                // check if our selection rectangle overlaps it.
+                // Transform the world-space bounds of our SelectableObject to a screen-space rect so we can later
+                // check if our selection rectangle (which is also in screen-space) overlaps it.
                 var WorldBounds = Obj.GetComponent<Renderer>().bounds;
                 var ScreenSpaceObjectRect = WorldBounds.ToScreenSpace(PlayerCamera);
 
