@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask GraphLayerMask;
     public UnityGraph UnityGraph;
 
+    public List<SelectableGameObject> SelectedObjects = new List<SelectableGameObject>();
+
     void Start()
     {
         UnityGraph = FindObjectOfType<UnityGraph>();
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleSelectionDrag();
+
         PanCamera();
         ZoomCamera();
         CastMousePointerIntoWorld();
@@ -77,6 +80,7 @@ public class PlayerController : MonoBehaviour
         {
             Transform objectHit = hit.transform;
             var TargetNode = UnityGraph.GetNodeAtPosition(UnityGraph.WorldToLocalTile(objectHit.position));
+
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green, .25f);
 
             // Debug.Log(TargetNode.NodeIndex);
@@ -95,6 +99,8 @@ public class PlayerController : MonoBehaviour
             {
                 Object.OnDeselect();
             }
+
+            SelectedObjects.Clear();
 
             DragStartPosition = Input.mousePosition;
             DragEndPositon = DragStartPosition;
@@ -126,10 +132,16 @@ public class PlayerController : MonoBehaviour
                 if (SelectionRectangle.Overlaps(ScreenSpaceObjectRect, true))
                 {
                     Obj.OnSelect();
+            
+                    if (!SelectedObjects.Contains(Obj))
+                    {
+                        SelectedObjects.Add(Obj);
+                    }
                 }
                 else
                 {
                     Obj.OnDeselect();
+                    SelectedObjects.Remove(Obj);
                 }
             }
 

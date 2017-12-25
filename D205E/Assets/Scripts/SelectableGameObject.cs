@@ -19,6 +19,9 @@ public class SelectableGameObject : MonoBehaviour
         {
             OnSelectEvent();
         }
+
+        // Should always update the player when this object has been selected.
+        // Add to list of players selected objects
     }
 
     public virtual void OnDeselect()
@@ -27,6 +30,8 @@ public class SelectableGameObject : MonoBehaviour
         {
             OnDeselectEvent();
         }
+
+        // Remove from list of players selected objects.
     }
 
     public virtual void OnToggleSelected()
