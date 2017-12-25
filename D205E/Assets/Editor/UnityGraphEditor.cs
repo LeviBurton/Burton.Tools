@@ -33,6 +33,10 @@ namespace Burton.Lib.Unity
           
             EditorGUILayout.LabelField("Properties", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("WalkableNodePrefab"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("UnWalkableNodePrefab"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("bInGame_ShowGraphNodes"));
+
             EditorGUILayout.PropertyField(serializedObject.FindProperty("WallLayerMask"));
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawWalkable"));

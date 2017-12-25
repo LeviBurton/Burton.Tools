@@ -1,0 +1,28 @@
+﻿1>------ Build started: Project: D205E, Configuration: Debug Any CPU ------
+1>C:\Projects\Burton.Tools\D205E\Assets\Scripts\GameEntities\UnityGear.cs(9,18,9,30): warning CS0169: The field 'UnityGear.ItemInstance' is never used
+1>C:\Projects\Burton.Tools\D205E\Assets\Scripts\OLD\ScrollDetailTexture.cs(11,12,11,20): warning CS0169: The field 'ScrollDetailTexture.m_Matrix' is never used
+1>C:\Projects\Burton.Tools\D205E\Assets\Scripts\OLD\ScrollDetailTexture.cs(15,11,15,16): warning CS0169: The field 'ScrollDetailTexture.m_Mat' is never used
+1>C:\Projects\Burton.Tools\D205E\Assets\NO_SOURCE_CONTROL\TextMesh Pro\Examples & Extras\Scripts\Benchmark01.cs(17,31,17,46): warning CS0169: The field 'Benchmark01.m_textContainer' is never used
+1>  D205E -> C:\Projects\Burton.Tools\D205E\Temp\UnityVS_bin\Debug\Assembly-CSharp.dll
+2>------ Build started: Project: D205E.Editor, Configuration: Debug Any CPU ------
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponList.cs(13,20,13,32): warning CS0169: The field 'WeaponListWindow.DatabaseFile' is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponEditor.cs(488,12,488,24): warning CS0169: The field 'WeaponEditorWindow.DatabaseFile' is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\SkillEditor.cs(34,9,34,19): warning CS0414: The field 'SkillListWindow.SmallWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponEditor.cs(491,9,491,19): warning CS0414: The field 'WeaponEditorWindow.SmallWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\SpellEditor.cs(264,9,264,19): warning CS0414: The field 'SpellEditorWindow.LargeWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\ItemList.cs(11,19,11,38): warning CS0414: The field 'ItemListWindow.SpellAssetsBasePath' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\SpellEditor.cs(261,9,261,21): warning CS0414: The field 'SpellEditorWindow.DefaultWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponEditor.cs(489,21,489,38): warning CS0414: The field 'WeaponEditorWindow.DefaultWeaponName' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\SpellEditor.cs(263,9,263,18): warning CS0414: The field 'SpellEditorWindow.IconWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponList.cs(11,19,11,38): warning CS0414: The field 'WeaponListWindow.SpellAssetsBasePath' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponEditor.cs(14,9,14,21): warning CS0414: The field 'LevelScriptEditor.DefaultWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponEditor.cs(15,9,15,19): warning CS0414: The field 'LevelScriptEditor.SmallWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\SpellEditor.cs(262,9,262,19): warning CS0414: The field 'SpellEditorWindow.SmallWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponEditor.cs(493,9,493,19): warning CS0414: The field 'WeaponEditorWindow.LargeWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\SpellEditor.cs(390,19,390,38): warning CS0414: The field 'SpellListWindow.SpellAssetsBasePath' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\SpellEditor.cs(265,10,265,20): warning CS0414: The field 'SpellEditorWindow.bIsChecked' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponEditor.cs(490,9,490,21): warning CS0414: The field 'WeaponEditorWindow.DefaultWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\WeaponEditor.cs(17,9,17,19): warning CS0414: The field 'LevelScriptEditor.LargeWidth' is assigned but its value is never used
+2>C:\Projects\Burton.Tools\D205E\Assets\Editor\SpellEditor.cs(396,9,396,21): warning CS0414: The field 'SpellListWindow.DefaultWidth' is assigned but its value is never used
+2>  D205E.Editor -> C:\Projects\Burton.Tools\D205E\Temp\UnityVS_bin\Debug\Assembly-CSharp-Editor.dll
+========== Build: 2 succeeded, 0 failed, 10 up-to-date, 0 skipped ==========

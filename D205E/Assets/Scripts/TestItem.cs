@@ -7,7 +7,7 @@ public class TestItem : MonoBehaviour
 {
     public bool Selected = false;
     private Outline Outline;
-    SelectableGameObject Selectable = new SelectableGameObject();
+    SelectableGameObject Selectable = null;
 
     public void OnSelect()
     {
@@ -55,7 +55,6 @@ public class TestItem : MonoBehaviour
 
     public void OnMouseExit()
     {
-        Debug.Log("OnMouseLeave");
         if (!IsSelected())
         {
             Outline.enabled = false;

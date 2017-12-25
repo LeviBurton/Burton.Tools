@@ -335,6 +335,7 @@
     <Compile Include="Assets\Scripts\Testing\DragPanel.cs" />
     <Compile Include="Assets\Scripts\Testing\LoadOnClick.cs" />
     <Compile Include="Assets\Scripts\TestItem.cs" />
+    <Compile Include="Assets\Scripts\VisualUnityNode.cs" />
     <Compile Include="Assets\UI\Panel_Character.cs" />
   </ItemGroup>
   <ItemGroup>

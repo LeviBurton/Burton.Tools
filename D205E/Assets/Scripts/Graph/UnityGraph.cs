@@ -23,13 +23,16 @@ namespace Burton.Lib.Unity
 
 
     [Serializable]
-    [ExecuteInEditMode]
     public class UnityGraph : MonoBehaviour, ISerializationCallbackReceiver
     {
         [NonSerialized]
         public SparseGraph<UnityNode, UnityEdge> Graph = new SparseGraph<UnityNode, UnityEdge>();
         public byte[] SerializedGraph;
         public LayerMask WallLayerMask;
+        public Transform WalkableNodePrefab;
+        public Transform UnWalkableNodePrefab;
+
+        private Transform GraphNodePrefabsRoot;
 
         private IHeuristic<SparseGraph<UnityNode, UnityEdge>> Heuristic = new UnityDistanceHeuristic();
 
@@ -55,6 +58,8 @@ namespace Burton.Lib.Unity
         public Color RayHitColor;
 
         public float PathSphereSize = 1.0f;
+
+        public bool bInGame_ShowGraphNodes = true;
 
         public bool DrawNodeIndex = true;
         public bool DrawEdges = true;
@@ -86,18 +91,41 @@ namespace Burton.Lib.Unity
             Graph.RemoveNode(NodeIndex);
         }
 
-        void Start()
+        void Update()
         {
+            GraphNodePrefabsRoot.gameObject.SetActive(bInGame_ShowGraphNodes);
+         
         }
 
+        void Start()
+        {
+            GraphNodePrefabsRoot = transform.GetChild(0);
+
+            foreach (var Node in Graph.Nodes)
+            {
+                UnityNode GraphNode = (UnityNode)Graph.GetNode(Node.NodeIndex);
+                Vector3 NodePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y + 0.1f, transform.position.z + Node.Position.z);
+
+                if (Node.NodeIndex != (int)ENodeType.InvalidNodeIndex)
+                {
+                    // Vector3 CubeSize = new Vector3(TileWidth * (1 - TilePadding), .01f, TileHeight * (1 - TilePadding));
+                    Node.GraphNodePrefab = Instantiate(WalkableNodePrefab, NodePosition, Quaternion.identity, GraphNodePrefabsRoot);
+                    Node.GraphNodePrefab.GetComponent<VisualUnityNode>().UnityNode = Node;
+                }
+                else
+                {
+                    // Node.GraphNodePrefab.GetComponent<GraphNode>().NodeIndex = (int)ENodeType.InvalidNodeIndex;
+                    Node.GraphNodePrefab = Instantiate(UnWalkableNodePrefab, NodePosition, Quaternion.identity, GraphNodePrefabsRoot);
+                }
+            }
+        }
+        
         void OnGUI()
         {
-            // Draw some debug stuff in game here so we can see if everything works on our platforms.
-            
         }
 
 #if UNITY_EDITOR_WIN
-        static void DrawString(string text, Vector3 worldPos, Color? colour = null)
+            static void DrawString(string text, Vector3 worldPos, Color? colour = null)
         {
             UnityEditor.Handles.BeginGUI();
             if (colour.HasValue) GUI.color = colour.Value;

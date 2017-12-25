@@ -12,6 +12,9 @@ public class UnityNode : NavGraphNode, ISerializationCallbackReceiver
 
     public List<GameObject> GameObjects = new List<GameObject>();
 
+    [NonSerialized]
+    public Transform GraphNodePrefab;
+
     public UnityNode(int NodeIndex, Vector3 Position)
         : base(NodeIndex, Position.x, Position.z, Position.y)
     {

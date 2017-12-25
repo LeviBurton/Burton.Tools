@@ -1,23 +1,7 @@
-﻿using System.Collections;
+﻿using Burton.Lib.Unity;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public static class BoundsExtensions
-{
-    public static Rect ToScreenSpace(this Bounds Bounds, Camera Camera)
-    {
-        var WorldToCameraMin = Camera.WorldToScreenPoint(Bounds.min);
-        var WorldToCameraMax = Camera.WorldToScreenPoint(Bounds.max);
-
-        // For clarity.
-        var x = WorldToCameraMin.x;
-        var y = Screen.height - WorldToCameraMax.y;
-        var width = WorldToCameraMax.x - WorldToCameraMin.x;
-        var height = WorldToCameraMax.y - WorldToCameraMin.y;
-                               
-        return new Rect(x, y, width, height);
-    }
-}
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,12 +20,20 @@ public class PlayerController : MonoBehaviour
 
     public List<Rect> RectsToDraw = new List<Rect>();
     public SelectableGameObject[] SelectableObjects = null;
+    public LayerMask GraphLayerMask;
+    public UnityGraph UnityGraph;
+
+    void Start()
+    {
+        UnityGraph = FindObjectOfType<UnityGraph>();
+    }
 
     void Update()
     {
         HandleSelectionDrag();
         PanCamera();
         ZoomCamera();
+        CastMousePointerIntoWorld();
     }
 
     public void OnGUI()
@@ -52,21 +44,43 @@ public class PlayerController : MonoBehaviour
         }
 
         #region DEBUG
-        //foreach (var go in SelectableObjects)
-        //{
-        //    var WorldBounds = go.GetComponent<Renderer>().bounds;
-        //    var ScreenSpaceObjectRect = WorldBounds.ToScreenSpace(PlayerCamera);
+        foreach (var go in SelectableObjects)
+        {
+            //var WorldBounds = go.GetComponent<Renderer>().bounds;
+            //var ScreenSpaceObjectRect = WorldBounds.ToScreenSpace(PlayerCamera);
+            //Vector3 CameraPosition = PlayerCamera.transform.position;
 
-        //    Debug.LogFormat("{0}", go.name);
-        //    Debug.LogFormat("    World Position: {0}", go.transform.position);
-        //    Debug.LogFormat("    World Bounds: {0}", WorldBounds.ToString());
-        //    Debug.LogFormat("    World Bounds Min: {0}", WorldBounds.min.ToString());
-        //    Debug.LogFormat("    World Bounds Max: {0}", WorldBounds.max.ToString());
-        //    Debug.LogFormat("    Camera World to Screen Min: {0}", WorldToCameraMin);
-        //    Debug.LogFormat("    Camera World to Screen Max: {0}", WorldToCameraMax);
-        //    GUI.Box(ScreenSpaceObjectRect, go.name);
-        //}
+            //// Testing -- extend bound by distance from center of screen.
+            //var Distance_X = WorldBounds.center.x - CameraPosition.x;
+            //Debug.Log(Distance_X);
+            //WorldBounds.Expand(new Vector3(Distance_X, 1, 1));
+
+            //Debug.LogFormat("{0}", go.name);
+            //Debug.LogFormat("    World Position: {0}", go.transform.position);
+            //Debug.LogFormat("    World Bounds: {0}", WorldBounds.ToString());
+            //Debug.LogFormat("    World Bounds Min: {0}", WorldBounds.min.ToString());
+            //Debug.LogFormat("    World Bounds Max: {0}", WorldBounds.max.ToString());
+            //Debug.LogFormat("    Camera World to Screen Min: {0}", WorldToCameraMin);
+            //Debug.LogFormat("    Camera World to Screen Max: {0}", WorldToCameraMax);
+            //GUI.Box(ScreenSpaceObjectRect, go.name);
+        }
         #endregion
+    }
+
+    public void CastMousePointerIntoWorld()
+    {
+        // Need a mask to filter ray casts
+        RaycastHit hit;
+        Ray ray = PlayerCamera.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit, GraphLayerMask))
+        {
+            Transform objectHit = hit.transform;
+            var TargetNode = UnityGraph.GetNodeAtPosition(UnityGraph.WorldToLocalTile(objectHit.position));
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green, .25f);
+
+            // Debug.Log(TargetNode.NodeIndex);
+        }
     }
 
     public bool HandleSelectionDrag()
@@ -104,8 +118,9 @@ public class PlayerController : MonoBehaviour
             {
                 // Transform the world-space bounds of our SelectableObject to a screen-space rect so we can later
                 // check if our selection rectangle (which is also in screen-space) overlaps it.
-                var WorldBounds = Obj.GetComponent<Renderer>().bounds;
-                var ScreenSpaceObjectRect = WorldBounds.ToScreenSpace(PlayerCamera);
+                Bounds WorldBounds = Obj.GetComponent<Renderer>().bounds;
+                Vector3 CameraPosition = PlayerCamera.transform.position;
+                Rect ScreenSpaceObjectRect = WorldBounds.ToScreenSpace(PlayerCamera);
 
                 // Change this to a SelectionHovered type of thing, and actually select on mouse up.
                 if (SelectionRectangle.Overlaps(ScreenSpaceObjectRect, true))
@@ -126,7 +141,7 @@ public class PlayerController : MonoBehaviour
 
     public void ZoomCamera()
     {
-        var ScrollWheel = Input.GetAxis("Mouse ScrollWheel");
+        float ScrollWheel = Input.GetAxis("Mouse ScrollWheel");
 
         if (ScrollWheel != 0)
         {
@@ -147,7 +162,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(2))
         {
-
             Cursor.visible = true;
         }
         else if (Input.GetMouseButton(2))
@@ -157,5 +171,21 @@ public class PlayerController : MonoBehaviour
         }
 
         PlayerCamera.transform.position = TargetPosition;
+    }
+}
+
+public static class BoundsExtensions
+{
+    public static Rect ToScreenSpace(this Bounds Bounds, Camera Camera)
+    {
+        Vector3 WorldToCameraMin = Camera.WorldToScreenPoint(Bounds.min);
+        Vector3 WorldToCameraMax = Camera.WorldToScreenPoint(Bounds.max);
+
+        float x = WorldToCameraMin.x;
+        float y = Screen.height - WorldToCameraMax.y;
+        float width = WorldToCameraMax.x - WorldToCameraMin.x;
+        float height = WorldToCameraMax.y - WorldToCameraMin.y;
+
+        return new Rect(x, y, width, height);
     }
 }
