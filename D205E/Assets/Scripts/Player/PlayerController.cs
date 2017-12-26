@@ -82,8 +82,6 @@ public class PlayerController : MonoBehaviour
             var TargetNode = UnityGraph.GetNodeAtPosition(UnityGraph.WorldToLocalTile(objectHit.position));
 
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green, .25f);
-
-            // Debug.Log(TargetNode.NodeIndex);
         }
     }
 
