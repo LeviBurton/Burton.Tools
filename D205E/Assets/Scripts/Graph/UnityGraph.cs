@@ -104,7 +104,7 @@ namespace Burton.Lib.Unity
             foreach (var Node in Graph.Nodes)
             {
                 UnityNode GraphNode = (UnityNode)Graph.GetNode(Node.NodeIndex);
-                Vector3 NodePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y + 0.1f, transform.position.z + Node.Position.z);
+                Vector3 NodePosition = new Vector3(transform.position.x + Node.Position.x, transform.position.y + Node.Position.y + 0.02f, transform.position.z + Node.Position.z);
 
                 if (Node.NodeIndex != (int)ENodeType.InvalidNodeIndex)
                 {

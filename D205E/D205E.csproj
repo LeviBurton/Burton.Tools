@@ -355,7 +355,7 @@
     <Compile Include="Assets\OutlineEffect\LinkedSet.cs" />
     <Compile Include="Assets\OutlineEffect\Outline.cs" />
     <Compile Include="Assets\OutlineEffect\OutlineEffect.cs" />
-    <Compile Include="Assets\Scripts\Character\UnityCharacter.cs" />
+    <Compile Include="Assets\Scripts\Character\Character.cs" />
     <Compile Include="Assets\Scripts\Character\UnitySpellMethods.cs" />
     <Compile Include="Assets\Scripts\Game\GameInstance.cs" />
     <Compile Include="Assets\Scripts\Game\GameMode.cs" />
@@ -392,6 +392,8 @@
     <Compile Include="Assets\Scripts\OLD\TiltWindow.cs" />
     <Compile Include="Assets\Scripts\OLD\UnitySingleton.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerControllerStates.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerEncounterController.cs" />
     <Compile Include="Assets\Scripts\SelectableGameObject.cs" />
     <Compile Include="Assets\Scripts\States\UnityTestEntity.cs" />
     <Compile Include="Assets\Scripts\States\UnityTestState.cs" />
