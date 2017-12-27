@@ -72,7 +72,6 @@ public class PlayerController : MonoBehaviour
 
     public void CastMousePointerIntoWorld()
     {
-        // Need a mask to filter ray casts
         RaycastHit hit;
         Ray ray = PlayerCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -82,8 +81,6 @@ public class PlayerController : MonoBehaviour
             var TargetNode = UnityGraph.GetNodeAtPosition(UnityGraph.WorldToLocalTile(objectHit.position));
 
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green, .25f);
-
-            // Debug.Log(TargetNode.NodeIndex);
         }
     }
 
