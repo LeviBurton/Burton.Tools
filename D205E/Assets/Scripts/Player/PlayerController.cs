@@ -1,4 +1,5 @@
-﻿using Burton.Lib.Unity;
+﻿using Burton.Lib.StateMachine;
+using Burton.Lib.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,37 +7,48 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Camera PlayerCamera = null;
-    public Vector3 CurrentMousePosition;
-    public Vector3 PreviousMousePosition;
+    private Vector3 CurrentMousePosition;
+    private Vector3 PreviousMousePosition;
     public float ZoomLevel;
 
     public float PanSpeed = 5.0f;
     public float ZoomSpeed = 5.0f;
 
-    public bool bDrawSelectionRectangle;
-    public Rect SelectionRectangle;
-    public Vector3 DragStartPosition;
-    public Vector3 DragEndPositon;
+    private bool bDrawSelectionRectangle;
+    private Rect SelectionRectangle;
+    private Vector3 DragStartPosition;
+    private Vector3 DragEndPositon;
 
-    public List<Rect> RectsToDraw = new List<Rect>();
+    private List<Rect> RectsToDraw = new List<Rect>();
     public SelectableGameObject[] SelectableObjects = null;
     public LayerMask GraphLayerMask;
     public UnityGraph UnityGraph;
 
     public List<SelectableGameObject> SelectedObjects = new List<SelectableGameObject>();
 
+    public StateMachine<PlayerController> StateMachine;
+    protected State_Normal State_Normal = new State_Normal();
+    protected State_Encounter State_Encounter = new State_Encounter();
+
+    public Transform HoveredNodePrefab;
+    public Transform HoveredNode;
+
     void Start()
     {
+        StateMachine = new StateMachine<PlayerController>(this);
+        StateMachine.ChangeState(State_Normal);
+        HoveredNode = Instantiate(HoveredNodePrefab, Vector3.zero, Quaternion.identity);
+        HoveredNode.gameObject.SetActive(false);
+        HoveredNode.gameObject.GetComponent<Renderer>().enabled = false;
         UnityGraph = FindObjectOfType<UnityGraph>();
     }
 
     void Update()
     {
-        HandleSelectionDrag();
-
-        PanCamera();
-        ZoomCamera();
-        CastMousePointerIntoWorld();
+        if (StateMachine != null)
+        {
+            StateMachine.Update();
+        }
     }
 
     public void OnGUI()
@@ -75,12 +87,11 @@ public class PlayerController : MonoBehaviour
         // Need a mask to filter ray casts
         RaycastHit hit;
         Ray ray = PlayerCamera.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out hit, GraphLayerMask))
+        
+        if (Physics.Raycast(ray, out hit, 1000, GraphLayerMask))
         {
             Transform objectHit = hit.transform;
             var TargetNode = UnityGraph.GetNodeAtPosition(UnityGraph.WorldToLocalTile(objectHit.position));
-
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green, .25f);
         }
     }
@@ -169,13 +180,17 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(2))
         {
             Cursor.visible = false;
+         
         }
         else if (Input.GetMouseButtonUp(2))
         {
+
             Cursor.visible = true;
         }
         else if (Input.GetMouseButton(2))
         {
+            HoveredNode.gameObject.SetActive(false);
+            HoveredNode.gameObject.GetComponent<Renderer>().enabled = false;
             TargetPosition += PlayerCamera.transform.right * (CurrentMousePosition.x - PreviousMousePosition.x) * PanSpeed * -1f * Time.deltaTime;
             TargetPosition += Vector3.Cross(PlayerCamera.transform.right, Vector3.up) * (CurrentMousePosition.y - PreviousMousePosition.y) * PanSpeed * -1f * Time.deltaTime;
         }

@@ -7,9 +7,6 @@ using Burton.Lib.Characters.Combat;
 
 public class UnityCharacter : MonoBehaviour
 {
-    public Character Character = null;
-    public GameObject Target = null;
-
     public List<Gear> Gear;
     public List<Spell> Spells;
     public List<Weapon> Weapons;

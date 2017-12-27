@@ -58,10 +58,6 @@
       <Project>{c888b906-6e1e-4020-8e29-9536fdecfff5}</Project>
       <Name>Burton.Lib.Alg.PriorityQueue</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Burton.Lib.Character\Burton.Lib.Characters.csproj">
-      <Project>{f6700042-c536-46ac-ac71-6ad2555032fa}</Project>
-      <Name>Burton.Lib.Characters</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Burton.Lib.Dice\Burton.Lib.Dice.csproj">
       <Project>{3267817f-744f-48d1-b0d6-bfdd4dcb68a7}</Project>
       <Name>Burton.Lib.Dice</Name>

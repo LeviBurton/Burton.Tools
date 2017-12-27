@@ -28,19 +28,19 @@ public class UnitySpellMethods
     [SpellMethod]
     public static void Bless(Spell Spell, object Caster)
     {
-        var Character = Caster as UnityCharacter;
-        Debug.LogFormat("{0} casted {1}", Character.Character.Name, Spell.Name);
+        //var Character = Caster as UnityCharacter;
+        //Debug.LogFormat("{0} casted {1}", Character.Character.Name, Spell.Name);
 
-        if (Character.Target != null && Character is UnityCharacter)
-        {
-            //Debug.LogFormat("Target Position: {0}", Character.Target.transform.position.ToString());
+        //if (Character.Target != null && Character is UnityCharacter)
+        //{
+        //    //Debug.LogFormat("Target Position: {0}", Character.Target.transform.position.ToString());
 
-            // Just kind of fooling around with things we can do.
-            UnityCharacter Target = Character.Target.GetComponent<UnityCharacter>();
-            Target.Character.Name += " the Blessed!";
-            Target.Character.AlignmentMoralityType = EAlignmentMoralityType.Evil;
-            Target.Character.AlignmentAttitudeType = EAlignmentAttitudeType.Chaotic;
-        }
+        //    // Just kind of fooling around with things we can do.
+        //    UnityCharacter Target = Character.Target.GetComponent<UnityCharacter>();
+        //    Target.Character.Name += " the Blessed!";
+        //    Target.Character.AlignmentMoralityType = EAlignmentMoralityType.Evil;
+        //    Target.Character.AlignmentAttitudeType = EAlignmentAttitudeType.Chaotic;
+        //}
     }
 
     [SpellMethod]
